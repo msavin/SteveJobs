@@ -2,6 +2,6 @@
 
 # Steve Jobs
 
-## The simple jobs queue that just works. 
+# The simple jobs queue that just works. 
 
 Coming soon for Meteor.
