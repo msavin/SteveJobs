@@ -2,11 +2,11 @@
 
 # Steve Jobs
 
-# The simple jobs queue that just works. 
+## The simple jobs queue that just works. 
 
 **IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled tasks. It's designed to work with fibers, and works by setting a MongoDB collection and using `Meteor.setTimeout`.
 
-# How to Use
+## How to Use
 
 First, install the package:
 
@@ -49,7 +49,7 @@ Jobs.add({
 
 Or when to run it: 
 
-```
+```javascript
 Jobs.add({
     name: sendReminderEmail,
     parameters: {
@@ -66,13 +66,9 @@ Jobs.add({
 
 ```
 
-# Pending Work
+## Pending Work
 
- - Add "you're fired" message when a job fails 
  - Make it work
- - Ensure this only runs on one server to prevent a job from running twice
- - Fix up API
- - Switch to defining jobs as functions instead of Methods
- - Develop in/on logic for scheduling jobs
- - Upgrade to module approach
- - Repeating jobs
+ - Add "you're fired" message when a job fails 
+ - Ensure this only runs on one server to prevent jobs from running twice
+ - Consider repeating jobs for v1 
