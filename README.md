@@ -12,23 +12,27 @@ First, install the package:
 
 	meteor add msavin:stevejobs
 
-Second, define your jobs as Methods: 
+Second, define your background jobs: 
 
 ```javascript
-Meteor.methods({
-	sendReminderEmail: function (messageContent) {
-		magicFunction(messageContent)
+Jobs.register({
+	sendReminderEmail: function (parameters) {
+		Email.send({
+			to: parameters.to,
+			from: "no-reply@jobs.com",
+			subject: "Your Reminder",
+			content: parameters.content,
+		})
+	},
+	somethingElse: function (parameters) {
+		Collection.insert(parameters)
 	}
 })
-
 ```
 
-Finally, schedule the job :
+Finally, schedule a job:
 
 ```javascript
-// Must use only `in` or `on`
-// Both are used here for demonstration purposes
-
 Jobs.add({
 	name: sendReminderEmail,
 	parameters: {
@@ -39,17 +43,28 @@ Jobs.add({
 		days: 1,
 		hours: 3,
 		minutes: 14
+	}
+})
+
+Jobs.add({
+	name: sendReminderEmail,
+	parameters: {
+		to: "john@smith.com",
+		message: "hi this is your reminder"
 	},
 	on: {
 		month: 0,
 		day: 1,
-		hour: 23
+		hour: 23,
+		year: 2017
 	}
 })
+
 ```
 
 # Pending Work
 
+ - Add "you're fired" message when a job fails 
  - Make it work
  - Ensure this only runs on one server to prevent a job from running twice
  - Fix up API

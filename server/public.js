@@ -1,31 +1,25 @@
-SteveJobsData = new Mongo.Collection("simpleJobs");
-
-// Public API 
-
 Jobs = {
-	'markAsComplete': function (id) {
-		// Assume success, and remove the reminder
-		return SteveJobsData.update(id, {
-			$set: {
-				status: "sent"
+	register: function (jobs) {
+		Object.keys(jobs).forEach(function (job) {
+			if (typeof jobs[job] === "function") {
+				Jobs.internal.registry[job] = jobs[job];	
+			} else {
+				console.log("Jobs: Error registering " + job);
+				console.log("Jobs: Please make sure its a valid function");
+				console.log("----");
 			}
 		});
 	},
-	'run': function () {
-		// Make sure scheduler doesn't run multiple times
-		jobsAvailable = false;
+	add: function (job) {
+		// Should probably implement some kind of argument checking here
 		
-		// Grab one document that is pending
-		var reminder = SteveJobsUtilities.getJob;
+		date = job.on || job.at;
+		date = magic(date);
 
-		if (reminder) {
-			SteveJobsUtilities.callMethod(reminder.method);
-		}
-	},
-	'add': function (due, method) {
 		return SteveJobsData.insert({
-			due: due,
-			method: method
+			due: date,
+			name: job.name,
+			parameters: job.parameters
 		});
 	}
 };
