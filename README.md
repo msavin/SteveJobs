@@ -4,7 +4,7 @@
 
 # The simple jobs queue that just works. 
 
-**NOT WORKING / IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled tasks. It's designed to work with fibers, and works by setting a MongoDB collection and using `Meteor.setTimeout`.
+**IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled tasks. It's designed to work with fibers, and works by setting a MongoDB collection and using `Meteor.setTimeout`.
 
 # How to Use
 
@@ -16,17 +16,17 @@ Second, define your background jobs:
 
 ```javascript
 Jobs.register({
-	sendReminderEmail: function (parameters) {
-		Email.send({
-			to: parameters.to,
-			from: "no-reply@jobs.com",
-			subject: "Your Reminder",
-			content: parameters.content,
-		})
-	},
-	somethingElse: function (parameters) {
-		Collection.insert(parameters)
-	}
+    sendReminderEmail: function (parameters) {
+        Email.send({
+            to: parameters.to,
+            from: "no-reply@jobs.com",
+            subject: "Your Reminder",
+            content: parameters.content,
+        })
+    },
+    somethingElse: function (parameters) {
+        Collection.insert(parameters)
+    }
 })
 ```
 
@@ -34,16 +34,16 @@ Finally, schedule a job:
 
 ```javascript
 Jobs.add({
-	name: sendReminderEmail,
-	parameters: {
-		to: "john@smith.com",
-		message: "hi this is your reminder"
-	},
-	in: {
-		days: 1,
-		hours: 3,
-		minutes: 14
-	}
+    name: sendReminderEmail,
+    parameters: {
+        to: "john@smith.com",
+        message: "hi this is your reminder"
+    },
+    in: {
+        days: 1,
+        hours: 3,
+        minutes: 14
+    }
 })
 
 Jobs.add({
