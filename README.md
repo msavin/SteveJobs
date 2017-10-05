@@ -30,7 +30,7 @@ Jobs.register({
 })
 ```
 
-Finally, schedule a job:
+Finally, schedule a job by specifying how soon to run it:
 
 ```javascript
 Jobs.add({
@@ -45,19 +45,23 @@ Jobs.add({
         minutes: 14
     }
 })
+```
 
+Or when to run it: 
+
+```
 Jobs.add({
-	name: sendReminderEmail,
-	parameters: {
-		to: "john@smith.com",
-		message: "hi this is your reminder"
-	},
-	on: {
-		month: 0,
-		day: 1,
-		hour: 23,
-		year: 2017
-	}
+    name: sendReminderEmail,
+    parameters: {
+        to: "john@smith.com",
+        message: "hi this is your reminder"
+    },
+    on: {
+        month: 0,
+        day: 1,
+        hour: 23,
+        year: 2017
+    }
 })
 
 ```
@@ -71,3 +75,4 @@ Jobs.add({
  - Switch to defining jobs as functions instead of Methods
  - Develop in/on logic for scheduling jobs
  - Upgrade to module approach
+ - Repeating jobs
