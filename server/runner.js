@@ -10,11 +10,16 @@ JobsRunner = {
 		timeout = Jobs.timer || 30000;
 
 		this.state = Meteor.setTimeout(function () {
-			console.log('working')
+			JobsRunner.run()
 		}, );
 	},
 	stop: function () {
 		return Meteor.clearTimeout(this.state);
+	},
+	run: function () {
+		// Step 1: Find document
+		// Step 2: Run the job
+		// Step 3: Check if there are more jobs to run
 	}
 }
 
@@ -23,3 +28,4 @@ Meteor.startup(function () {
 		JobsRunner.start();
 	// }
 });
+

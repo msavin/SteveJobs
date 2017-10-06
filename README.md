@@ -74,7 +74,7 @@ The package will run one job at a time until there are no more jobs to run. Afte
 Jobs.timer = 1000
 ```
 
-In addition to creating jobs, you can also:
+In addition to creating jobs, you can also use:
 
 ```javascript
 // Stop the job queue - could be handy for development
@@ -96,6 +96,10 @@ Jobs.run(jobId)
 Jobs.internal.collection.find().fetch()
 ```
 
+## Archiving 
+
+Jobs will automatically archive jobs. There are three types of jobs: failed, successful, and pending. 
+
 ## Pending Work
 
  - Make it work
@@ -110,4 +114,4 @@ Jobs.internal.collection.find().fetch()
  - Create a way to run jobs across multiple servers. One easy way to do this is by playing with the MongoDB document ID's. For example, if the first character is a letter, use server one, if its a letter, use server two.
  - Create a way for the server to pause jobs if the CPU usage is high. Every little bit helps, right?
  - Create a way for a server with lower CPU consumption to take over the jobs queue if possible.
- - Create a way to run jobs as a microservice
+ - Create a way to run jobs as a microservice.
