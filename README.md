@@ -71,29 +71,29 @@ Jobs.add({
 The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 30 seconds by quering the database. However, you could change the frequency to your preference with a simple setting: 
 
 ```javascript
-Jobs.timer = 1000
+Jobs.timer = 1000;
 ```
 
 In addition to creating jobs, you can also use:
 
 ```javascript
 // Stop the job queue - could be handy for development
-Jobs.stop()
+Jobs.stop();
 
 // Start the job queue - could be handy for development
-Jobs.start
+Jobs.start();
 
 // Get information about a pending job
-Jobs.get(jobId)
+Jobs.get(jobId);
 
 // Remove a job
-Jobs.remove(jobId)
+Jobs.remove(jobId);
 
 // Run a job ahead of time
-Jobs.run(jobId)
+Jobs.run(jobId);
 
 // Access the Jobs collection directly
-Jobs.internal.collection.find().fetch()
+Jobs.internal.collection.find().fetch();
 ```
 
 ## Archiving 
