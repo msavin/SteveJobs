@@ -14,4 +14,5 @@ Package.onUse(function(api) {
 	api.use(['mongo']);
 	api.addFiles(serverFiles, 'server');
 	api.versionsFrom('1.0');
+	api.export('Jobs')
 });
