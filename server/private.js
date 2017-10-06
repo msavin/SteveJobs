@@ -1,6 +1,10 @@
+Jobs = {};
+
 Jobs.internal = {};
 
 Jobs.internal.data = new Mongo.Collection("simpleJobs");
+
+Jobs.internal.registry = {};
 
 Jobs.internal.getJob = function () {
 	return SteveJobsData.findOne({
@@ -40,7 +44,6 @@ Jobs.internal.markAsComplete = function (id) {
 	});
 }
 
-
 Jobs.internal.run = function (id) {
 	// Make sure scheduler doesn't run multiple times
 	jobsAvailable = false;
@@ -51,5 +54,4 @@ Jobs.internal.run = function (id) {
 	if (reminder) {
 		SteveJobsUtilities.callMethod(reminder.method);
 	}
-},
-
+}

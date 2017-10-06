@@ -1,18 +1,25 @@
-// To Do: Ensure this only runs on one server
-// Bonus: When it runs the last job, the package could check if there is something scheduled to run before its time out, and shorten the timeout amountAwesome. I'm a big fan of member management apps, was going to one a while back..
+// To Do 1: Ensure this only runs on one server
+// To Do 2: Provide a way to set the timeout
+// Future: When it runs the last job, the package could check if there is something scheduled to run before its time out, and shorten the timeout
+// Future: Provide ability to run jobs across multiple servers. Perhaps it could be divided by considering if the MongoDB document id starts with a number or letter.
 
-var available = true;
+JobsRunner = {
+	available: true,
+	state: null,
+	start: function () {
+		timeout = Jobs.timer || 30000;
 
-Meteor.onConnection(function(result){
-    console.log(result.httpHeaders);
-    console.log(result);
-});
-
+		this.state = Meteor.setTimeout(function () {
+			console.log('working')
+		}, );
+	},
+	stop: function () {
+		return Meteor.clearTimeout(this.state);
+	}
+}
 
 Meteor.startup(function () {
-	Meteor.setTimeout(function () {
-		if (available) {
-			Meteor.call('SteveJobs/run');
-		}
-	}, 30000);
+	// if (Control.serverIsActive) {
+		JobsRunner.start();
+	// }
 });
