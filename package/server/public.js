@@ -23,14 +23,37 @@ Jobs.register = function (jobs) {
 // Add a new job to MongoDB
 
 Jobs.add = function (job) {
-	// Should probably implement some kind of argument checking here
-	
-	var date = job.on || job.at;
-	date = magic(date);
+	// Check that we have the right input
+		if (typeof job === "object") {
+			if (typeof job.name !== "string") {
+				console.log("Jobs: must specify name")
+			}
+		} else {
+			console.log("Jobs: Invalid input");
+			console.log(job)
+			console.log("----");
+			return;
+		}
+
+	// Check that the job being added exists
+		if (!Jobs.private.registry[name]) {
+			console.log("Jobs: Invalid job name: " + job.name);
+		}
+
+	var date = function () {
+		// if (jobs.in) {
+
+		// } else if (job.on) {
+
+		// }
+
+		return new Date();
+	}();
 
 	return SteveJobsData.insert({
 		due: date,
 		name: job.name,
+		state: "pending",
 		parameters: job.parameters
 	});
 }
@@ -47,6 +70,7 @@ Jobs.remove = function () {
 Jobs.start = function () {
 	JobsRunner.start();
 }
+
 Jobs.stop = function () {
 	JobsRunner.stop();
 }
@@ -74,3 +98,5 @@ Jobs.run = function (doc, callback) {
 		console.log('----')
 	}
 }
+
+Jobs.collection = Jobs.private.collection

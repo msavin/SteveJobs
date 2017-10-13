@@ -4,7 +4,7 @@
 
 ## The simple jobs queue that just works. 
 
-**IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled tasks. It's designed to work naturally with Meteor by storing data with MongoDB and using the fibers-based `Meteor.setTimeout` function to check for pending jobs.
+**IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled tasks. It's specially designed to work with Meteor by leveraging MongoDB and the fibers-based timeout function for effortless setup and ease of use.
 
 ## How to Use
 
@@ -103,25 +103,9 @@ Jobs.run(jobId, function (e,r) {
 });
 
 // Access the Jobs collection directly
-Jobs.internal.collection.find().fetch();
+Jobs.collection.find().fetch();
 ```
 
-## Archiving 
+## How It Works
 
-Jobs will automatically archive jobs. There are three types of jobs: failed, successful, and pending. 
-
-## Pending Work
-
- - Make it work
- - Add "you're fired" message when a job fails 
- - Ensure this only runs on one server to prevent jobs from running twice
- - Consider repeating jobs for v1 
- - Create a way to cache jobs, or clear jobs. Hmm.
- - Set MongoDB indexes
-
-## Future Ideas
-
- - Create a way to run jobs across multiple servers. One easy way to do this is by playing with the MongoDB document ID's. For example, if the first character is a letter, use server one, if its a letter, use server two.
- - Create a way for the server to pause jobs if the CPU usage is high. Every little bit helps, right?
- - Create a way for a server with lower CPU consumption to take over the jobs queue if possible.
- - Create a way to run jobs as a microservice.
+For more information on how it works, including how jobs run, how the timing works, what happens when a job fails, and so on, check out "<a href="HOWITWORKS.md">How It Works</a>."

@@ -4,6 +4,13 @@ Jobs.private = {};
 
 Jobs.private.collection = new Mongo.Collection("simpleJobs");
 
+Meteor.startup(function () {
+	Jobs_ensureIndex({
+		due: 1, 
+		state: 1
+	})
+})
+
 Jobs.private.registry = {};
 
 Jobs.private.configuration = {
