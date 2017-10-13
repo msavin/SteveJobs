@@ -4,7 +4,12 @@
 
 ## The simple jobs queue that just works. 
 
-**IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled tasks. It's specially designed to work with Meteor by leveraging MongoDB and the fibers-based timeout function for effortless setup and ease of use.
+**IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled jobs on Meteor. It's specially designed to work with Meteor by leveraging MongoDB collections and fibers-based timer functions for effortless setup and use.
+ - Runs one job at a time
+ - Runs on one server at a time
+ - Archives all jobs and their outcomes
+ - Retries failed jobs on server restart
+ - Designed for smooth performance on Meteor
 
 ## How to Use
 
@@ -69,7 +74,7 @@ Jobs.add({
 
 ```
 
-## Additional Information
+## Configuration and API
 
 The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 30 seconds by quering the database. However, you could change the frequency to your preference with a simple setting: 
 
@@ -106,6 +111,10 @@ Jobs.run(jobId, function (e,r) {
 Jobs.collection.find().fetch();
 ```
 
-## How It Works
+## More Information
 
 For more information on how it works, including how jobs run, how the timing works, what happens when a job fails, and so on, check out "<a href="HOWITWORKS.md">How It Works</a>."
+
+If you like the design of the package, make sure to check out: 
+ - <a href="http://meteor.toys">Meteor Toys</a> - Development Tools
+ - <a href="https://www.meteorcandy.com">Meteor Candy</a> - Admin Panel
