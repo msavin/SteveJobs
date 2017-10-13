@@ -5,9 +5,10 @@ Package.describe({
 });
 
 serverFiles  = [
-	'server/runner.js'
 	'server/private.js',
 	'server/public.js',
+	'server/control.js',
+	'server/runner.js'
 ];
 
 Package.onUse(function(api) {

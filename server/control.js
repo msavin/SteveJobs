@@ -11,10 +11,16 @@ JobsControl = {
 		self = this;
 		doc = self.collection.find({name: "ActiveServer"})
 
-		if (doc.serverId === self.serverId) {
-			if (doc.lastPing ... more than X minutes ago) {
-				return true;
-			} else {
+		if (!doc) {
+			self.setAsActiveServer();
+		}
+		else if (doc.serverId === self.serverId) {
+			self.setAsActiveServer();
+		} 
+		else {
+			timeGap = new Date () - doc.lastPing;
+			timeSpacer = Jobs.timeGap || 10*60*1000 // 10 minutes
+			if (timeGap > timeSpacer) {
 				self.setAsActiveServer()
 			}
 		}

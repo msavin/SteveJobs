@@ -1,38 +1,45 @@
 Jobs = {};
 
-Jobs.internal = {};
+Jobs.private = {};
 
-Jobs.internal.collection = new Mongo.Collection("simpleJobs");
+Jobs.private.collection = new Mongo.Collection("simpleJobs");
 
-Jobs.internal.registry = {};
+Jobs.private.registry = {};
 
-Jobs.internal.run = function (doc) {
+Jobs.private.configuration = {
+	timer: 1 * 60 * 1000,
+	checker: 30 * 60 * 1000 
+}
+
+Jobs.private.run = function (doc, callback) {
 	// Goals: 
 	// 1- Execute the job
 	// 2- Update the document in database
 	// 3- Capture the result (if any)
 
-	if (typeof Jobs.internal.registry[doc.name] === "function") {
+	if (typeof Jobs.private.registry[doc.name] === "function") {
 		// should probably switch to
 		// pending: true/false
 		// ranSuccessfully: true/false 
 		try () {
-			var jobResult = Jobs.internal.registry[doc.name](doc.parameters);
+			var jobResult = Jobs.private.registry[doc.name](doc.parameters);
 
-			var jobUpdate = Jobs.internal.collection.update(doc._id, $set: {
+			var jobUpdate = Jobs.private.collection.update(doc._id, $set: {
 				state: "successful",
 				result: jobResult
 			})
 
-			return jobResult;
+			callback(null, jobResult);
 		} catch (e) {
-			var jobUpdate = Jobs.internal.collection.update(doc._id, $set: {
+			var jobUpdate = Jobs.private.collection.update(doc._id, $set: {
 				state: "failed"
 			});
 
 			if (jobUpdate) {
 				console.log("Jobs: Job failed to run: " + doc.name)
 			}
+
+			callback(e, null)
 		}
 	} else {
 		console.log("Jobs: Job not found in registry: " + doc.name);

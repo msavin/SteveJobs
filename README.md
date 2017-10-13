@@ -25,7 +25,10 @@ Jobs.register({
         })
     },
     somethingElse: function (parameters) {
-        Collection.insert(parameters)
+        Collection.insert({
+            date: new Date(),
+            data: parameters
+        });
     }
 })
 ```
@@ -71,7 +74,10 @@ Jobs.add({
 The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 30 seconds by quering the database. However, you could change the frequency to your preference with a simple setting: 
 
 ```javascript
-Jobs.timer = 1000;
+Jobs.configure({
+    timer: 1000,
+
+})
 ```
 
 In addition to creating jobs, you can also use:
@@ -90,7 +96,11 @@ Jobs.get(jobId);
 Jobs.remove(jobId);
 
 // Run a job ahead of time
-Jobs.run(jobId);
+Jobs.run(jobId, function (e,r) {
+    if (e) {
+        console.log("You're fired!")
+    }
+});
 
 // Access the Jobs collection directly
 Jobs.internal.collection.find().fetch();

@@ -1,9 +1,17 @@
+// Configure the package
+
+Jobs.configure = function (data) {
+	Object.keys(data).forEach(function (key) {
+		Jobs.private.configuration[key] = data[key];
+	});
+}
+
 // Register jobs
 
 Jobs.register = function (jobs) {
 	Object.keys(jobs).forEach(function (job) {
 		if (typeof jobs[job] === "function") {
-			Jobs.internal.registry[job] = jobs[job];	
+			Jobs.private.registry[job] = jobs[job];	
 		} else {
 			console.log("Jobs: Error registering " + job);
 			console.log("Jobs: Please make sure its a valid function");
@@ -17,7 +25,7 @@ Jobs.register = function (jobs) {
 Jobs.add = function (job) {
 	// Should probably implement some kind of argument checking here
 	
-	date = job.on || job.at;
+	var date = job.on || job.at;
 	date = magic(date);
 
 	return SteveJobsData.insert({
@@ -30,7 +38,7 @@ Jobs.add = function (job) {
 // Remove a job from MongoDB
 
 Jobs.remove = function () {
-	return Jobs.internal.collection.remove(id)
+	return Jobs.private.collection.remove(id)
 }
 
 // Start or stop the queue
@@ -46,24 +54,23 @@ Jobs.stop = function () {
 // Get info on a job/jobs
 
 Jobs.get = function (id) {
-	return Jobs.internal.collection.findOne(id)
+	return Jobs.private.collection.findOne(id)
 }
 
 // Run a job ahead of time
 
-Jobs.run = function (doc) {
+Jobs.run = function (doc, callback) {
 	if (typeof doc === "object") {
-		Jobs.internal.run(doc)
+		Jobs.private.run(doc, callback)
 	} else if (typeof doc === "string") {
-		jobDoc = Jobs.internal.collection.findOne(doc);
+		jobDoc = Jobs.private.collection.findOne(doc);
 
 		if (jobDoc) {
-			Jobs.internal.run(jobDoc)
+			Jobs.private.run(jobDoc, callback)
 		}
 	} else {
 		console.log("Jobs: Invalid input for Jobs.run();")
 		console.log(doc)
 		console.log('----')
 	}
-	// ...
 }
