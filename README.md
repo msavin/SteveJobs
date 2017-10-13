@@ -76,7 +76,7 @@ The package will run one job at a time until there are no more jobs to run. Afte
 ```javascript
 Jobs.configure({
     timer: 1000,
-
+    checker: 30000
 })
 ```
 
@@ -95,7 +95,7 @@ Jobs.get(jobId);
 // Remove a job
 Jobs.remove(jobId);
 
-// Run a job ahead of time
+// Run a job ahead of time, and provide optional callback
 Jobs.run(jobId, function (e,r) {
     if (e) {
         console.log("You're fired!")
