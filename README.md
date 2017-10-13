@@ -2,12 +2,12 @@
 
 # Steve Jobs
 
-## The simple jobs queue that just works. 
+### The simple jobs queue that just works. 
 
 **IN DEVELOPMENT.** Steve Jobs makes it really easy to run scheduled jobs on Meteor. It's specially designed to work with Meteor by leveraging MongoDB collections and fibers-based timer functions for effortless setup and use.
  - Runs one job at a time
  - Runs on one server at a time
- - Archives all jobs and their outcomes
+ - Logs all jobs and their outcomes
  - Retries failed jobs on server restart
  - Designed for smooth performance on Meteor
 
