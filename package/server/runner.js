@@ -9,21 +9,24 @@ JobsRunner = {
 	start: function () {
 		var self = this;
 
-		this.state = Meteor.setTimeout(function () {
+		self.state = Meteor.setTimeout(function () {
 			self.run()
 		}, Jobs.private.configuration.timer);
 	},
 	stop: function () {
-		return Meteor.clearTimeout(this.state);
+		var self = this;
+		return Meteor.clearTimeout(self.state);
 	},
 	run: function () {
 		var self = this;
 
-		if (JobsControl.checkIfActiveServer) {
+		if (JobsControl.isActive) {
 			if (self.available) {
 				self.available = false;
-				JobsRunner.runLatest()
+				self.runLatest();
 			}
+		} else {
+			self.stop();
 		}
 	},
 	runLatest: function () {
@@ -32,16 +35,16 @@ JobsRunner = {
 		var latestJob = Jobs.private.collection.findOne({
 			due: {
 				$lt: new Date()
-			}
+			},
+			state: "pending"
 		}, {
 			sort: {
-				due: -1, 
-				limit: 1
+				due: -1
 			}
 		});
 
 		if (latestJob) {
-			job = Jobs.private.run(latestJob, function () {
+			Jobs.run(latestJob, function () {
 				self.available = true;
 				JobsRunner.runLatest()
 			});
@@ -53,3 +56,9 @@ Meteor.startup(function () {
 	JobsRunner.start();
 });
 
+/*
+	Potential (small) Bug: 
+		- person manually runs job with Jobs.run()
+		- jobs queue runs the same job 
+		- run function should be integrated with `JobsRunner.available` or ...
+*/
