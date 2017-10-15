@@ -8,12 +8,20 @@ The Steve Jobs package is quite like Steve Jobs, and quite unlike him at the sam
 
 To avoid potential screw-ups with MongoDB read/write performance, the package will claim one server and run from there. If that server goes down, another server will take over. The new server is claimed based on whoever picks it first.
 
-## Success and Failure
+## Job States (needs to be rewritten)
+
+Jobs can have four different states, which are marked by a number for MongoDB indexing purposes:
+ - 1 - Pending
+ - 2 - Failed
+ - 3 - Succeeded
+ - 4 - Canceled
+
+## Success and Failure (needs to be rewritten)
 
 Jobs will automatically archive jobs. There are three types of jobs: failed, successful, and pending. 
- - Jobs that succeed will stay in the database. They can be cleared at your preference with `Jobs.clear(numberOfDays)`.
- - Jobs that fail will try to run again the next time the server restarts. (Never give up!)
- - Jobs that are pending will sit and wait their turn. They could be removed with `Jobs.remove`, or be forced to run early with `Jobs.run`.
+  - Jobs that succeed will stay in the database. They can be cleared at your preference with `Jobs.clear(numberOfDays)`.
+  - Jobs that fail will try to run again the next time the server restarts. (Never give up!)
+  - Jobs that are pending will sit and wait their turn. They could be removed with `Jobs.remove`, or be forced to run early with `Jobs.run`.
 
 ## Fibers-based Timing
 

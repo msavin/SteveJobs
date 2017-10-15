@@ -97,8 +97,8 @@ Jobs.start();
 // Get information about a pending job
 Jobs.get(jobId);
 
-// Remove a job
-Jobs.remove(jobId);
+// Cancel a job but do not remove from database
+Jobs.cancel(jobId);
 
 // Run a job ahead of time, and provide optional callback
 Jobs.run(jobId, function (e,r) {

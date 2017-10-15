@@ -60,7 +60,28 @@ Jobs.add = function (job) {
 
 // Remove a job from MongoDB
 
-Jobs.remove = function () {
+Jobs.cancel = function (id) {
+	job = Jobs.private.collection.findOne(id)
+
+	if (job) {
+		if (job.state === "pending" || job.state === "failed") {
+			result = Jobs.private.collection.update(id, {
+				state: "cancelled"
+			})
+
+			return result;
+		} else {
+			console.log("Jobs: Cancel failed for " + id);
+			console.log("Jobs: Job has completed successful before.");
+			console.log("----");
+			return false;
+		}
+	} else {
+		console.log("Jobs: Cancel failed for " + id);
+		console.log("Jobs: No such job found.");
+		console.log("----");
+		return false;
+	}
 	return Jobs.private.collection.remove(id)
 }
 
