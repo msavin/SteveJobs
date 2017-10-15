@@ -80,8 +80,9 @@ The package will run one job at a time until there are no more jobs to run. Afte
 
 ```javascript
 Jobs.configure({
-    timer: 1000,
-    checker: 30000
+    timer: 1000,         // how often to check for new jobs
+    checker: 30000,      // how often to check if there is an active jobs server
+    startupDelay: 5000   // how soon to run after the server has started
 })
 ```
 

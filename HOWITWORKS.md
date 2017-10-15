@@ -8,6 +8,10 @@ The Steve Jobs package is quite like Steve Jobs, and quite unlike him at the sam
 
 To avoid potential screw-ups with MongoDB read/write performance, the package will claim one server and run from there. If that server goes down, another server will take over. The new server is claimed based on whoever picks it first.
 
+## In Development Mode
+
+For the smoothest development experience, this package automatically checks out your local development server as active. This is to keep the package from running slower than expected, because may restart frequently in development.
+
 ## Job States (needs to be rewritten)
 
 Jobs can have four different states, which are marked by a number for MongoDB indexing purposes:
@@ -38,3 +42,7 @@ Steve Jobs will create two collections, one for jobs and another for communicati
  - Create a way for a server with lower CPU consumption to take over the jobs queue if possible.
  - Create a way to run jobs as a microservice.
  - Create a way to repeat jobs.
+
+## Timezones
+
+This package will use the servers timezone to base all of its operations. This should ensure that jobs run predictably, because they are designed to run on relative time (i.e. do this in  30 minutes). You can also set the timezone on your server using the `TZ` environment variable.

@@ -29,14 +29,15 @@ JobsRunner = {
 			self.stop();
 		}
 	},
-	runLatest: function () {
+	runLatest: function (jobState) {
 		var self = this;
 
+		var state = jobState || "pending"
 		var latestJob = Jobs.private.collection.findOne({
 			due: {
 				$lt: new Date()
 			},
-			state: "pending"
+			state: state
 		}, {
 			sort: {
 				due: -1
@@ -55,9 +56,15 @@ JobsRunner = {
 }
 
 Meteor.startup(function () {
+	var delay = Jobs.private.configuration.startupDelay;
+	
+	if (Meteor.isDevelopment) {
+		delay = 1500;
+	}
+
 	Meteor.setTimeout(function () {
 		JobsRunner.start();
-	}, 10000)
+	}, delay)
 });
 
 /*
@@ -65,4 +72,7 @@ Meteor.startup(function () {
 		- person manually runs job with Jobs.run()
 		- jobs queue runs the same job 
 		- run function should be integrated with `JobsRunner.available` or ...
+
+	Idea
+		- have seperate configuration settings for development and production
 */

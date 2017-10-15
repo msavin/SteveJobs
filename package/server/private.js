@@ -14,8 +14,9 @@ Meteor.startup(function () {
 Jobs.private.registry = {};
 
 Jobs.private.configuration = {
-	timer: 1 * 60 * 1000,
-	checker: 30 * 60 * 1000 
+	timer: .05 * 60 * 1000,
+	checker: 5 * 60 * 1000 ,
+	startupDelay: 5 * 60 * 1000
 }
 
 Jobs.private.run = function (doc, callback) {
@@ -65,4 +66,26 @@ Jobs.private.run = function (doc, callback) {
 	} else {
 		console.log("Jobs: Job not found in registry: " + doc.name);
 	}
+}
+
+Jobs.private.date = {};
+
+/* Supported fields:
+	- second
+	- minute
+	- hour
+	- day
+	- month
+	- year
+*/
+
+Jobs.private.date.fields = []
+
+Jobs.private.date.on = function (on) {
+	current = new Date();
+	return date;
+}
+
+Jobs.private.date.in = function (in) {
+
 }
