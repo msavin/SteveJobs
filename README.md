@@ -15,7 +15,7 @@ Steve Jobs makes it really easy to run scheduled tasks on Meteor. It's specially
 
 First, install the package:
 
-	meteor add msavin:stevejobs
+	meteor add msavin:sjobs
 
 Second, define your background jobs: 
 
