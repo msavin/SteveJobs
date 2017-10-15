@@ -80,9 +80,9 @@ The package will run one job at a time until there are no more jobs to run. Afte
 
 ```javascript
 Jobs.configure({
-    timer: 1000,         // how often to check for new jobs
-    checker: 30000,      // how often to check if there is an active jobs server
-    startupDelay: 5000   // how soon to run after the server has started
+    timer: 5 * 1000,            // how often to check for new jobs
+    checker: 5 * 60 * 1000, // how often to check if there is an active jobs server
+    startupDelay: 5 * 1000  // how soon to run after the server has started
 })
 ```
 
@@ -110,6 +110,9 @@ Jobs.run(jobId, function (e,r) {
 
 // Access the Jobs collection directly
 Jobs.collection.find().fetch();
+
+// Clear the logs
+Jobs.clear() // pass in `true` to remove failed documents, pass in `true, true` to remove all
 ```
 
 ## More Information

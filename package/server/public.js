@@ -27,6 +27,7 @@ Jobs.add = function (job) {
 		if (typeof job === "object") {
 			if (typeof job.name !== "string") {
 				console.log("Jobs: must specify name")
+				console.log("----");
 			}
 		} else {
 			console.log("Jobs: Invalid input");
@@ -38,10 +39,19 @@ Jobs.add = function (job) {
 	// 2. Check that the job being added exists
 		if (!Jobs.private.registry[job.name]) {
 			console.log("Jobs: Invalid job name: " + job.name);
+			console.log("----");
 		}
 
 	// 3. Ensure there is a valid date to work with
 	var date = function () {
+		time = new Date();
+
+		addMinutes = function (date, minutes) {
+		    return new Date(date.getTime() + minutes*60000);
+		}
+
+		return addMinutes(time, 1)
+
 		if (job.on) {
 			return new Date()
 		} else if (job.in) {
@@ -105,7 +115,7 @@ Jobs.stop = function () {
 // Get info on a job/jobs
 
 Jobs.get = function (id) {
-	return Jobs.private.collection.findOne(id)
+	return Jobs.private.collection.findOne(id);
 }
 
 // Run a job ahead of time
@@ -117,13 +127,31 @@ Jobs.run = function (doc, callback) {
 		jobDoc = Jobs.private.collection.findOne(doc);
 
 		if (jobDoc) {
-			Jobs.private.run(jobDoc, callback)
+			Jobs.private.run(jobDoc, callback);
 		}
 	} else {
-		console.log("Jobs: Invalid input for Jobs.run();")
-		console.log(doc)
+		console.log("Jobs: Invalid input for Jobs.run();");
+		console.log(doc);
 		console.log('----')
 	}
 }
 
-Jobs.collection = Jobs.private.collection
+// Clear either "useless" documents, or all of them 
+
+Jobs.clear = function (failed, pending) {
+	var state = ["successful", "cancelled"];
+
+	if (failed) {
+		state.push("failed")
+	} 
+
+	if (pending) {
+		state.push("pending")
+	} 
+
+	Jobs.remove({
+		state: state
+	})
+}
+
+Jobs.collection = Jobs.private.collection;

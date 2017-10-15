@@ -15,5 +15,10 @@ Package.onUse(function(api) {
 	api.use(['mongo']);
 	api.addFiles(serverFiles, 'server');
 	api.versionsFrom('1.0');
+	
+	// For Development
 	api.export(['Jobs', 'JobsControl', 'JobsRunner'])
+	
+	// For External Use
+	// api.export('Jobs')
 });

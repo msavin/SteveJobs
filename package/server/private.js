@@ -14,9 +14,9 @@ Meteor.startup(function () {
 Jobs.private.registry = {};
 
 Jobs.private.configuration = {
-	timer: .05 * 60 * 1000,
-	checker: 5 * 60 * 1000 ,
-	startupDelay: 5 * 60 * 1000
+	timer: 5 * 1000,
+	checker: 5 * 60 * 1000,
+	startupDelay: 5 * 1000
 }
 
 Jobs.private.run = function (doc, callback) {
@@ -35,6 +35,8 @@ Jobs.private.run = function (doc, callback) {
 			var jobUpdate = Jobs.private.collection.update(doc._id, {
 				$set: {
 					state: "successful",
+					lastRun: new Date(),
+					completed: new Date(),
 					result: jobResult
 				}
 			})
@@ -48,6 +50,7 @@ Jobs.private.run = function (doc, callback) {
 		} catch (e) {
 			var jobUpdate = Jobs.private.collection.update(doc._id, {
 				$set: {
+					lastRun: new Date(),
 					state: "failed"
 				}
 			});

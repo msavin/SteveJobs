@@ -63,10 +63,6 @@ JobsRunner = {
 
 Meteor.startup(function () {
 	var delay = Jobs.private.configuration.startupDelay;
-	
-	if (Meteor.isDevelopment) {
-		delay = 1500;
-	}
 
 	Meteor.setTimeout(function () {
 		JobsRunner.start();
@@ -78,7 +74,4 @@ Meteor.startup(function () {
 		- person manually runs job with Jobs.run()
 		- jobs queue runs the same job 
 		- run function should be integrated with `JobsRunner.available` or ...
-
-	Idea
-		- have seperate configuration settings for development and production
 */
