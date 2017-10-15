@@ -36,7 +36,7 @@ Jobs.add = function (job) {
 		}
 
 	// Check that the job being added exists
-		if (!Jobs.private.registry[name]) {
+		if (!Jobs.private.registry[job.name]) {
 			console.log("Jobs: Invalid job name: " + job.name);
 		}
 
@@ -50,7 +50,7 @@ Jobs.add = function (job) {
 		return new Date();
 	}();
 
-	return SteveJobsData.insert({
+	return Jobs.private.collection.insert({
 		due: date,
 		name: job.name,
 		state: "pending",

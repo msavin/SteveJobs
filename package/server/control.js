@@ -8,7 +8,7 @@ JobsControl = {
 	collection: new Mongo.Collection('jobsSettings'),
 	serverId: Math.random(), 
 	checkIfActiveServer: function () {
-		self = this;
+		var self = this;
 		doc = self.collection.find({name: "ActiveServer"})
 
 		if (!doc) {
@@ -18,19 +18,22 @@ JobsControl = {
 			self.setAsActiveServer();
 		} 
 		else {
-			timeGap = new Date () - doc.lastPing;
-			timeSpacer = Jobs.timeGap || 10*60*1000 // 10 minutes
+			var timeGap = new Date () - doc.lastPing;
+			var timeSpacer = Jobs.timeGap || 10*60*1000 // 10 minutes
 			if (timeGap > timeSpacer) {
 				self.setAsActiveServer()
 			}
 		}
 	},
 	setAsActiveServer: function () {
-		self = this;
+		var self = this;
+		var current = new Date();
 
-		return self.collection.upsert({name: "ActiveServer"}, $set: {
-			lastPing: new Date(),
-			serverId: self.serverId
+		return self.collection.upsert({name: "ActiveServer"}, {
+			$set: {
+				lastPing: current,
+				serverId: self.serverId
+			}
 		})
 	}
 }

@@ -5,7 +5,7 @@ Jobs.private = {};
 Jobs.private.collection = new Mongo.Collection("simpleJobs");
 
 Meteor.startup(function () {
-	Jobs_ensureIndex({
+	Jobs.private.collection._ensureIndex({
 		due: 1, 
 		state: 1
 	})
@@ -28,25 +28,39 @@ Jobs.private.run = function (doc, callback) {
 		// should probably switch to
 		// pending: true/false
 		// ranSuccessfully: true/false 
-		try () {
+		try {
 			var jobResult = Jobs.private.registry[doc.name](doc.parameters);
 
-			var jobUpdate = Jobs.private.collection.update(doc._id, $set: {
-				state: "successful",
-				result: jobResult
+			var jobUpdate = Jobs.private.collection.update(doc._id, {
+				$set: {
+					state: "successful",
+					result: jobResult
+				}
 			})
 
-			callback(null, jobResult);
+			if (typeof callback === "function") {
+				callback(null, jobResult);
+			} else if (typeof callback !== "undefined") {
+				console.log("Jobs: Invalid callback, but job still ran");
+				console.log("----")
+			}
 		} catch (e) {
-			var jobUpdate = Jobs.private.collection.update(doc._id, $set: {
-				state: "failed"
+			var jobUpdate = Jobs.private.collection.update(doc._id, {
+				$set: {
+					state: "failed"
+				}
 			});
 
 			if (jobUpdate) {
 				console.log("Jobs: Job failed to run: " + doc.name)
 			}
 
-			callback(e, null)
+			if (typeof callback === "function") {
+				callback(e, null)
+			} else if (typeof callback !== "undefined") {
+				console.log("Jobs: Invalid callback, but job still ran");
+				console.log("----")
+			}
 		}
 	} else {
 		console.log("Jobs: Job not found in registry: " + doc.name);

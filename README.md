@@ -42,7 +42,7 @@ Finally, schedule a job by specifying how soon to run it:
 
 ```javascript
 Jobs.add({
-    name: sendReminderEmail,
+    name: "sendReminderEmail",
     parameters: {
         to: "john@smith.com",
         message: "hi this is your reminder"
@@ -59,7 +59,7 @@ Or when to run it:
 
 ```javascript
 Jobs.add({
-    name: sendReminderEmail,
+    name: "sendReminderEmail",
     parameters: {
         to: "john@smith.com",
         message: "hi this is your reminder"
