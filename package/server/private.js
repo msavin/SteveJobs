@@ -68,7 +68,8 @@ Jobs.private.run = function (doc, callback) {
 	}
 }
 
-Jobs.private.date = {};
+
+// Jobs.private.date = {};
 
 /* Supported fields:
 	- second
@@ -77,15 +78,15 @@ Jobs.private.date = {};
 	- day
 	- month
 	- year
-*/
+// */
 
-Jobs.private.date.fields = []
+// Jobs.private.date.fields = []
 
-Jobs.private.date.on = function (on) {
-	current = new Date();
-	return date;
-}
+// Jobs.private.date.on = function (on) {
+// 	current = new Date();
+// 	return date;
+// }
 
-Jobs.private.date.in = function (in) {
+// Jobs.private.date.in = function (in) {
 
-}
+// }

@@ -1,11 +1,10 @@
-// Goal 1: Ensure this only runs on one server
-// Goal 2: Provide a way to set the timeout
-// Future: When it runs the last job, the package could check if there is something scheduled to run before its time out, and shorten the timeout
-// Future: Provide ability to run jobs across multiple servers. Perhaps it could be divided by considering if the MongoDB document id starts with a number or letter.
+// Future idea: When it runs the last job, the package could check if there is something scheduled to run before its time out, and shorten the timeout
+// Future idea: Provide ability to run jobs across multiple servers. Perhaps it could be divided by considering if the MongoDB document id starts with a number or letter.
 
 JobsRunner = {
 	available: true,
 	state: null,
+	ranFailed: false,
 	start: function () {
 		var self = this;
 
@@ -25,15 +24,17 @@ JobsRunner = {
 				self.available = false;
 				self.runLatest();
 			}
-		} else {
-			self.stop();
 		}
 	},
-	runLatest: function (jobState) {
+	runLatest: function () {
 		var self = this;
+		var state = "pending"
 
-		var state = jobState || "pending"
-		var latestJob = Jobs.private.collection.findOne({
+		if (!self.ranFailed) {
+			var state = "failed"
+		}
+
+		var jobDoc = Jobs.private.collection.findOne({
 			due: {
 				$lt: new Date()
 			},
@@ -44,13 +45,18 @@ JobsRunner = {
 			}
 		});
 
-		if (latestJob) {
-			Jobs.run(latestJob, function () {
+		if (jobDoc) {
+			Jobs.run(jobDoc, function () {
 				self.available = true;
 				JobsRunner.runLatest()
 			});
 		} else {
 			self.available = true;
+
+			if (!self.ranFailed) {
+				self.ranFailed = true;
+				JobsRunner.runLatest();
+			}
 		}
 	}
 }
