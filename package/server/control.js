@@ -8,6 +8,9 @@ JobsControl = {
 	collection: new Mongo.Collection('jobsSettings'),
 	serverId: Math.random(), 
 	isActive: function () {
+		if (Meteor.isDevelopment)
+			return true;
+
 		var self = this;
 
 		doc = self.collection.find({name: "ActiveServer"}).fetch();

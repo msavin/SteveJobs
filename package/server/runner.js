@@ -9,13 +9,13 @@ JobsRunner = {
 	start: function () {
 		var self = this;
 
-		self.state = Meteor.setTimeout(function () {
+		self.state = Meteor.setInterval(function () {
 			self.run()
 		}, Jobs.private.configuration.timer);
 	},
 	stop: function () {
 		var self = this;
-		return Meteor.clearTimeout(self.state);
+		return Meteor.clearInterval(self.state);
 	},
 	run: function () {
 		var self = this;
@@ -48,12 +48,16 @@ JobsRunner = {
 				self.available = true;
 				JobsRunner.runLatest()
 			});
+		} else {
+			self.available = true;
 		}
 	}
 }
 
 Meteor.startup(function () {
-	JobsRunner.start();
+	Meteor.setTimeout(function () {
+		JobsRunner.start();
+	}, 10000)
 });
 
 /*

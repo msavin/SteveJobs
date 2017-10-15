@@ -23,7 +23,7 @@ Jobs.register = function (jobs) {
 // Add a new job to MongoDB
 
 Jobs.add = function (job) {
-	// Check that we have the right input
+	// 1. Check that we have the right input
 		if (typeof job === "object") {
 			if (typeof job.name !== "string") {
 				console.log("Jobs: must specify name")
@@ -35,30 +35,37 @@ Jobs.add = function (job) {
 			return;
 		}
 
-	// Check that the job being added exists
+	// 2. Check that the job being added exists
 		if (!Jobs.private.registry[job.name]) {
 			console.log("Jobs: Invalid job name: " + job.name);
 		}
 
+	// 3. Ensure there is a valid date to work with
 	var date = function () {
-		// if (jobs.in) {
-
-		// } else if (job.on) {
-
-		// }
-
-		return new Date();
+		if (job.on) {
+			return new Date()
+		} else if (job.in) {
+			return new Date()
+		} else {
+			return new Date();
+		}
 	}();
 
-	return Jobs.private.collection.insert({
-		due: date,
-		name: job.name,
-		state: "pending",
-		parameters: job.parameters
-	});
+	if (date) {
+		var result = Jobs.private.collection.insert({
+			due: date,
+			name: job.name,
+			state: "pending",
+			parameters: job.parameters
+		});
+
+		return result;
+	} else {
+		console.log("Invalid date specified");
+	}
 }
 
-// Remove a job from MongoDB
+// Cancel a job without removing it from MongoDB
 
 Jobs.cancel = function (id) {
 	job = Jobs.private.collection.findOne(id)
@@ -72,7 +79,7 @@ Jobs.cancel = function (id) {
 			return result;
 		} else {
 			console.log("Jobs: Cancel failed for " + id);
-			console.log("Jobs: Job has completed successful before.");
+			console.log("Jobs: Job has completed successful or is already cancelled.");
 			console.log("----");
 			return false;
 		}
@@ -82,7 +89,6 @@ Jobs.cancel = function (id) {
 		console.log("----");
 		return false;
 	}
-	return Jobs.private.collection.remove(id)
 }
 
 // Start or stop the queue
