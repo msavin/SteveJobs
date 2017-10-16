@@ -81,8 +81,8 @@ The package will run one job at a time until there are no more jobs to run. Afte
 ```javascript
 Jobs.configure({
     timer: 5 * 1000,            // how often to check for new jobs
-    activityGap: 5 * 60 * 1000, // how much time a server can slack for before another server takes over
-    startupDelay: 5 * 1000  // how soon to run after the server has started
+    startupDelay: 5 * 1000      // how soon to run after the server has started
+    activityDelay: 5 * 60 * 1000, // how long a server can slack off for before another server takes over
 })
 ```
 
@@ -117,7 +117,7 @@ Jobs.clear() // pass in `true` to remove failed documents, pass in `true, true` 
 
 ## More Information
 
-For more information on how it works, including how jobs run, how the timing works, what happens when a job fails, and so on, check out "<a href="HOWITWORKS.md">How It Works</a>."
+For more information about how the package works, how jobs run, how the timing works, what happens when a job fails, and so on, check out "<a href="HOWITWORKS.md">How It Works</a>."
 
 If you like the design of the package, make sure to check out: 
  - <a href="http://meteor.toys">Meteor Toys</a> - Development Tools

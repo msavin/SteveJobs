@@ -16,7 +16,7 @@ Jobs.private.registry = {};
 Jobs.private.configuration = {
 	timer: 5 * 1000,
 	activityGap: 5 * 60 * 1000,
-	startupDelay: 5 * 1000
+	activityDelay: 5 * 1000
 }
 
 Jobs.private.run = function (doc, callback) {

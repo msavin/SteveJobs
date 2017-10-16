@@ -20,7 +20,7 @@ JobsControl = {
 			return self.setAsActive();
 		} else {
 			var timeGap = new Date () - doc.lastPing;
-			var timeSpacer = Jobs.private.configuration.activityGap || 10*60*1000 // 10 minutes
+			var timeSpacer = Jobs.private.configuration.activityDelay || 10*60*1000 // 10 minutes
 
 			if (timeGap > timeSpacer) {
 				return self.setAsActive()
