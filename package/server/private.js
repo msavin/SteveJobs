@@ -15,7 +15,7 @@ Jobs.private.registry = {};
 
 Jobs.private.configuration = {
 	timer: 5 * 1000,
-	checker: 5 * 60 * 1000,
+	activityGap: 5 * 60 * 1000,
 	startupDelay: 5 * 1000
 }
 

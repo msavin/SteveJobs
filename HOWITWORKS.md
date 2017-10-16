@@ -1,48 +1,50 @@
-# Steve Jobs - How It Works
+# Steve Jobs Package - How It Works
 
-## One Job At a Time
+## Runs One Job At a Time
 
-The Steve Jobs package is quite like Steve Jobs, and quite unlike him at the same time. In favor of ease and simplicity, the package does not aim to run its jobs on the dot. Instead, it checks for new jobs every 30 seconds and runs only one job at a time. Additionally, if a server goes down, it could take 5 minutes for the package to start running on a different server. Both of these timers could be modified to your preference.
+The Steve Jobs package is quite like Steve Jobs, and quite unlike him at the same time. In favor of ease and simplicity, the package does not aim to run its jobs on the dot. 
 
-## One Server At a Time
+Instead, it checks for new jobs every 5 seconds and runs only one job at a time. Whenever it runs a job, it will then check if there are more jobs pending. If there are not, it will go back to checking every 5 seconds. 
 
-To avoid potential screw-ups with MongoDB read/write performance, the package will claim one server and run from there. If that server goes down, another server will take over. The new server is claimed based on whoever picks it first.
+## Runs on One Server At a Time
 
-## In Development Mode
+To avoid potential screw-ups with MongoDB read/write performance, the package will claim one server and run from there. If that server goes down, another server will take over.
 
-For the smoothest development experience, this package automatically checks out your local development server as active. This is to keep the package from running slower than expected, because may restart frequently in development.
+Whenever a server starts up, it will be given a randomly generated id. It will then check if there is a server processing jobs, and if not, it will use its id to mark its presence in a MongoDB document. Other servers will automatically check if it is active. If one of them finds that it is not, it will take over the work.
 
-## Job States (needs to be rewritten)
+## Development Mode
 
-Jobs can have four different states, which are marked by a number for MongoDB indexing purposes:
- - 1 - Pending
- - 2 - Failed
- - 3 - Succeeded
- - 4 - Canceled
+For the smoothest development experience, this package automatically checks out your local development server as the active server. This is to keep the package from running slower than expected, because may restart frequently in development.
 
-## Success and Failure (needs to be rewritten)
+## Job States 
 
-Jobs will automatically archive jobs. There are three types of jobs: failed, successful, and pending. 
-  - Jobs that succeed will stay in the database. They can be cleared at your preference with `Jobs.clear(numberOfDays)`.
-  - Jobs that fail will try to run again the next time the server restarts. (Never give up!)
-  - Jobs that are pending will sit and wait their turn. They could be removed with `Jobs.remove`, or be forced to run early with `Jobs.run`.
+Jobs can have four different states:
+ - Pending
+ - Failed
+ - Succeeded
+ - Canceled
+
+Jobs that have failed will be re-tried whenever the a server starts processing jobs. It will attempt to run them one at a time until it goes through all of them. After that, it will go through the pending jobs. After that, it will poll the database every 5 seconds to see if there is anything new to do.
+
+Jobs that are Pending and/or Failed can be canceled with `Jobs.cancel`. Jobs that have succeeded or are canceled can be cleared with `Jobs.clear`.
 
 ## Fibers-based Timing
 
-The package leverages `Meteor.setInterval` to do its work. While the idea of timeouts may not sound like a good idea on the server - it may actually be the right approach because Meteor's timing functions leverage Fibers.
+The package leverages `Meteor.setInterval` to do its work. While the idea of timeouts on a server may not sound like a good idea - it may actually be the right approach because the  Meteor's timing functions leverage Fibers.
 
 ## MongoDB Indexing
 
-Steve Jobs will create two collections, one for jobs and another for communicating with other servers. The jobs one will 
+Steve Jobs will create two collections, one for jobs and another for communicating with other servers. The one with the jobs one is indexed by time and state for optimal performance.
+
+## Timezones
+
+This package will use the servers timezone to base all of its operations. This should ensure that jobs run predictably, because they are designed to run on relative time (i.e. do this in  30 minutes). You can also set the timezone on your server using the `TZ` environment variable.
 
 ## Future Ideas (Contributions Welcome)
 
  - Create a way to run jobs across multiple servers. One easy way to do this is by playing with the MongoDB document ID's. For example, if the first character is a letter, use server one, if its a letter, use server two.
  - Create a way for the server to pause jobs if the CPU usage is high. Every little bit helps, right?
- - Create a way for a server with lower CPU consumption to take over the jobs queue if possible.
  - Create a way to run jobs as a microservice.
- - Create a way to repeat jobs.
-
-## Timezones
-
-This package will use the servers timezone to base all of its operations. This should ensure that jobs run predictably, because they are designed to run on relative time (i.e. do this in  30 minutes). You can also set the timezone on your server using the `TZ` environment variable.
+ - Create a way to repeat jobs. (Perhaps this should be another package?)
+ - Create a way for people to place their own timezones
+ - Create a way to expedite certain jobs

@@ -121,6 +121,11 @@ Jobs.get = function (id) {
 // Run a job ahead of time
 
 Jobs.run = function (doc, callback) {
+	if (!JobsRunner.available) {
+		console.log("Jobs: Could not run job because job queue is busy");
+		return;
+	}
+
 	if (typeof doc === "object") {
 		Jobs.private.run(doc, callback)
 	} else if (typeof doc === "string") {

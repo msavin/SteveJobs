@@ -81,7 +81,7 @@ The package will run one job at a time until there are no more jobs to run. Afte
 ```javascript
 Jobs.configure({
     timer: 5 * 1000,            // how often to check for new jobs
-    checker: 5 * 60 * 1000, // how often to check if there is an active jobs server
+    activityGap: 5 * 60 * 1000, // how much time a server can slack for before another server takes over
     startupDelay: 5 * 1000  // how soon to run after the server has started
 })
 ```

@@ -6,8 +6,9 @@ JobsControl = {
 	collection: new Mongo.Collection('jobsSettings'),
 	serverId: Math.random(), 
 	isActive: function () {
-		if (Meteor.isDevelopment)
+		if (Meteor.isDevelopment) {
 			return true;
+		}
 
 		var self = this;
 
@@ -15,13 +16,11 @@ JobsControl = {
 
 		if (!doc) {
 			return self.setAsActive();
-		}
-		else if (doc.serverId === self.serverId) {
+		} else if (doc.serverId === self.serverId) {
 			return self.setAsActive();
-		} 
-		else {
+		} else {
 			var timeGap = new Date () - doc.lastPing;
-			var timeSpacer = Jobs.private.configuration.checker || 10*60*1000 // 10 minutes
+			var timeSpacer = Jobs.private.configuration.activityGap || 10*60*1000 // 10 minutes
 
 			if (timeGap > timeSpacer) {
 				return self.setAsActive()

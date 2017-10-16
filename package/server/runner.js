@@ -68,10 +68,3 @@ Meteor.startup(function () {
 		JobsRunner.start();
 	}, delay)
 });
-
-/*
-	Potential (small) Bug: 
-		- person manually runs job with Jobs.run()
-		- jobs queue runs the same job 
-		- run function should be integrated with `JobsRunner.available` or ...
-*/
