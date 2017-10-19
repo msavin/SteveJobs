@@ -11,13 +11,15 @@ Steve Jobs makes it really easy to run scheduled tasks on Meteor. It's specially
  - Retries failed jobs on server restart
  - Designed for smooth performance on Meteor
 
-## How to Use
+## Get Started
 
 First, install the package:
 
-	meteor add msavin:sjobs
+```bash
+meteor add msavin:sjobs
+```
 
-Second, write your background jobs like you would a method: 
+Second, write your background jobs like you would your methods: 
 
 ```javascript
 Jobs.register({
@@ -44,7 +46,7 @@ Finally, schedule a job to run like you would run a method:
 Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
 ```
 
-The job will be added to the queue to run as soon as possible. You can delay it by passing in a special object at the end: 
+The job will be added to the queue to run as soon as possible. You can delay it by passing in a special object: 
 
 ```javascript
 Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
@@ -63,12 +65,12 @@ The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`,
 
 ## Configuration and API
 
-The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 30 seconds by quering the database. However, you could change the frequency to your preference with a simple setting: 
+The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 30 seconds by quering the database. However, you could change the frequency to your preference: 
 
 ```javascript
 Jobs.configure({
-    timer: 5 * 1000,            // how often to check for new jobs
-    startupDelay: 5 * 1000      // how soon to run after the server has started
+    timer: 5 * 1000,                // how often to check for new jobs
+    startupDelay: 5 * 1000          // how soon to run after the server has started
     activityDelay: 5 * 60 * 1000, // how long a server can slack off for before another server takes over
 })
 ```
