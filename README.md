@@ -110,7 +110,7 @@ Jobs.collection.find();
 Jobs.clear() // pass in `true` to remove failed documents, pass in `true, true` to remove all
 ```
 
-## For Details
+## For More Details
 
 For more information about how the package works, how jobs run, how the timing works, what happens when a job fails, and so on, check out the "<a href="DOCUMENTATION.md">documentation</a>."
 

@@ -17,8 +17,6 @@
 	When a job completes, Jobs will check if there are more jobs to run.
 	If there are more jobs to run, Jobs will continue to run them consecutively. 
 	If there are no more jobs to run, Jobs will go back to polling with setInterval
-	
-	BUG: infinite loop for failed jobs, could be negated by attaching server id to MongoDB document
 
 */
 
@@ -49,7 +47,10 @@ JobsRunner = {
 			due: {
 				$lt: new Date()
 			},
-			state: state
+			state: state,
+			$ne: {
+				lastServer: JobsControl.serverId
+			}
 		}, {
 			sort: {
 				due: -1
