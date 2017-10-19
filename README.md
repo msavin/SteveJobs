@@ -17,62 +17,49 @@ First, install the package:
 
 	meteor add msavin:sjobs
 
-Second, define your background jobs: 
+Second, write your background jobs like you would a method: 
 
 ```javascript
 Jobs.register({
-    sendReminderEmail: function (parameters) {
+    sendReminderEmail: function (to, content) {
         Email.send({
-            to: parameters.to,
+            to: to,
             from: "no-reply@jobs.com",
             subject: "Your Reminder",
-            content: parameters.content,
+            content: content,
         })
     },
-    somethingElse: function (parameters) {
+    insertRecord: function (data) {
         Collection.insert({
             date: new Date(),
-            data: parameters
+            data: data
         });
     }
-})
+});
 ```
 
-Finally, schedule a job by specifying how soon to run it:
+Finally, schedule a job to run like you would run a method: 
 
 ```javascript
-Jobs.add({
-    name: "sendReminderEmail",
-    parameters: {
-        to: "john@smith.com",
-        message: "hi this is your reminder"
-    },
+Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
+```
+
+The job will be added to the queue to run as soon as possible. You can delay it by passing in a special object at the end: 
+
+```javascript
+Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
     in: {
         days: 1,
-        hours: 3,
-        minutes: 14
-    }
-})
-```
-
-Or when to run it: 
-
-```javascript
-Jobs.add({
-    name: "sendReminderEmail",
-    parameters: {
-        to: "john@smith.com",
-        message: "hi this is your reminder"
-    },
+        hours: 13
+    }, 
     on: {
-        month: 0,
-        day: 1,
-        hour: 23,
-        year: 2017
+        minutes: 13,
+        year: 2037
     }
-})
-
+});
 ```
+
+The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`, `hours`, `day`, `month`, and `year`. 
 
 ## Configuration and API
 

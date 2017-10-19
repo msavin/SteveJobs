@@ -1,4 +1,4 @@
-// Configure the package
+ // Configure the package
 
 Jobs.configure = function (data) {
 	Object.keys(data).forEach(function (key) {
@@ -22,7 +22,7 @@ Jobs.register = function (jobs) {
 
 // Add a new job to MongoDB
 
-Jobs.add = function (job) {
+Jobs.add = function () {
 	// 1. Check that we have the right input
 		if (typeof job === "object") {
 			if (typeof job.name !== "string") {
@@ -42,37 +42,29 @@ Jobs.add = function (job) {
 			console.log("----");
 		}
 
-	// 3. Ensure there is a valid date to work with
-	var date = function () {
-		time = new Date();
+	// 3. Ready set fire
 
-		addMinutes = function (date, minutes) {
-		    return new Date(date.getTime() + minutes*60000);
+		var doc = {
+			name: arguments[0],
+			due: function () {
+				var run = new Date();
+
+				if (typeof arguments[arguments.length] === "object") {
+					if (arguments[arguments.length].in || arguments[arguments.length].on) {
+						run = Jobs.private.date(arguments[arguments.length]);
+					}
+				}
+
+				return run
+			}(),
+			arguments: function () {
+				return arguments.splice(0, 1)
+			}(),
+			state: "pending"
 		}
 
-		return addMinutes(time, 1)
-
-		if (job.on) {
-			return new Date()
-		} else if (job.in) {
-			return new Date()
-		} else {
-			return new Date();
-		}
-	}();
-
-	if (date) {
-		var result = Jobs.private.collection.insert({
-			due: date,
-			name: job.name,
-			state: "pending",
-			parameters: job.parameters
-		});
-
+		var result = Jobs.private.collection.insert(doc);
 		return result;
-	} else {
-		console.log("Invalid date specified");
-	}
 }
 
 // Cancel a job without removing it from MongoDB

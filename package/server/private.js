@@ -30,7 +30,7 @@ Jobs.private.run = function (doc, callback) {
 		// pending: true/false
 		// ranSuccessfully: true/false 
 		try {
-			var jobResult = Jobs.private.registry[doc.name](doc.parameters);
+			var jobResult = Jobs.private.registry[doc.name].apply(null, doc.arguments);
 
 			var jobUpdate = Jobs.private.collection.update(doc._id, {
 				$set: {
@@ -78,13 +78,13 @@ Jobs.private.date  = function (input1, input2) {
 	if (input2) {
 		try { 
 			currentDate = new Date(input1);
-			action = input2
+			action = input2;
 		} catch (e) {
 			console.log("DateFunc: Invalid date entered");
 			return;
 		}
 	} else {
-		action = input1;
+		action = input1 || {};
 	}
 	
 	var utilities = {
