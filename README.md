@@ -1,15 +1,18 @@
-<img align="right" width="220" src="https://github.com/msavin/stevejobs/blob/master/avatar.png?raw=true" />
+<img align="right" width="220" src="https://github.com/msavin/stevejobs/blob/master/AVATAR.png?raw=true" />
 
 # Steve Jobs
 
-### The simple jobs queue that just works. [IN DEVELOPMENT]
+### The Simple Jobs Queue That Just Works. [IN DEVELOPMENT]
 
-Steve Jobs makes it really easy to run scheduled tasks on Meteor. It's specially designed to work with Meteor by leveraging MongoDB collections and fibers-based timer functions for effortless setup and use.
+Steve Jobs makes it effortless to run scheduled tasks on Meteor. The API is comfortable to use, it works great with MongoDB collections, and it uses fibers-based timing functions.
+
  - Runs one job at a time
  - Runs on one server at a time
- - Logs all jobs and their outcomes
- - Retries failed jobs on server restart
- - Designed for smooth performance on Meteor
+ - Logs all the jobs and their outcomes
+ - Retries failed jobs on server startups
+ - Designed to performance well on Meteor
+
+The package has been production tested and is ready for action. To get started, check out the Get Started example below and take a look at the <a href="./DOCUMENTATION.md">Documentation</a>.
 
 ## Get Started
 
@@ -63,9 +66,9 @@ Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
 
 The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`, `hours`, `day`, `month`, and `year`. 
 
-## Configuration and API
+## Feature Overview 
 
-The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 30 seconds by quering the database. However, you could change the frequency to your preference: 
+The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 5 seconds by quering the database. However, you could change the frequency to your preference: 
 
 ```javascript
 Jobs.configure({
@@ -98,15 +101,15 @@ Jobs.run(jobId, function (e,r) {
 });
 
 // Access the Jobs collection directly
-Jobs.collection.find().fetch();
+Jobs.collection.find();
 
 // Clear the logs
 Jobs.clear() // pass in `true` to remove failed documents, pass in `true, true` to remove all
 ```
 
-## More Information
+## For Details
 
-For more information about how the package works, how jobs run, how the timing works, what happens when a job fails, and so on, check out "<a href="HOWITWORKS.md">How It Works</a>."
+For more information about how the package works, how jobs run, how the timing works, what happens when a job fails, and so on, check out the "<a href="DOCUMENTATION.md">documentation</a>."
 
 If you like the design of the package, make sure to check out: 
  - <a href="http://meteor.toys">Meteor Toys</a> - Development Tools

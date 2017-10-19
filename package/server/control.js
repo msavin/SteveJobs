@@ -3,7 +3,7 @@
 // If it doesn't do that for X minutes, another server will take over
 
 JobsControl = {
-	collection: new Mongo.Collection('jobsSettings'),
+	collection: new Mongo.Collection('jobs_config'),
 	serverId: Math.random(), 
 	isActive: function () {
 		if (Meteor.isDevelopment) {

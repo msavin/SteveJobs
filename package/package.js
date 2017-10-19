@@ -1,6 +1,6 @@
 Package.describe({
 	name:    'msavin:sjobs',
-	summary: 'A simple jobs que that just works',
+	summary: 'A simple jobs queue that just works',
 	version: '1.0.0'
 });
 
