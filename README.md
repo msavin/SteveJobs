@@ -1,4 +1,4 @@
-<img align="right" width="220" src="https://github.com/msavin/stevejobs/blob/master/AVATAR.png?raw=true" />
+<img align="right" width="220" src="https://github.com/msavin/stevejobs/blob/master/ICON.png?raw=true" />
 
 # Steve Jobs
 
