@@ -71,25 +71,103 @@ Jobs.private.run = function (doc, callback) {
 	}
 }
 
+Jobs.private.date  = function (input1, input2) {
+	var currentDate = new Date();
+	var action;
 
-// Jobs.private.date = {};
+	if (input2) {
+		try { 
+			currentDate = new Date(input1);
+			action = input2
+		} catch (e) {
+			console.log("DateFunc: Invalid date entered");
+			return;
+		}
+	} else {
+		action = input1;
+	}
+	
+	var utilities = {
+		in: {
+			milliseconds: function (int) {
+				int = currentDate.getMilliseconds() + int;
+				currentDate.setMilliseconds(int);
+			},
+			seconds: function (int) {
+				int = currentDate.getSeconds() + int;
+				currentDate.setSeconds(int);
+			},
+			minutes: function (int) {
+				int = currentDate.getMinutes() + int;
+				currentDate.setMinutes(int);
+			},
+			hours: function (int) {
+				int = currentDate.getHours() + int;
+				currentDate.setHours(int);
+			},
+			day: function (int) {
+				int = currentDate.getDate() + int;
+				currentDate.setDate(int);
+			},
+			month: function (int) {
+				int = currentDate.getMonth() + int;
+				currentDate.setMonth(int);
+			},
+			year: function (int) {
+				int = currentDate.getYear() + int;
+				currentDate.setYear(int);
+			}
+		},
+		on: {
+			milliseconds: function (int) {
+				currentDate.setMilliseconds(int);
+			},
+			seconds: function (int) {
+				currentDate.setSeconds(int);
+			},
+			minutes: function (int) {
+				currentDate.setMinutes(int);
+			},
+			hours: function (int) {
+				currentDate.setHours(int);
+			},
+			day: function (int) {
+				currentDate.setDate(int);
+			},
+			month: function (int) {
+				currentDate.setMonth(int);
+			},
+			year: function (int) {
+				currentDate.setYear(int);
+			}
+		}
+	}
 
-/* Supported fields:
-	- second
-	- minute
-	- hour
-	- day
-	- month
-	- year
-// */
+	if (typeof action === "object") {
+		Object.keys(action).forEach(function (key1) {
+			if (["in","on"].indexOf(key1) > -1) {
 
-// Jobs.private.date.fields = []
+				Object.keys(action[key1]).forEach(function (key2) {
+					try {
+						if (typeof action[key1][key2] === "number") {
+							utilities[key1][key2](action[key1][key2]);
+						} else {
+							console.log("DateFunc: invalid type was inputted: " + key1 + "." + key2);	
+						}
+					} catch (e) {
+						console.log("DateFunc: invalid argument was ignored: " + key1 + "." + key2);
+					}
+				});
 
-// Jobs.private.date.on = function (on) {
-// 	current = new Date();
-// 	return date;
-// }
+			} else if (key1  === "tz" ) {
+				console.log("DateFunc: Oooo - you found a hidden feature - timezone is not working yet!");
+			} else {
+				console.log("DateFunc: invalid argument was ignored: " + key1);
+			}
+		});
 
-// Jobs.private.date.in = function (in) {
-
-// }
+		return currentDate;
+	} else {
+		console.log("DateFunc: Invalid input for second argument");
+	}
+}
