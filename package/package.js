@@ -1,24 +1,25 @@
 Package.describe({
-	name:    'msavin:sjobs',
-	summary: 'A simple jobs queue that just works',
-	version: '1.0.0'
+	name:    "msavin:sjobs",
+	summary: "A simple jobs queue that just works",
+	version: "1.0.0"
 });
 
 serverFiles  = [
-	'server/private.js',
-	'server/public.js',
-	'server/control.js',
-	'server/runner.js'
+	"server/private.js",
+	"server/public.js",
+	"server/control.js",
+	"server/runner.js"
+	"server/startup.js"
 ];
 
 Package.onUse(function(api) {
-	api.use(['mongo']);
-	api.addFiles(serverFiles, 'server');
-	api.versionsFrom('1.0');
+	api.use(["mongo"]);
+	api.addFiles(serverFiles, "server");
+	api.versionsFrom("1.0");
 	
 	// For Development
-	api.export(['Jobs', 'JobsControl', 'JobsRunner'])
+	api.export(["Jobs", "JobsControl", "JobsRunner"])
 	
 	// For External Use
-	// api.export('Jobs')
+	// api.export("Jobs")
 });

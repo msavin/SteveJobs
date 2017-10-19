@@ -128,41 +128,41 @@ Jobs.private.start = function (doc, callback) {
 	} else {
 		console.log("Jobs: Invalid input for Jobs.run();");
 		console.log(doc);
-		console.log('----')
+		console.log("----")
 	}
 }
 
 Jobs.private.add = function () {
 	// 1. Check that the job being added exists
-		if (!Jobs.private.registry[arguments[0]]) {
-			console.log("Jobs: Invalid job name: " + job.name);
-			console.log("----");
-		}
+	if (!Jobs.private.registry[arguments[0]]) {
+		console.log("Jobs: Invalid job name: " + job.name);
+		console.log("----");
+	}
 
 	// 2. Ready set fire
+	var doc = {
+		name: arguments[0],
+		due: function () {
+			var run = new Date();
 
-		var doc = {
-			name: arguments[0],
-			due: function () {
-				var run = new Date();
-
-				if (typeof arguments[arguments.length] === "object") {
-					if (arguments[arguments.length].in || arguments[arguments.length].on) {
-						run = Jobs.private.date(arguments[arguments.length]);
-					}
+			if (typeof arguments[arguments.length] === "object") {
+				if (arguments[arguments.length].in || arguments[arguments.length].on) {
+					run = Jobs.private.date(arguments[arguments.length]);
 				}
+			}
 
-				return run
-			}(),
-			arguments: function () {
-				return arguments.splice(0, 1)
-			}(),
-			state: "pending"
-		}
+			return run
+		}(),
+		arguments: function () {
+			return arguments.splice(0, 1)
+		}(),
+		state: "pending"
+	}
 
-		var result = Jobs.private.collection.insert(doc);
-		return result;
+	var result = Jobs.private.collection.insert(doc);
+	return result;
 }
+
 Jobs.private.date  = function (input1, input2) {
 	var currentDate = new Date();
 	var action;

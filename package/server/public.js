@@ -6,7 +6,7 @@ Jobs.configure = function (data) {
 	});
 }
 
-// Register jobs
+// Register jobs in a similar style to Meteor methods
 
 Jobs.register = function (jobs) {
 	Object.keys(jobs).forEach(function (job) {
@@ -40,6 +40,17 @@ Jobs.start = function () {
 
 Jobs.stop = function () {
 	JobsRunner.stop();
+}
+
+// Restart the queue, forcing failed jobs to run without restarting server
+// The server that this function runs on will take over running the queue
+
+
+Jobs.restart = function () {
+	JobsRunner.stop();
+	JobsControl.setAsActive();
+	JobsRunner.state = "failed";
+	JobsRunner.start();
 }
 
 // Get info on a job/jobs

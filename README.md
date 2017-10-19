@@ -12,7 +12,7 @@ Steve Jobs makes it effortless to run scheduled tasks on Meteor. The API is comf
  - Retries failed jobs on server startups
  - Designed to performance well on Meteor
 
-The package has been production tested and is ready for action. To get started, check out the Get Started example below and take a look at the <a href="./DOCUMENTATION.md">Documentation</a>.
+The package has been production tested and is ready for action. To get started, check out the Get Started example below and take a look at the <a href="./DOCUMENTATION.md">documentation</a>.
 
 ## Get Started
 
@@ -68,7 +68,7 @@ The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`,
 
 ## Feature Overview 
 
-The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 5 seconds by quering the database. However, you could change the frequency to your preference: 
+The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 5 seconds by querying the database. However, you could change the frequency of that, and other things, to your preference: 
 
 ```javascript
 Jobs.configure({
@@ -86,6 +86,9 @@ Jobs.stop();
 
 // Start the job queue - could be handy for development
 Jobs.start();
+
+// Restart the queue, forcing failed jobs to re-run without restarting servers
+Jobs.restart();
 
 // Get information about a pending job
 Jobs.get(jobId);
