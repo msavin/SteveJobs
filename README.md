@@ -2,9 +2,9 @@
 
 # Steve Jobs
 
-### The Simple Jobs Queue That Just Works. [IN DEVELOPMENT]
+### The Simple Jobs Queue That Just Works. [IN TESTING]
 
-Steve Jobs makes it effortless to run scheduled tasks on Meteor. The API is comfortable to use, it works great with MongoDB collections, and it uses fibers-based timing functions.
+Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made just for Meteor. The setup and usage is quick and effortless, thanks to tight integration with MongoDB collections and fibers-based timing function.
 
  - Runs one job at a time
  - Runs on one server at a time
@@ -12,9 +12,9 @@ Steve Jobs makes it effortless to run scheduled tasks on Meteor. The API is comf
  - Retries failed jobs on server startups
  - Designed to performance well on Meteor
 
-The package has been production tested and is ready for action. To get started, check out the Get Started example below and take a look at the <a href="./DOCUMENTATION.md">documentation</a>.
+The package has been production tested and is ready for action. To get started, check out the Quick Start below and take a look at the <a href="./DOCUMENTATION.md">documentation</a>.
 
-## Get Started
+## Quick Start
 
 First, install the package:
 
@@ -49,7 +49,7 @@ Finally, schedule a job to run like you would run a method:
 Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
 ```
 
-The job will be added to the queue to run as soon as possible. You can delay it by passing in a special object: 
+The job will be added to the queue to run ASAP. However, you can delay it by passing in a special object at the end: 
 
 ```javascript
 Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
@@ -64,23 +64,30 @@ Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
 });
 ```
 
-The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`, `hours`, `day`, `month`, and `year`. 
+The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`, `hours`, `day`, `month`, and `year`. The date object will be updated in the order that is specified in the object. So, for example, if you set in 1 year, on year 2037, the year will still be 2037. However, if you set on year 2037, and add in 1 year, the year will be 2038.
 
 ## Feature Overview 
 
-The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 5 seconds by querying the database. However, you could change the frequency of that, and other things, to your preference: 
+The package will run one job at a time until there are no more jobs to run. After that, it will check for new jobs every 5 seconds by querying the database. However, you could change that and more: 
 
 ```javascript
 Jobs.configure({
     timer: 5 * 1000,                // how often to check for new jobs
     startupDelay: 5 * 1000          // how soon to run after the server has started
-    activityDelay: 5 * 60 * 1000, // how long a server can slack off for before another server takes over
+    activityDelay: 5 * 60 * 1000,   // how long a server can slack off for before another server takes over
 })
 ```
 
 In addition to creating jobs, you can also use:
 
 ```javascript
+// Run a job ahead of time, and provide optional callback
+Jobs.run(jobId, function (e,r) {
+    if (e) {
+        console.log("You're fired!")
+    }
+});
+
 // Stop the job queue - could be handy for development
 Jobs.stop();
 
@@ -96,21 +103,15 @@ Jobs.get(jobId);
 // Cancel a job but do not remove from database
 Jobs.cancel(jobId);
 
-// Run a job ahead of time, and provide optional callback
-Jobs.run(jobId, function (e,r) {
-    if (e) {
-        console.log("You're fired!")
-    }
-});
+// Clear completed and/or canceled jobs
+Jobs.clear()
 
 // Access the Jobs collection directly
 Jobs.collection.find();
 
-// Clear the logs
-Jobs.clear() // pass in `true` to remove failed documents, pass in `true, true` to remove all
 ```
 
-## For More Details
+## More Details
 
 For more information about how the package works, how jobs run, how the timing works, what happens when a job fails, and so on, check out the "<a href="DOCUMENTATION.md">documentation</a>."
 

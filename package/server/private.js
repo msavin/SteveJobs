@@ -19,12 +19,12 @@ Jobs.private.configuration = {
 	activityDelay: 5 * 1000
 }
 
-Jobs.private.run = function (doc, callback) {
+Jobs.private.run = function (doc, jobCallback) {
 	// Goals: 
 	// 1- Execute the job
 	// 2- Update the document in database
 	// 3- Capture the result (if any)
-
+	
 	if (typeof Jobs.private.registry[doc.name] === "function") {
 		// should probably switch to
 		// pending: true/false
@@ -41,17 +41,17 @@ Jobs.private.run = function (doc, callback) {
 				}
 			})
 
-			if (typeof callback === "function") {
-				callback(null, jobResult);
-			} else if (typeof callback !== "undefined") {
+			if (typeof jobCallback === "function") {
+				jobCallback(null, jobResult);
+			} else if (typeof jobCallback !== "undefined") {
 				console.log("Jobs: Invalid callback, but job still ran");
 				console.log("----")
 			}
 		} catch (e) {
+			console.log(e);
 			var jobUpdate = Jobs.private.collection.update(doc._id, {
 				$set: {
 					lastRun: new Date(),
-					lastServer: JobsControl.serverId,
 					state: "failed"
 				}
 			});
@@ -60,9 +60,9 @@ Jobs.private.run = function (doc, callback) {
 				console.log("Jobs: Job failed to run: " + doc.name)
 			}
 
-			if (typeof callback === "function") {
-				callback(e, null)
-			} else if (typeof callback !== "undefined") {
+			if (typeof jobCallback === "function") {
+				jobCallback(true, null)
+			} else if (typeof jobCallback !== "undefined") {
 				console.log("Jobs: Invalid callback, but job still ran");
 				console.log("----")
 			}
@@ -107,24 +107,25 @@ Jobs.private.clear = function (failed, pending) {
 		state.push("pending")
 	} 
 
-	Jobs.remove({
-		state: state
+	var result = Jobs.private.collection.remove({
+		state: {
+			$in: state
+		}
 	})
+
+	return result;
 }
 
-Jobs.private.start = function (doc, callback) {
-	if (!JobsRunner.available) {
-		console.log("Jobs: Could not run job because job queue is busy");
-		return;
-	}
-
+Jobs.private.start = function (doc, jobCallback) {
 	if (typeof doc === "object") {
-		Jobs.private.run(doc, callback)
+		var result = Jobs.private.run(doc, jobCallback);
+		return result;
 	} else if (typeof doc === "string") {
 		jobDoc = Jobs.private.collection.findOne(doc);
 
 		if (jobDoc) {
-			Jobs.private.run(jobDoc, callback);
+			var result = Jobs.private.run(jobDoc, jobCallback);
+			return result;
 		}
 	} else {
 		console.log("Jobs: Invalid input for Jobs.run();");
@@ -134,28 +135,33 @@ Jobs.private.start = function (doc, callback) {
 }
 
 Jobs.private.add = function () {
+	// 0. Convert arguments to array
+	var args = Array.prototype.slice.call(arguments);
+
 	// 1. Check that the job being added exists
-	if (!Jobs.private.registry[arguments[0]]) {
+	if (!Jobs.private.registry[args[0]]) {
 		console.log("Jobs: Invalid job name: " + job.name);
 		console.log("----");
 	}
 
 	// 2. Ready set fire
 	var doc = {
-		name: arguments[0],
+		name: args[0],
 		due: function () {
-			var run = new Date();
+			var due = new Date();
+			lastArg = args[args.length - 1];
 
-			if (typeof arguments[arguments.length] === "object") {
-				if (arguments[arguments.length].in || arguments[arguments.length].on) {
-					run = Jobs.private.date(arguments[arguments.length]);
+			if (typeof lastArg === "object") {
+				if (lastArg.in || lastArg.on) {
+					due = Jobs.private.date(lastArg);
 				}
 			}
 
-			return run
+			return due;
 		}(),
 		arguments: function () {
-			return arguments.splice(0, 1)
+			args.splice(0, 1)
+			return args;
 		}(),
 		state: "pending"
 	}
@@ -173,7 +179,7 @@ Jobs.private.date  = function (input1, input2) {
 			currentDate = new Date(input1);
 			action = input2;
 		} catch (e) {
-			console.log("DateFunc: Invalid date entered");
+			console.log("Jobs: Invalid date entered");
 			return;
 		}
 	} else {
@@ -245,22 +251,22 @@ Jobs.private.date  = function (input1, input2) {
 						if (typeof action[key1][key2] === "number") {
 							utilities[key1][key2](action[key1][key2]);
 						} else {
-							console.log("DateFunc: invalid type was inputted: " + key1 + "." + key2);	
+							console.log("Jobs: invalid type was inputted: " + key1 + "." + key2);	
 						}
 					} catch (e) {
-						console.log("DateFunc: invalid argument was ignored: " + key1 + "." + key2);
+						console.log("Jobs: invalid argument was ignored: " + key1 + "." + key2);
 					}
 				});
 
 			} else if (key1  === "tz" ) {
-				console.log("DateFunc: Oooo - you found a hidden feature - timezone is not working yet!");
+				console.log("Jobs: Oooo - you found a hidden feature - timezone is not working yet!");
 			} else {
-				console.log("DateFunc: invalid argument was ignored: " + key1);
+				console.log("Jobs: invalid argument was ignored: " + key1);
 			}
 		});
 
 		return currentDate;
 	} else {
-		console.log("DateFunc: Invalid input for second argument");
+		console.log("Jobs: Invalid input for second argument");
 	}
 }

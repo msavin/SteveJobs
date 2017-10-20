@@ -8,7 +8,7 @@ serverFiles  = [
 	"server/private.js",
 	"server/public.js",
 	"server/control.js",
-	"server/runner.js"
+	"server/runner.js",
 	"server/startup.js"
 ];
 

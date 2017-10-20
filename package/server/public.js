@@ -23,7 +23,7 @@ Jobs.register = function (jobs) {
 // Add a new job to MongoDB
 
 Jobs.add = function () {
-	Jobs.private.add.apply(null, arguments)
+	return Jobs.private.add.apply(null, arguments)
 }
 
 // Cancel a job without removing it from MongoDB
@@ -35,11 +35,11 @@ Jobs.cancel = function (id) {
 // Start or stop the queue - handy for debugging
 
 Jobs.start = function () {
-	JobsRunner.start();
+	return JobsRunner.start();
 }
 
 Jobs.stop = function () {
-	JobsRunner.stop();
+	return JobsRunner.stop();
 }
 
 // Restart the queue, forcing failed jobs to run without restarting server
@@ -62,7 +62,11 @@ Jobs.get = function (id) {
 // Run a job ahead of time
 
 Jobs.run = function (doc, callback) {
-	return Jobs.private.start(doc, callback);
+	if (!JobsRunner.available) {
+		console.log("Jobs: Could not run job because job queue is busy");
+	} else {
+		return Jobs.private.start(doc, callback);
+	}
 }
 
 // Clear either "useless" documents, or all of them 

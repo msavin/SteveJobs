@@ -21,24 +21,32 @@
 */
 
 JobsRunner = {
-	timer: null,
+	interval: null,
 	state: "failed",
 	available: true,
 	start: function () {
 		var self = this;
 
-		self.timer = Meteor.setInterval(function () {
-			if (JobsControl.isActive) {
-				if (self.available) {
-					self.available = false;
-					self.run();
-				}
-			}
+		self.interval = Meteor.setInterval(function () {
+			self.trigger();
 		}, Jobs.private.configuration.timer);
 	},
 	stop: function () {
 		var self = this;
-		return Meteor.clearInterval(self.timer);
+		return Meteor.clearInterval(self.interval);
+	},
+	trigger: function () {
+		var self = this;
+
+		if (JobsRunner.available === true) {
+			JobsRunner.available = false;
+
+			if (JobsControl.isActive) {
+				self.run();
+			} else {
+				JobsRunner.available = true;
+			}
+		}
 	},
 	grabDoc: function () {
 		var self = this;
@@ -47,13 +55,10 @@ JobsRunner = {
 			due: {
 				$lt: new Date()
 			},
-			state: state,
-			$ne: {
-				lastServer: JobsControl.serverId
-			}
+			state: state
 		}, {
 			sort: {
-				due: -1
+				due: 1
 			}
 		});
 
@@ -63,18 +68,17 @@ JobsRunner = {
 		var self = this;
 		var state = self.state;
 		var jobDoc = self.grabDoc();
-
+		
 		if (jobDoc) {
-			Jobs.run(jobDoc, function () {
-				self.available = true;
-				self.run()
+			Jobs.private.start(jobDoc, function () {
+				JobsRunner.available = true;
+				self.trigger()
 			});
 		} else {
-			self.available = true;
-
-			if (state === "failed") {
+			JobsRunner.available = true;
+			if (self.state === "failed") {
 				self.state = "pending";
-				self.run();
+				self.trigger();
 			}
 		}
 	}
