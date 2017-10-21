@@ -43,7 +43,7 @@ Jobs.register({
 });
 ```
 
-Finally, you can schedule a job similarly to how you would run a method: 
+Finally, schedule a background job to run like you would run a method: 
 
 ```javascript
 Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
@@ -82,7 +82,7 @@ Jobs.configure({
 })
 ```
 
-The package also provides In addition to creating jobs, you can also use:
+The package also provides ways for your to interact with your queue.
 
 ```javascript
 // Run a job ahead of time, and provide optional callback
