@@ -13,7 +13,7 @@ Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made jus
  - Designed to perform well on Meteor
  - No third party dependencies
 
-The package has been production tested and is ready for action. To get started, check out the Quick Start below, take a look at the <a href="./DOCUMENTATION.md">documentation</a>, and try the <a href="http://jobsqueue.herokuapp.com">live demo</a>.
+The package has been production tested and is ready for action. It can run hundreds of jobs in seconds, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="./DOCUMENTATION.md">documentation</a>, and try the <a href="http://jobsqueue.herokuapp.com">live demo</a>.
 
 ## Quick Start
 

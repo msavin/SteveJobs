@@ -1,6 +1,6 @@
 Package.describe({
 	name:    "msavin:sjobs",
-	summary: "The simple jobs queue that just works. (kw: synced, schedule, background, tasks, later, worker, cron, defer)",
+	summary: "The simple jobs queue that just works. (kw: synced, schedule tasks, background, later, worker, cron)",
 	version: "1.0.0"
 });
 
