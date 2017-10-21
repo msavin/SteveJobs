@@ -1,6 +1,6 @@
 Package.describe({
 	name:    "msavin:sjobs",
-	summary: "A simple jobs queue that just works",
+	summary: "The simple jobs queue that just works. (kw: synced, schedule, background, tasks, later, worker, cron, defer)",
 	version: "1.0.0"
 });
 
@@ -16,10 +16,5 @@ Package.onUse(function(api) {
 	api.use(["mongo"]);
 	api.addFiles(serverFiles, "server");
 	api.versionsFrom("1.0");
-	
-	// For Development
 	api.export(["Jobs", "JobsControl", "JobsRunner"])
-	
-	// For External Use
-	// api.export("Jobs")
 });

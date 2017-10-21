@@ -1,4 +1,4 @@
-# Steve Jobs Package - How It Works
+# Steve Jobs Package - Documentation (Draft)
 
 ## Runs One Job At a Time
 
@@ -76,11 +76,52 @@ The `jobs_data` collection is indexed on the `due` and `state` fields for optima
 
 This package will use the servers time and timezone to base all of its operations, and all time functions are relative to that. This should ensure that jobs run predictably (i.e. ru this job in 30 minutes). If timezone is of importance, you can set it manually in Meteor with the `TZ` environment variable. 
 
+## Server-Side Only
+
+The Jobs is designed to be minimal and works server-side only. However, you could make its data accessible on the client using Method's or Pub/Sub. For example:
+
+```javascript
+// client
+Jobs = new Mongo.Collection('jobs_data');
+Meteor.subscribe("jobs")
+```
+```javascript
+// server
+Meteor.publish("jobs", function () {
+	return Jobs.collection.find();
+})
+```
+
+You can also write Method's to make it easy to create your own jobs from the client:
+
+```javascript
+// server
+Meteor.methods({
+	'addJob': function () {
+		args = Array.prototype.slice.call(arguments);
+		job = Jobs.add.apply(null, args)
+		return job;
+	}
+})
+```
+
+```javascript
+// client
+AddJob = function () {
+	args = Array.prototype.slice.call(arguments);
+	args.unshift("addJob")
+	Meteor.call.apply(null, args);
+}
+```
+
+Note: these are untested examples, and they are not secure at all
+
+
 ## Future Ideas (Contributions Welcome)
 
 The package completes its goal of helping you run scheduled tasks in a simple and predictable way. However, it doesn't have to stop there. Here are some ideas - feel free to open a ticket about implementing one of them or proposing something new.
 
- - Create a way to run jobs across multiple servers. One easy way to do this is by playing with the MongoDB document ID's. For example, if the first character is a letter, use server one, if its a letter, use server two.
+ - Create a way to run jobs across multiple servers. One easy way to do this is by playing with the MongoDB document ID's. For example, if the first character is a letter, use server one, if its a letter, use server two. Or, creating a new queue for each job.
  - Create a way for the server to pause jobs if the CPU usage is high. Every little bit helps, right?
  - Create a way to run jobs as a microservice.
  - Create a way to repeat jobs. (Perhaps this should be another package?)

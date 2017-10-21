@@ -32,7 +32,7 @@ Jobs.cancel = function (id) {
 	return Jobs.private.cancel(id);
 }
 
-// Start or stop the queue - handy for debugging
+// Start or stop the queue - intended for debugging
 
 Jobs.start = function () {
 	return JobsRunner.start();
@@ -44,7 +44,7 @@ Jobs.stop = function () {
 
 // Restart the queue, forcing failed jobs to run without restarting server
 // The server that this function runs on will take over running the queue
-
+// Intended for debugging
 
 Jobs.restart = function () {
 	JobsRunner.stop();
@@ -53,7 +53,7 @@ Jobs.restart = function () {
 	JobsRunner.start();
 }
 
-// Get info on a job/jobs
+// Get info on a job
 
 Jobs.get = function (id) {
 	return Jobs.private.collection.findOne(id);
@@ -61,18 +61,19 @@ Jobs.get = function (id) {
 
 // Run a job ahead of time
 
-Jobs.run = function (doc, callback) {
-	if (!JobsRunner.available) {
-		console.log("Jobs: Could not run job because job queue is busy");
-	} else {
+Jobs.run = function (doc, callback, force) {
+	if (force || JobsRunner.available) {
 		return Jobs.private.start(doc, callback);
+	} else {
+		console.log("Jobs: Could not run job because job queue is active");
 	}
 }
 
-// Clear either "useless" documents, or all of them 
+// Clear resolved jobs - or all of them 
 
 Jobs.clear = function (failed, pending) {
 	return Jobs.private.clear(failed, pending)
 }
 
+// Access to MongoDB Collection
 Jobs.collection = Jobs.private.collection;
