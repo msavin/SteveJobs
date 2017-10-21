@@ -2,7 +2,7 @@ Jobs = {};
 
 Jobs.private = {};
 
-Jobs.private.collection = new Mongo.Collection("simpleJobs");
+Jobs.private.collection = new Mongo.Collection("jobs_data");
 
 Meteor.startup(function () {
 	Jobs.private.collection._ensureIndex({

@@ -2,7 +2,7 @@
 
 # Steve Jobs
 
-### The Simple Jobs Queue That Just Works. [IN TESTING]
+### The Simple Jobs Queue That Just Works [IN TESTING]
 
 Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, using this package is quick and effortless.
 
@@ -43,7 +43,7 @@ Jobs.register({
 });
 ```
 
-Finally, schedule a background job to run like you would run a method: 
+Finally, schedule a background job like you would call a method: 
 
 ```javascript
 Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
