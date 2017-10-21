@@ -81,4 +81,6 @@ The package completes its goal of helping you run scheduled tasks in a simple an
  - Create a way to run jobs as a microservice.
  - Create a way to repeat jobs. (Perhaps this should be another package?)
  - Create a way to prioritize certain jobs
- - Create a hook function for logging ?
+ - Add support for hooks
+ - Add Jobs.delay() to delaying tasks
+ - Add support for setting manual timezones

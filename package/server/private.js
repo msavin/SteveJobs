@@ -186,6 +186,7 @@ Jobs.private.date  = function (input1, input2) {
 		action = input1 || {};
 	}
 	
+	// Hacky
 	var utilities = {
 		in: {
 			milliseconds: function (int) {
@@ -204,15 +205,15 @@ Jobs.private.date  = function (input1, input2) {
 				int = currentDate.getHours() + int;
 				currentDate.setHours(int);
 			},
-			day: function (int) {
+			days: function (int) {
 				int = currentDate.getDate() + int;
 				currentDate.setDate(int);
 			},
-			month: function (int) {
+			months: function (int) {
 				int = currentDate.getMonth() + int;
 				currentDate.setMonth(int);
 			},
-			year: function (int) {
+			years: function (int) {
 				int = currentDate.getYear() + int;
 				currentDate.setYear(int);
 			}
@@ -230,17 +231,33 @@ Jobs.private.date  = function (input1, input2) {
 			hours: function (int) {
 				currentDate.setHours(int);
 			},
-			day: function (int) {
+			days: function (int) {
 				currentDate.setDate(int);
 			},
-			month: function (int) {
+			months: function (int) {
 				currentDate.setMonth(int);
 			},
-			year: function (int) {
+			years: function (int) {
 				currentDate.setYear(int);
 			}
 		}
 	}
+
+	utilities.in.millisecond = utilities.in.milliseconds;
+	utilities.in.second = utilities.in.seconds;
+	utilities.in.minute = utilities.in.minutes;
+	utilities.in.hour = utilities.in.hours;
+	utilities.in.day = utilities.in.days;
+	utilities.in.month = utilities.in.months;
+	utilities.in.year = utilities.in.years;
+
+	utilities.on.millisecond = utilities.on.milliseconds;
+	utilities.on.second = utilities.on.seconds;
+	utilities.on.minute = utilities.on.minutes;
+	utilities.on.hour = utilities.on.hours;
+	utilities.on.day = utilities.on.days;
+	utilities.on.month = utilities.on.months;
+	utilities.on.year = utilities.on.years;
 
 	if (typeof action === "object") {
 		Object.keys(action).forEach(function (key1) {

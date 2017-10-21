@@ -4,13 +4,13 @@
 
 ### The Simple Jobs Queue That Just Works. [IN TESTING]
 
-Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made just for Meteor. The setup and usage is quick and effortless, thanks to tight integration with MongoDB collections and fibers-based timing function.
+Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, using this package is quick and effortless.
 
  - Runs one job at a time
  - Runs on one server at a time
  - Logs all the jobs and their outcomes
- - Retries failed jobs on server startups
- - Designed to performance well on Meteor
+ - Retries failed jobs on server restart
+ - Designed to perform well on Meteor
 
 The package has been production tested and is ready for action. To get started, check out the Quick Start below and take a look at the <a href="./DOCUMENTATION.md">documentation</a>.
 
@@ -22,7 +22,7 @@ First, install the package:
 meteor add msavin:sjobs
 ```
 
-Second, write your background jobs like you would your methods: 
+Then, write your background jobs like you would write your methods: 
 
 ```javascript
 Jobs.register({
@@ -43,7 +43,7 @@ Jobs.register({
 });
 ```
 
-Finally, schedule a job to run like you would run a method: 
+Finally, you can schedule a job similarly to how you would run a method: 
 
 ```javascript
 Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
@@ -58,13 +58,17 @@ Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
         hours: 13
     }, 
     on: {
-        minutes: 13,
+        minute: 13,
         year: 2037
     }
 });
 ```
 
-The supported fields for `in` and `on` are `milliseconds`, `seconds`, `minutes`, `hours`, `day`, `month`, and `year`. The date object will be updated in the order that is specified in the object. So, for example, if you set in 1 year, on year 2037, the year will still be 2037. However, if you set on year 2037, and add in 1 year, the year will be 2038.
+The supported fields for `in` and `on` are:
+ - `milliseconds`, `seconds`, `minutes`, `hours`, `days`, `months`, and `years`
+ - `millisecond`, `second`, `minute`, `hour`, `day`, `month`, and `year`
+
+The plural or singular versions of words can be used to your preferences. The date object will be updated in the order that is specified. For example, if you set the job to run `in` 1 year, an `on` year 2037, the year will be 2037. However, if you set the job to run `on` year 2037, and `in` 1 year, the year will be 2038.
 
 ## Feature Overview 
 
@@ -78,7 +82,7 @@ Jobs.configure({
 })
 ```
 
-In addition to creating jobs, you can also use:
+The package also provides In addition to creating jobs, you can also use:
 
 ```javascript
 // Run a job ahead of time, and provide optional callback
@@ -88,19 +92,19 @@ Jobs.run(jobId, function (e,r) {
     }
 });
 
-// Stop the job queue - could be handy for development
+// Stop the job queue (for development purposes)
 Jobs.stop();
 
-// Start the job queue - could be handy for development
+// Start the job queue (for development purposes)
 Jobs.start();
 
-// Restart the queue, forcing failed jobs to re-run without restarting servers
+// Restart the queue, forcing failed jobs to re-run without restarting servers (for development purposes)
 Jobs.restart();
 
 // Get information about a pending job
 Jobs.get(jobId);
 
-// Cancel a job but do not remove from database
+// Cancel a job 
 Jobs.cancel(jobId);
 
 // Clear completed and/or canceled jobs
@@ -108,12 +112,11 @@ Jobs.clear()
 
 // Access the Jobs collection directly
 Jobs.collection.find();
-
 ```
 
 ## More Details
 
-For more information about how the package works, how jobs run, how the timing works, what happens when a job fails, and so on, check out the "<a href="DOCUMENTATION.md">documentation</a>."
+For more information about how the package works, how jobs run, how the timing works, job failures, etc, check out the "<a href="DOCUMENTATION.md">documentation</a>."
 
 If you like the design of the package, make sure to check out: 
  - <a href="http://meteor.toys">Meteor Toys</a> - Development Tools
