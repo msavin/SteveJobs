@@ -52,6 +52,7 @@ Jobs.private.run = function (doc, jobCallback) {
 			var jobUpdate = Jobs.private.collection.update(doc._id, {
 				$set: {
 					lastRun: new Date(),
+					lastServer: JobsControl.serverId,
 					state: "failed"
 				}
 			});
