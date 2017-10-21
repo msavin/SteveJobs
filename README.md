@@ -2,7 +2,7 @@
 
 # Steve Jobs
 
-### The Simple Jobs Queue That Just Works [IN TESTING]
+### The Simple Jobs Queue That Just Works
 
 Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, using this package is quick and effortless.
 
