@@ -55,9 +55,9 @@ JobsRunner = {
 			due: {
 				$lt: new Date()
 			},
-			state: state
+			state: state,
 			lastServer: {
-				$not: JobsControl.serverId
+				$ne: JobsControl.serverId
 			}
 		}, {
 			sort: {
