@@ -50,7 +50,7 @@ Finally, schedule a background job like you would call a method:
 Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
 ```
 
-The job will be added to the queue to run ASAP. However, you can delay it by passing in a special object at the end: 
+One more thing. The function above will schedule the job to run as soon as possible. However, you can delay it by passing in a special object at the end.
 
 ```javascript
 Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
