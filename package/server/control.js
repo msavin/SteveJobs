@@ -18,7 +18,7 @@
 
 JobsControl = {
 	collection: new Mongo.Collection("jobs_config"),
-	serverId: Math.random(), 
+	serverId: Random.id(), 
 	isActive: function () {
 		if (Meteor.isDevelopment) return true;
 
