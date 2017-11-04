@@ -5,6 +5,8 @@
 
 Meteor.startup(function () {
 	Meteor.setTimeout(function () {
-		JobsRunner.start();
-	}, Jobs.private.configuration.activityDelay;)
+		Meteor.setTimeout(function () {
+			Jobs.start();
+		}, Jobs.private.configuration.activityDelay);
+	}, 3000)
 });

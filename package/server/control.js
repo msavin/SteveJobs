@@ -20,7 +20,9 @@ JobsControl = {
 	collection: new Mongo.Collection("jobs_config"),
 	serverId: Random.id(), 
 	isActive: function () {
-		if (Meteor.isDevelopment) return true;
+		if (Meteor.isDevelopment) {
+			return true;
+		}
 
 		var self = this;
 

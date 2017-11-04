@@ -1,6 +1,7 @@
 /*
-	
 	This object ensures that only job is processed at a time (and on one server)
+	It starts a new runner for each queue that you register
+	Queues can be accessed with Jobs.queue
 
 	How it works
 	1. when a server starts up, it will run the start function after a slight delay
@@ -20,7 +21,8 @@
 
 */
 
-JobsRunners = function () {
+JobsRunner = function (name) {
+	this.name = name;
 	this.interval = null;
 	this.state =  "failed";
 	this.available = true;
@@ -30,25 +32,27 @@ JobsRunners = function () {
 		var self = this;
 
 		self.interval = Meteor.setInterval(function () {
+			// console.log(name)
 			self.trigger();
 		}, Jobs.private.configuration.timer);
 	}
 
 	this.stop = function () {
 		var self = this;
+		self.state = "failed";
 		return Meteor.clearInterval(self.interval);
 	}
 
 	this.trigger = function () {
 		var self = this;
 
-		if (JobsRunner.available === true) {
-			JobsRunner.available = false;
+		if (self.available === true) {
+			self.available = false;
 
 			if (JobsControl.isActive) {
 				self.run();
 			} else {
-				JobsRunner.available = true;
+				self.available = true;
 			}
 		}
 	}
@@ -56,8 +60,10 @@ JobsRunners = function () {
 	this.grabDoc = function () {
 		var self = this;
 		var state = self.state;
+		var name = self.name;
 
 		var jobDoc = Jobs.private.collection.findOne({
+			name: name,
 			due: {
 				$lt: new Date()
 			},
@@ -82,21 +88,15 @@ JobsRunners = function () {
 		
 		if (jobDoc) {
 			Jobs.private.start(jobDoc, function () {
-				JobsRunner.available = true;
+				self.available = true;
 				self.trigger()
 			});
 		} else {
-			JobsRunner.available = true;
+			self.available = true;
 			if (self.state === "failed") {
 				self.state = "pending";
 				self.trigger();
 			}
 		}
 	}
-	
 }
-
-// Converted it to a prototype
-// The plan is to start a new runner for each job
-// The runner should start upon initialization
-JobsRunner = new JobsRunners();

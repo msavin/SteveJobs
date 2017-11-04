@@ -6,8 +6,9 @@
 
 Run scheduled tasks effortlessly with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, using this package is quick and effortless.
 
- - Runs one job at a time
- - Runs on one server at a time
+ - Create multiple job queues
+ - Jobs runs on one server at a time
+ - Jobs runs predictably and consecutively
  - Logs all the jobs and their outcomes
  - Retries failed jobs on server restart
  - Designed to perform well on Meteor
@@ -101,9 +102,6 @@ Jobs.stop();
 
 // Start the job queue (for development purposes)
 Jobs.start();
-
-// Restart the queue, forcing failed jobs to re-run without restarting servers (for development purposes)
-Jobs.restart();
 
 // Get information about a pending job
 Jobs.get(jobId);

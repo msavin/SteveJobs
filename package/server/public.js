@@ -8,10 +8,16 @@ Jobs.configure = function (data) {
 
 // Register jobs in a similar style to Meteor methods
 
+Jobs.queues = {}
+
 Jobs.register = function (jobs) {
 	Object.keys(jobs).forEach(function (job) {
 		if (typeof jobs[job] === "function") {
-			Jobs.private.registry[job] = jobs[job];	
+			Jobs.private.registry[job] = jobs[job];
+			
+			Meteor.setTimeout(function () {
+				Jobs.queues[job] = new JobsRunner(job);
+			}, 3000);
 		} else {
 			console.log("Jobs: Error registering " + job);
 			console.log("Jobs: Please make sure its a valid function");
@@ -34,23 +40,24 @@ Jobs.cancel = function (id) {
 
 // Start or stop the queue - intended for debugging
 
-Jobs.start = function () {
-	return JobsRunner.start();
+Jobs.start = function (queueName) {
+	if (queueName) {
+		Jobs.queues[queueName].start()
+	} else {
+		Object.keys(Jobs.queues).forEach(function (queueName) {
+			Jobs.queues[queueName].start()
+		});
+	}
 }
 
-Jobs.stop = function () {
-	return JobsRunner.stop();
-}
-
-// Restart the queue, forcing failed jobs to run without restarting server
-// The server that this function runs on will take over running the queue
-// Intended for debugging
-
-Jobs.restart = function () {
-	JobsRunner.stop();
-	JobsControl.setAsActive();
-	JobsRunner.state = "failed";
-	JobsRunner.start();
+Jobs.stop = function (queueName) {
+	if (queueName) {
+		Jobs.queues[queueName].stop()
+	} else {
+		Object.keys(Jobs.queues).forEach(function (queueName) {
+			Jobs.queues[queueName].stop()
+		});
+	}
 }
 
 // Get info on a job
@@ -70,6 +77,7 @@ Jobs.run = function (doc, callback, force) {
 }
 
 // Clear resolved jobs - or all of them 
+// TO DO (?): if the queue is no longer registered, remove all of its documents
 
 Jobs.clear = function (failed, pending) {
 	return Jobs.private.clear(failed, pending)
