@@ -136,8 +136,9 @@ Jobs.private.start = function (doc, jobCallback) {
 }
 
 Jobs.private.add = function () {
-	// 0. Convert arguments to array
+	// 0. Convert arguments to array + prepare necessary data
 	var args = Array.prototype.slice.call(arguments);
+	var config = args[args.length - 1];
 
 	// 1. Check that the job being added exists
 	if (!Jobs.private.registry[args[0]]) {
@@ -150,15 +151,19 @@ Jobs.private.add = function () {
 		name: args[0],
 		due: function () {
 			var due = new Date();
-			lastArg = args[args.length - 1];
 
-			if (typeof lastArg === "object") {
-				if (lastArg.in || lastArg.on) {
-					due = Jobs.private.date(lastArg);
+			if (typeof config === "object") {
+				if (config.in || config.on) {
+					due = Jobs.private.date(config);
 				}
 			}
 
 			return due;
+		}(),
+		priority: function () {
+			if (typeof config === "object" && config.priority) {
+				return Jobs.private.number(config.priority, "priority") || 0;
+			}
 		}(),
 		arguments: function () {
 			args.splice(0, 1)
@@ -169,6 +174,19 @@ Jobs.private.add = function () {
 
 	var result = Jobs.private.collection.insert(doc);
 	return result;
+}
+
+Jobs.private.number = function (thing, note) {
+	if (typeof thing === "function") {
+		thing = thing();
+	}
+
+	if (typeof thing === "number") {
+		return thing;
+	} else {
+		console.log("Jobs: invalid input for " + note || "number");
+		return 0;
+	}
 }
 
 Jobs.private.date  = function (input1, input2) {

@@ -61,7 +61,8 @@ Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
     on: {
         minute: 13,
         year: 2037
-    }
+    },
+    priority: 1000
 });
 ```
 
@@ -70,6 +71,8 @@ The supported fields for `in` and `on` are:
  - `milliseconds`, `seconds`, `minutes`, `hours`, `days`, `months`, and `years`
 
 The plural or singular versions of words can be used to your preferences. The date object will be updated in the order that is specified. For example, if you set the job to run `in` 1 year, an `on` year 2037, the year will be 2037. However, if you set the job to run `on` year 2037, and `in` 1 year, the year will be 2038.
+
+(Not yet published) Finally, you have the option of settings the priority of the job with the priority key. By default, priority will be set to 0, and you can change it to any number. Jobs will run the jobs with the highest priority first.
 
 ## Feature Overview 
 

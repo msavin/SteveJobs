@@ -1,7 +1,9 @@
 Package.describe({
 	name:    "msavin:sjobs",
 	summary: "The simple jobs queue that just works. (kw: synced, schedule tasks, background, later, worker, cron)",
-	version: "1.0.0"
+	version: "1.1.0",
+	documentation: "README.md",
+	git:     'https://github.com/msavin/SteveJobs.git',
 });
 
 serverFiles  = [
@@ -13,7 +15,7 @@ serverFiles  = [
 ];
 
 Package.onUse(function(api) {
-	api.use(["mongo"]);
+	api.use(["mongo", "random"], "server");
 	api.addFiles(serverFiles, "server");
 	api.versionsFrom("1.0");
 	api.export(["Jobs", "JobsControl", "JobsRunner"])

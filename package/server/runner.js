@@ -20,22 +20,26 @@
 
 */
 
-JobsRunner = {
-	interval: null,
-	state: "failed",
-	available: true,
-	start: function () {
+JobsRunners = function () {
+	this.interval = null;
+	this.state =  "failed";
+	this.available = true;
+
+
+	this.start = function () {
 		var self = this;
 
 		self.interval = Meteor.setInterval(function () {
 			self.trigger();
 		}, Jobs.private.configuration.timer);
-	},
-	stop: function () {
+	}
+
+	this.stop = function () {
 		var self = this;
 		return Meteor.clearInterval(self.interval);
-	},
-	trigger: function () {
+	}
+
+	this.trigger = function () {
 		var self = this;
 
 		if (JobsRunner.available === true) {
@@ -47,10 +51,12 @@ JobsRunner = {
 				JobsRunner.available = true;
 			}
 		}
-	},
-	grabDoc: function () {
+	}
+
+	this.grabDoc = function () {
 		var self = this;
 		var state = self.state;
+
 		var jobDoc = Jobs.private.collection.findOne({
 			due: {
 				$lt: new Date()
@@ -61,13 +67,15 @@ JobsRunner = {
 			}
 		}, {
 			sort: {
-				due: 1
+				due: 1,
+				priority: 1
 			}
 		});
 
 		return jobDoc;
-	},
-	run: function () {
+	}
+
+	this.run = function () {
 		var self = this;
 		var state = self.state;
 		var jobDoc = self.grabDoc();
@@ -85,4 +93,10 @@ JobsRunner = {
 			}
 		}
 	}
+	
 }
+
+// Converted it to a prototype
+// The plan is to start a new runner for each job
+// The runner should start upon initialization
+JobsRunner = new JobsRunners();
