@@ -1,10 +1,12 @@
 # Steve Jobs Package - Documentation (Draft)
 
-## Runs One Job At a Time
+## Multiple Queues with Consecutive Job Execution
 
-The Steve Jobs package is quite like Steve Jobs, and quite unlike him at the same time. In favor of ease and simplicity, the package does not aim to execute things on the dot. 
+Every time you register a new job using `Jobs.register`, the package will start a new "runner" that will check for new jobs every 5 seconds by polling the database.
 
-Instead, it checks for new jobs every 5 seconds and runs only one job at a time. Whenever it runs a job, it will then check if there are more jobs pending. If there are not, it will go back to checking every 5 seconds. This can be configured to your preference:
+When it finds a job to run, it will run it. After it runs the job, it will check if there is another jobs to run. If so, it will repeat the process, and if not, it will go back to polling the database. 
+
+The rate at which the package polls the database can be configured:
 
 ```javascript
 Jobs.configure({
@@ -12,13 +14,15 @@ Jobs.configure({
 })
 ```
 
-In general, things would probably be off by a couple of seconds or minutes. In some basic tests, Meteor was able to add and execute hundreds of jobs in seconds, so provided you are not expecting a million background tasks to run on the same second, this package should cover your needs.
+Even though jobs run one at a time, queues run simultaneously.
 
 ## Runs on One Server At a Time
 
-This package aims for reliability above everything. To avoid potential screw-ups with MongoDB read/write commands, the package will claim one server and run from there. If that server stops running, another server will take over.
+This package aims for reliability. To avoid potential screw-ups with MongoDB, the package will claim one server and run from there. If that server stops running, another server will take over.
 
-Whenever a server starts up, it will be given a randomly generated id. The server will then check if there is a server processing jobs, and if not, it will use its id and a timestamp to let other servers know that it has taken over. Other servers will automatically check the ping time to ensure it is active. The first server that spots that the timestamp has expired will take over the queue.
+Whenever a servers starts up, the `JobsControl` function will give that server an id. Then, `JobsRunner` will check if the server with that id is the active server. If it is, it will proceed to run the job. If it is not, it will keep polling to see if anything has changed.
+
+Whenever a server is active, it will let other servers know with a timestamp. If that timestamp becomes "old", the first server to spot it will take over the queue.
 
 By default, a server can "slack off" for up to 5 minutes before another server will pick up the work. This can be configured to your preference: 
 
@@ -31,6 +35,14 @@ Jobs.configure({
 ## Development Mode
 
 As explained in the former section, a server has a certain amount of time to signal that its working, otherwise, another server will take over the work. However, this is impractical in development mode because you are running one server and the wait can slow you down. Thus, the package will check if you are in development mode, and if you are, it will mark that as the active server. This should not make any difference so long as not using your production database with your local server.
+
+[TODO] If you are using a production database, you can disable the package in development mode.
+
+```javascript
+Jobs.configure({
+    productionOnly: true
+})
+```
 
 ## Server Startup
 
@@ -116,16 +128,3 @@ AddJob = function () {
 
 Note: these are untested examples, and they are not secure at all
 
-
-## Future Ideas (Contributions Welcome)
-
-The package completes its goal of helping you run scheduled tasks in a simple and predictable way. However, it doesn't have to stop there. Here are some ideas - feel free to open a ticket about implementing one of them or proposing something new.
-
- - Create a way to run jobs across multiple servers. One easy way to do this is by playing with the MongoDB document ID's. For example, if the first character is a letter, use server one, if its a letter, use server two. Or, creating a new queue for each job.
- - Create a way for the server to pause jobs if the CPU usage is high. Every little bit helps, right?
- - Create a way to run jobs as a microservice.
- - Create a way to repeat jobs. (Perhaps this should be another package?)
- - Create a way to prioritize certain jobs
- - Add support for hooks
- - Add Jobs.delay() to delaying tasks
- - Add support for setting manual timezones on jobs
