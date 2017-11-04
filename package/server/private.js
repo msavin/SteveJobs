@@ -14,6 +14,7 @@ Meteor.startup(function () {
 Jobs.private.registry = {};
 
 Jobs.private.configuration = {
+	autoStart: true,
 	timer: 5 * 1000,
 	activityGap: 5 * 60 * 1000,
 	activityDelay: 5 * 1000

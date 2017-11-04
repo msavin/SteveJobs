@@ -81,6 +81,7 @@ The package will run one job at a time until there are no more jobs to run. Afte
 
 ```javascript
 Jobs.configure({
+    autoStart: true,                // default is true
     timer: 5 * 1000,                // how often to check for new jobs
     startupDelay: 5 * 1000          // how soon to run after the server has started
     activityDelay: 5 * 60 * 1000,   // how long a server can slack off for before another server takes over
