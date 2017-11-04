@@ -181,6 +181,15 @@ Jobs.private.number = function (thing, note) {
 		thing = thing();
 	}
 
+	if (typeof thing === "string") {
+		thing = Number(thing);
+
+		if (isNaN(thing)) {
+			console.log("Jobs: invalid input for " + note || "number");
+			return 0
+		}
+	}
+
 	if (typeof thing === "number") {
 		return thing;
 	} else {
