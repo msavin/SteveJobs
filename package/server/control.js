@@ -1,5 +1,4 @@
-/* 
-	
+/* 	
 	This object ensures that only one server is processing jobs
 
 	How it works

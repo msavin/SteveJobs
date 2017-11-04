@@ -1,6 +1,6 @@
 Package.describe({
 	name:    "msavin:sjobs",
-	summary: "The simple jobs queue that just works. (kw: synced, schedule tasks, background, later, worker, cron)",
+	summary: "The simple jobs queue that just works. (kw: synced, schedule, tasks, background, later, worker, cron)",
 	version: "1.1.0",
 	documentation: "README.md",
 	git:     'https://github.com/msavin/SteveJobs.git',
@@ -8,10 +8,11 @@ Package.describe({
 
 serverFiles  = [
 	"server/private.js",
-	"server/public.js",
+	"server/utilities.js",
 	"server/control.js",
 	"server/runner.js",
-	"server/startup.js"
+	"server/public.js",
+	"server/startup.js",
 ];
 
 Package.onUse(function(api) {
