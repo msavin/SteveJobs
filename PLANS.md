@@ -12,6 +12,7 @@ If you would like to make a pull request, please start a ticket to discuss it fi
  - Add Jobs.reschedule() to rescheduling a job
  - Update Jobs.clear() to remove jobs that are no longer registered
  - Add jobs history
+  
 
 **v2.0 - Under Consideration**
  - Add a way to run repeatable jobs
@@ -21,6 +22,7 @@ If you would like to make a pull request, please start a ticket to discuss it fi
 **v2.1**
  - Add alerts if jobs are failing
  - Add a way to pause the queue if a job fails 
+ - Pause jobs, or switch servers, if CPU usage is over X
 
 **Future (?)**
  - Microservice mode
