@@ -26,21 +26,13 @@ Then, write your background jobs like you would write your methods:
 
 ```javascript
 Jobs.register({
-    sendReminderEmail: function (to, content) {
+    sendReminder: function (to, content) {
         Email.send({
             to: to,
             from: "no-reply@jobs.com",
             subject: "Your Reminder",
             content: content,
         })
-    },
-    insertRecord: function (data) {
-        docId = Collection.insert({
-            date: new Date(),
-            data: data
-        });
-
-        return docId;
     }
 });
 ```
@@ -48,22 +40,21 @@ Jobs.register({
 Finally, schedule a background job like you would call a method: 
 
 ```javascript
-Jobs.run("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
+Jobs.run("sendReminder", "tcook@apple.com", "Don't forget about the launch!");
 ```
 
 One more thing: the function above will schedule the job to run on the moment that the function was called. However, you can delay it by passing in a special <a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki#configuration-options">**configuration object**</a> at the end. 
 
 ```javascript
-Jobs.run("sendReminderEmail", "john@smith.com", "The future is here!", {
+Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
     in: {
-        days: 1,
-        hours: 13
+        days: 3,
     }, 
     on: {
-        minute: 13,
-        year: 2037
+        hour: 9,
+        minute: 42
     },
-    priority: 1000
+    priority: 9999999999
 });
 ```
 
