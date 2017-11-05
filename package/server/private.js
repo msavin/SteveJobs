@@ -228,24 +228,50 @@ Jobs.private.run = function () {
 
 // Pending:
 
-// Jobs.private.reschedule = function (jobId, config, resetState) {
-// 	// First, check if the doc is available
-// 	// Second, check if the doc has ran
+Jobs.private.reschedule = function (jobId, config) {
+	// TODO: Allow to set a new priority too? or make it a different function?
 
-// 	var jobDoc = Jobs.private.collection.findOne(jobId);
+	// First, check if the doc is available
+	// Second, check if the doc has ran
 
-// 	if (!jobDoc) {
-// 		console.log("Jobs: no such job found: " + jobId);
-// 		return;
-// 	}
+	var jobDoc = Jobs.private.collection.findOne(jobId);
 
-// 	if (['successful', 'cancelled'].indexOf(jobDoc.state) <= 0) {
-// 		console.log('Jobs: job has already completed: ' + jobId);
-// 		return;
-// 	}
+	if (!jobDoc) {
+		console.log("Jobs: no such job found: " + jobId);
+		return;
+	}
+
+	if (['successful', 'cancelled'].indexOf(jobDoc.state) >= 0) {
+		console.log('Jobs: job has already completed: ' + jobId);
+		return;
+	}
 	
-// 	// If not create the patch and update the document
+	// If not create the patch and update the document
 
-// 	update = {}
-// 	Jobs.private.collection.update(jobId, update)	
-// }
+	newDueDate = function () {
+		var due = new Date();
+
+		if (typeof config === "object") {
+			if (config.in || config.on) {
+				due = Jobs.utilities.date(config);
+			}
+		}
+
+		return due;
+	}()
+
+	var update = Jobs.private.collection.update(jobId, {
+		$set: {
+			due: newDueDate
+		},
+		$push: {
+			history: {
+				date: new Date(),
+				type: "reschedule",
+				result: newDueDate
+			}
+		}
+	})	
+
+	return update;
+}

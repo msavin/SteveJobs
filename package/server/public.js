@@ -80,6 +80,12 @@ Jobs.execute = function (doc, callback, force) {
 	}
 }
 
+// Reschedule a job
+
+Jobs.reschedule = function (jobId, config) {
+	return Jobs.private.reschedule(jobId, config);
+}
+
 // Clear resolved jobs - or all of them 
 
 Jobs.clear = function (count) {
