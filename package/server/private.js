@@ -204,6 +204,8 @@ Jobs.private.run = function () {
 		priority: function () {
 			if (typeof config === "object" && config.priority) {
 				return Jobs.utilities.number(config.priority, "priority") || 0;
+			} else {
+				return 0;
 			}
 		}(),
 		arguments: function () {
