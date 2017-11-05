@@ -6,10 +6,10 @@
 
 Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, this package is reliable, quick and effortless.
 
- - Jobs runs on one server at a time
- - Jobs runs predictably and consecutively
+ - Runs on one server at a time
+ - Runs predictably and consecutively
  - Logs all the jobs and their outcomes
- - Retries failed jobs on server restart
+ - Retries failed jobs on restart
  - No third party dependencies
 
 **The package has been production tested and is ready for action.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="./https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/Primary-Features">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
@@ -69,6 +69,8 @@ Jobs.run("sendReminderEmail", "john@smith.com", "The future is here!", {
 
 ## More Information
 
-For more information about how the package works, how jobs run, how the timing works, job failures, etc, check out the "<a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/">**documentation**</a>."
-
-If you like the design of the package, make sure to check out <a href="https://www.meteorcandy.com">**Meteor Candy**</a>, the fastest and easiest way to add an admin panel to your app.
+- [Main Features](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use Jobs.register, Jobs.run and Jobs.repeat
+- [Package Features]()<br>Learn how to handle edge cases
+- [How It Works](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn the features and limitations
+- [See the Roadmap](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
+- [See Meteor Candy](https://www.meteorcandy.com/?ref=sjgh)<br>The fastest and easiest way to add an admin panel to your app
