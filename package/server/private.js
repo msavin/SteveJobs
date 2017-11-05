@@ -20,7 +20,7 @@ Jobs.private.configuration = {
 	activityDelay: 5 * 1000
 }
 
-Jobs.private.run = function (doc, jobCallback) {
+Jobs.private.execute = function (doc, jobCallback) {
 	// Goals: 
 	// 1- Execute the job
 	// 2- Update the document in database
@@ -120,23 +120,23 @@ Jobs.private.clear = function (failed, pending) {
 
 Jobs.private.start = function (doc, jobCallback) {
 	if (typeof doc === "object") {
-		var result = Jobs.private.run(doc, jobCallback);
+		var result = Jobs.private.execute(doc, jobCallback);
 		return result;
 	} else if (typeof doc === "string") {
 		jobDoc = Jobs.private.collection.findOne(doc);
 
 		if (jobDoc) {
-			var result = Jobs.private.run(jobDoc, jobCallback);
+			var result = Jobs.private.execute(jobDoc, jobCallback);
 			return result;
 		}
 	} else {
-		console.log("Jobs: Invalid input for Jobs.run();");
+		console.log("Jobs: Invalid input for Jobs.execute();");
 		console.log(doc);
 		console.log("----")
 	}
 }
 
-Jobs.private.add = function () {
+Jobs.private.run = function () {
 	// 0. Convert arguments to array + prepare necessary data
 	var args = Array.prototype.slice.call(arguments);
 	var config = args[args.length - 1];

@@ -48,13 +48,13 @@ Jobs.register({
 Finally, schedule a background job like you would call a method: 
 
 ```javascript
-Jobs.add("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
+Jobs.run("sendReminderEmail", "john@smith.com", "Don't forget about the launch!");
 ```
 
 One more thing. The function above will schedule the job to run as soon as possible. However, you can delay it by passing in a special object at the end.
 
 ```javascript
-Jobs.add("sendReminderEmail", "john@smith.com", "The future is here!", {
+Jobs.run("sendReminderEmail", "john@smith.com", "The future is here!", {
     in: {
         days: 1,
         hours: 13
@@ -92,7 +92,7 @@ The package also provides ways for your to interact with your queue.
 
 ```javascript
 // Run a job ahead of time, and provide optional callback
-Jobs.run(jobId, function (e,r) {
+Jobs.execute(jobId, function (e,r) {
     if (e) {
         console.log("You're fired!")
     }
