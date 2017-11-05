@@ -69,8 +69,8 @@ Jobs.run("sendReminderEmail", "john@smith.com", "The future is here!", {
 
 ## More Information
 
-- [Main Features](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use Jobs.register, Jobs.run and Jobs.repeat
-- [Package Features]()<br>Learn how to handle edge cases
-- [How It Works](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn the features and limitations
-- [See the Roadmap](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
-- [See Meteor Candy](https://www.meteorcandy.com/?ref=sjgh)<br>The fastest and easiest way to add an admin panel to your app
+- [**Main Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use Jobs.register, Jobs.run and Jobs.repeat
+- [**Package Features**]()<br>Learn how to handle edge cases
+- [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn the features and limitations
+- [**See the Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
+- [**See Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)<br>The fastest and easiest way to add an admin panel to your app
