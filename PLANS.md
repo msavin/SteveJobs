@@ -12,8 +12,12 @@ If you would like to make a pull request, please start a ticket to discuss it fi
  - Add Jobs.reschedule() to rescheduling a job
  - Update Jobs.clear() to remove jobs that are no longer registered
  - Add jobs history
+<<<<<<< HEAD
  - Make a way to stop the queue across all servers
   
+=======
+ - Add ability to customize collection names  
+>>>>>>> f05ad7c0ac1ca5e9c1e280ec2757332e354eaf6c
 
 **v2.0 - Under Consideration**
  - Add a way to run repeatable jobs
