@@ -209,7 +209,14 @@ Jobs.private.run = function () {
 			}
 		}(),
 		arguments: function () {
-			args.splice(0, 1)
+			argz = args.splice(0, 1)
+
+			if (typeof config === "object") {
+				if (config.in || config.on || config.priority || config.tz) {
+					argz = args.splice(-1)
+				}
+			}
+			
 			return args;
 		}(),
 		state: "pending"
@@ -218,3 +225,27 @@ Jobs.private.run = function () {
 	var result = Jobs.private.collection.insert(doc);
 	return result;
 }
+
+// Pending:
+
+// Jobs.private.reschedule = function (jobId, config, resetState) {
+// 	// First, check if the doc is available
+// 	// Second, check if the doc has ran
+
+// 	var jobDoc = Jobs.private.collection.findOne(jobId);
+
+// 	if (!jobDoc) {
+// 		console.log("Jobs: no such job found: " + jobId);
+// 		return;
+// 	}
+
+// 	if (['successful', 'cancelled'].indexOf(jobDoc.state) <= 0) {
+// 		console.log('Jobs: job has already completed: ' + jobId);
+// 		return;
+// 	}
+	
+// 	// If not create the patch and update the document
+
+// 	update = {}
+// 	Jobs.private.collection.update(jobId, update)	
+// }

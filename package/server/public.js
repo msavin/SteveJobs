@@ -69,7 +69,11 @@ Jobs.get = function (id) {
 // Run a job ahead of time
 
 Jobs.execute = function (doc, callback, force) {
-	if (force || JobsRunner.available) {
+	if (typeof doc === "string") {
+		doc = Jobs.private.collection.findOne(doc)
+	}
+	
+	if (force || Jobs.queues[doc.name].available) {
 		return Jobs.private.start(doc, callback);
 	} else {
 		console.log("Jobs: Could not run job because job queue is active");

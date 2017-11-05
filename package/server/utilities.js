@@ -22,10 +22,9 @@ Jobs.utilities.number = function (thing, note) {
 	}
 }
 
-
-
 Jobs.utilities.date  = function (input1, input2) {
 	var currentDate = new Date();
+	var ignoreList = ["priority"]
 	var action;
 
 	if (input2) {
@@ -119,8 +118,10 @@ Jobs.utilities.date  = function (input1, input2) {
 
 				Object.keys(action[key1]).forEach(function (key2) {
 					try {
-						if (typeof action[key1][key2] === "number") {
-							utilities[key1][key2](action[key1][key2]);
+						newNumber = Jobs.utilities.number(action[key1][key2]);
+						
+						if (typeof newNumber === "number") {
+							utilities[key1][key2](newNumber);
 						} else {
 							console.log("Jobs: invalid type was inputted: " + key1 + "." + key2);	
 						}
@@ -129,8 +130,10 @@ Jobs.utilities.date  = function (input1, input2) {
 					}
 				});
 
-			} else if (key1  === "tz" ) {
+			} else if (key1  === "tz") {
 				console.log("Jobs: Oooo - you found a hidden feature - timezone is not working yet!");
+			} else if (ignoreList.indexOf(key1) > 0) {
+				// ignore
 			} else {
 				console.log("Jobs: invalid argument was ignored: " + key1);
 			}
