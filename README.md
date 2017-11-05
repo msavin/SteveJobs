@@ -60,8 +60,8 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 
 ## More Information
 
-- [**Main Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use the three R's: register, run and repeat
-- [**Package Features**]()<br>Learn how to handle edge cases
-- [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn the features and limitations
-- [**Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
+- [**Primary Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use the three R's
+- [**Secondary Features**]()<br>Learn how to handle edge cases
+- [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn about the possibilities and limitations
+- [**Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's next and get involved
 - [**Brought to you by Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)<br>Add an admin panel to your Meteor app in 5 minutes
