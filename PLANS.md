@@ -12,6 +12,7 @@ If you would like to make a pull request, please start a ticket to discuss it fi
  - Add Jobs.reschedule() to rescheduling a job
  - Update Jobs.clear() to remove jobs that are no longer registered
  - Add jobs history
+ - Make a way to stop the queue across all servers
   
 
 **v2.0 - Under Consideration**
