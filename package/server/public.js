@@ -28,8 +28,8 @@ Jobs.register = function (jobs) {
 
 // Add a new job to MongoDB
 
-Jobs.execute = function () {
-	return Jobs.private.execute.apply(null, arguments)
+Jobs.run = function () {
+	return Jobs.private.add.apply(null, arguments)
 }
 
 // Cancel a job without removing it from MongoDB
@@ -68,7 +68,7 @@ Jobs.get = function (id) {
 
 // Run a job ahead of time
 
-Jobs.run = function (doc, callback, force) {
+Jobs.execute = function (doc, callback, force) {
 	if (force || JobsRunner.available) {
 		return Jobs.private.start(doc, callback);
 	} else {
@@ -77,10 +77,9 @@ Jobs.run = function (doc, callback, force) {
 }
 
 // Clear resolved jobs - or all of them 
-// TO DO (?): if the queue is no longer registered, remove all of its documents
 
-Jobs.clear = function (failed, pending) {
-	return Jobs.private.clear(failed, pending)
+Jobs.clear = function (count) {
+	return Jobs.private.clear(count)
 }
 
 // Access to MongoDB Collection

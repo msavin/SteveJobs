@@ -98,22 +98,41 @@ Jobs.private.cancel = function (id) {
 	}
 }
 
-Jobs.private.clear = function (failed, pending) {
-	var state = ["successful", "cancelled"];
+Jobs.private.clear = function (count, name) {
 
-	if (failed) {
+	/* Future Idea:
+		- allow array as input for count and/or name
+		- verify array to make sure it has allowed inputs
+	*/
+
+	var state = ["cancelled"];
+
+	if (count >= 2) {
+		state.push("successful")
+	}
+
+	if (count >= 3) {
 		state.push("failed")
 	} 
 
-	if (pending) {
+	if (count >= 4) {
 		state.push("pending")
 	} 
 
-	var result = Jobs.private.collection.remove({
-		state: {
-			$in: state
-		}
-	})
+	if (name) {
+		var result = Jobs.private.collection.remove({
+			name: name,
+			state: {
+				$in: state
+			}
+		})
+	} else {
+		var result = Jobs.private.collection.remove({
+			state: {
+				$in: state
+			}
+		})
+	}
 
 	return result;
 }
