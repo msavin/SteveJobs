@@ -4,7 +4,7 @@
 
 ### The Simple Jobs Queue That Just Works
 
-Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, this package is reliable, quick and effortless.
+Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, this package is reliable, quick and effortless. 
 
  - Runs on one server at a time
  - Runs predictably and consecutively
@@ -60,8 +60,8 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 
 ## More Information
 
-- [**Main Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use Jobs.register, Jobs.run and Jobs.repeat
+- [**Main Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use the three R's: register, run and repeat
 - [**Package Features**]()<br>Learn how to handle edge cases
 - [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn the features and limitations
-- [**See the Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
-- [**See Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)<br>The fastest and easiest way to add an admin panel to your app
+- [**Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
+- [**Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh) **(ad)**<br>Add an admin panel to your app in 5 minutes
