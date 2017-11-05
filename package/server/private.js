@@ -37,8 +37,14 @@ Jobs.private.execute = function (doc, jobCallback) {
 				$set: {
 					state: "successful",
 					lastRun: new Date(),
-					completed: new Date(),
-					result: jobResult
+					completed: new Date()
+				}, 
+				$push: {
+					history: {
+						date: new Date(),
+						result: jobResult,
+						state: "successful"
+					}
 				}
 			})
 
@@ -55,6 +61,12 @@ Jobs.private.execute = function (doc, jobCallback) {
 					lastRun: new Date(),
 					lastServer: JobsControl.serverId,
 					state: "failed"
+				}, 
+				$push: {
+					history: {
+						date: new Date(),
+						state: "failed"
+					}
 				}
 			});
 
@@ -80,7 +92,15 @@ Jobs.private.cancel = function (id) {
 	if (job) {
 		if (job.state === "pending" || job.state === "failed") {
 			result = Jobs.private.collection.update(id, {
-				state: "cancelled"
+				$set: {
+					state: "cancelled"
+				},
+				$push: {
+					history: {
+						date: new Date(),
+						state: "cancelled"
+					}
+				}
 			})
 
 			return result;
@@ -169,6 +189,7 @@ Jobs.private.run = function () {
 	// 2. Ready set fire
 	var doc = {
 		name: args[0],
+		created: new Date(),
 		due: function () {
 			var due = new Date();
 

@@ -29,7 +29,7 @@ Jobs.register = function (jobs) {
 // Add a new job to MongoDB
 
 Jobs.run = function () {
-	return Jobs.private.add.apply(null, arguments)
+	return Jobs.private.run.apply(null, arguments)
 }
 
 // Cancel a job without removing it from MongoDB
