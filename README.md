@@ -64,4 +64,4 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 - [**Package Features**]()<br>Learn how to handle edge cases
 - [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn the features and limitations
 - [**Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's coming and get involved
-- [**Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh) **(ad)**<br>Add an admin panel to your app in 5 minutes
+- [**Brought to you by Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)<br>Add an admin panel to your Meteor app in 5 minutes
