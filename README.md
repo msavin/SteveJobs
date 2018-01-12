@@ -4,35 +4,48 @@
 
 ### The Simple Jobs Queue That Just Works
 
-Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, this package is reliable, quick and effortless. 
+Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, this package is quick, reliable and effortless to use. 
 
- - Runs on one server at a time
- - Runs predictably and consecutively
- - Logs all the jobs and their outcomes
- - Retries failed jobs on restart
+ - Jobs run on one server at a time
+ - Jobs run predictably and consecutively
+ - Jobs are logged with their outcomes
+ - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The package has been production tested and is ready for action.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="./https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/Primary-Features">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
+**The new 2.0 runs well but needs to be tested for bugs.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
 
 ## Quick Start
 
-First, install the package:
+First, install the package, and import if necessary:
 
 ```bash
 meteor add msavin:sjobs
+```
+```javascript
+import { Jobs } from 'meteor/msavin:jobs';
 ```
 
 Then, write your background jobs like you would write your methods: 
 
 ```javascript
 Jobs.register({
-    sendReminder: function (to, content) {
-        Email.send({
+    "sendReminder": function (to, message) {
+        var self = this;
+
+        var call = HTTP.put("http://www.mocky.io/v2/5a58d79c2d00006a29d2e66a/?mocky-delay=2000ms", {
             to: to,
-            from: "no-reply@jobs.com",
-            subject: "Your Reminder",
-            content: content,
+            message: message
         })
+
+        if (call.statusCode === 200) {
+            self.success(call);
+            return;
+        } else {
+            self.failure(call);
+            return;
+        }
+
+        var cantTouchThis = "$99999999999"
     }
 });
 ```
@@ -43,7 +56,7 @@ Finally, schedule a background job like you would call a method:
 Jobs.run("sendReminder", "tcook@apple.com", "Don't forget about the launch!");
 ```
 
-One more thing: the function above will schedule the job to run on the moment that the function was called. However, you can delay it by passing in a special <a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki#configuration-options">**configuration object**</a> at the end. 
+One more thing: the function above will schedule the job to run on the moment that the function was called. However, you can delay it by passing in a special <a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki#configuration-options">**configuration object**</a> at the end:
 
 ```javascript
 Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
@@ -58,10 +71,12 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 });
 ```
 
+The configuration object supports `date`, `in`, `on`, `priority`, and `state`, all of which are completely optional.
+
 ## More Information
 
 - [**Primary Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use the three R's
 - [**Secondary Features**]()<br>Learn how to handle edge cases
 - [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn about the possibilities and limitations
-- [**Roadmap**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/projects/1)<br>See what's next and get involved
-- [**Brought to you by Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)<br>Add an admin panel to your Meteor app in 5 minutes
+
+[**Brought to you by Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)
