@@ -14,6 +14,16 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
 
 **The new 2.0 runs well but needs to be tested for bugs.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
 
+## NEW: In-App Development Tool
+
+<img src="https://github.com/msavin/SteveJobs...meteor.schedule.background.tasks.jobs.queue/blob/master/GUI.png?raw=true">
+
+After installing the Steve Jobs package, run the install command below and press Control + J in your app. 
+
+```
+meteor add msavins:sjobs-ui-blaze
+```
+
 ## Quick Start
 
 First, install the package, and import if necessary:
@@ -30,22 +40,16 @@ Then, write your background jobs like you would write your methods:
 ```javascript
 Jobs.register({
     "sendReminder": function (to, message) {
-        var self = this;
-
         var call = HTTP.put("http://www.mocky.io/v2/5a58d79c2d00006a29d2e66a/?mocky-delay=2000ms", {
             to: to,
             message: message
         })
 
         if (call.statusCode === 200) {
-            self.success(call);
-            return;
+            this.success(call);
         } else {
-            self.failure(call);
-            return;
+            this.failure(call);
         }
-
-        var cantTouchThis = "$99999999999"
     }
 });
 ```
