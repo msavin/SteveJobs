@@ -21,7 +21,7 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
 After installing the Steve Jobs package, run the install command below and press Control + J in your app. 
 
 ```
-meteor add msavins:sjobs-ui-blaze
+meteor add msavin:sjobs-ui-blaze
 ```
 
 ## Quick Start
