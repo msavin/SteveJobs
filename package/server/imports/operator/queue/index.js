@@ -24,6 +24,13 @@ import { dominator } from '../dominator';
 	If there are more jobs to run, Jobs will continue to run them consecutively. 
 	If there are no more jobs to run, Jobs will go back to polling with setInterval
 
+	Protecting against stale reads
+	Sometimes, it takes a bit of time for writes to be reflected in the reads
+	To protect against a job running twice, the queue will keep track of which doc it ran last,
+	and ensure that it does not come up in the following query
+
+
+
 */
 
 var queue = function (name) {
@@ -31,6 +38,7 @@ var queue = function (name) {
 	this.state = "failure";
 	this.interval = null;
 	this.available = true;
+	this.previouslyRan = undefined;
 }
 
 queue.prototype.start = function () {
@@ -54,6 +62,7 @@ queue.prototype.stop = function () {
 	}
 
 	self.state = "failure";
+	self.previouslyRan = undefined;
 	self.interval = Meteor.clearInterval(self.interval);
 }
 
@@ -75,8 +84,12 @@ queue.prototype.grabDoc = function () {
 	var self = this;
 	var state = self.state;
 	var name = self.name;
+	var previouslyRan = self.previouslyRan;
 
 	var jobDoc = Utilities.collection.findOne({
+		_id: {
+			$ne: previouslyRan
+		},
 		name: name,
 		due: {
 			$lt: new Date()
@@ -96,6 +109,8 @@ queue.prototype.grabDoc = function () {
 			priority: 1
 		}
 	});
+
+	this.previouslyRan = jobDoc._id;
 
 	return jobDoc;
 }
