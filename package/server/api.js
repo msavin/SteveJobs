@@ -127,7 +127,7 @@ Jobs.execute = function (jobId, callback, force) {
 Jobs.reschedule = function (jobId, config) {
 	check(jobId, String)
 	check(config, {
-		date: Match.Maybe(Object),
+		date: Match.Maybe(Date),
 		in: Match.Maybe(Object),
 		on: Match.Maybe(Object),
 		priority: Match.Maybe(Number),
