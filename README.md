@@ -12,7 +12,7 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
  - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The new 2.0 runs well but needs to be tested for bugs.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
+**The new 2.0 has been reported to work as expected.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
 
 ## NEW: In-App Development Tool
 
