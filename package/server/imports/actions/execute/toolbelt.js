@@ -5,6 +5,8 @@ import { reschedule } from '../reschedule/'
 var toolbelt = function (jobDoc) {
 	this.doc = jobDoc;
 
+	this.resolved = false; 
+
 	this.set = function (key, value) {	
 		check(key, String)
 
@@ -51,7 +53,7 @@ var toolbelt = function (jobDoc) {
 	this.success = function (result) {
 		var docId = this.doc._id;
 
-		Utilities.collection.update(docId, {
+		var update = Utilities.collection.update(docId, {
 			$set: {
 				state: "success",
 			}, 
@@ -64,6 +66,10 @@ var toolbelt = function (jobDoc) {
 				}
 			}
 		})
+
+		this.resolved = true;
+
+		return update;
 	}
 
 	this.failure = function (result) {
@@ -83,13 +89,49 @@ var toolbelt = function (jobDoc) {
 			}
 		})
 
+		this.resolved = true;
+
 		return update;
 	}
 
 	this.reschedule = function (config) {
 		var docId = this.doc._id;
 		var newDate = reschedule(docId, config);
+
+		this.resolved = true;
+
 		return newDate;
+	}
+
+	this.checkForResolution = function () {
+		var docId = this.doc._id;
+		var queueName = this.doc.name;
+		var resolution = this.resolved;
+
+		if (!resolution) {
+			Utilities.logger([
+				"Job was not successfully terminated: " + queueName + ", " + docId, 
+				"Every job must be resolved with this.successful(), this.failure(), or this.reschedule()",
+				"Queue was stopped; please re-write your function and re-start the server"
+			]);
+
+			Operator.manager.queues[queueName].stop();
+
+			var update = Utilities.collection.update(docId, {
+				$set: {
+					state: "failure",
+				}, 
+				$push: {
+					history: {
+						date: new Date(),
+						state: "unresolved",
+						server: Operator.dominator.serverId
+					}
+				}
+			})
+
+			return false;
+		}
 	}
 }
 

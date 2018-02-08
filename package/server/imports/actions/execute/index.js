@@ -5,7 +5,7 @@ var execute = function (job, callback) {
 	
 	// 1. Get the job Document
 	if (typeof job === "string") {
-		job = Utilities.collection.findOne({ 
+		var job = Utilities.collection.findOne({ 
 			_id: job,
 			state: {
 				$nin: ["success", "cancelled"]

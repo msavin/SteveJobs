@@ -8,10 +8,12 @@ var process = function (doc, callback) {
 	// 1- Execute the job
 	// 2- Update the document in database
 	// 3- Capture the result (if any)
+	var Toolbelt = new toolbelt(doc);
 
 	try {
-		var Toolbelt = new toolbelt(doc);
 		var jobResult = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
+		
+		var resolution = Toolbelt.checkForResolution();
 
 		if (typeof callback === "function") {
 			return callback(undefined, jobResult);
@@ -21,10 +23,9 @@ var process = function (doc, callback) {
 	}
 
 	catch (e) {		
-		var Toolbelt = new toolbelt(doc);
 		var failure = Toolbelt.failure();
 		
-		Utilities.logger("job failed to run: " + doc.name)
+		Utilities.logger("Job failed to run due to code error: " + doc.name)
 		console.log(e);
 
 		if (typeof callback === "function") {

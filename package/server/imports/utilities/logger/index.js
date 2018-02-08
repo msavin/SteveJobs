@@ -9,13 +9,16 @@ var logAsArray = function (messages) {
 }
 
 var logger = function (messages) {
+	console.log("");
+	console.log("****");
+
 	if (typeof messages === "string") {
 		logAsString(messages);
 	} else if (typeof messages === "object") {
 		logAsArray(messages);
 	}
 
-	console.log("----")
+	console.log("****");
 }
 
 export { logger }

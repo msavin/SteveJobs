@@ -29,8 +29,6 @@ import { dominator } from '../dominator';
 	To protect against a job running twice, the queue will keep track of which doc it ran last,
 	and ensure that it does not come up in the following query
 
-
-
 */
 
 var queue = function (name) {
@@ -38,7 +36,7 @@ var queue = function (name) {
 	this.state = "failure";
 	this.interval = null;
 	this.available = true;
-	this.previouslyRan = undefined;
+	this.previouslyRan = "this needs to be defined for the Mongo query :P";
 }
 
 queue.prototype.start = function () {
@@ -62,14 +60,14 @@ queue.prototype.stop = function () {
 	}
 
 	self.state = "failure";
-	self.previouslyRan = undefined;
+	self.previouslyRan = "hi again, I know, this is weird";
 	self.interval = Meteor.clearInterval(self.interval);
 }
 
 queue.prototype.trigger = function () {
 	var self = this;
 
-	if (self.available === true) {
+	if (self.available === true && self.interval) {
 		self.available = false;
 
 		if (dominator.isActive()) {
@@ -82,19 +80,16 @@ queue.prototype.trigger = function () {
 
 queue.prototype.grabDoc = function () {
 	var self = this;
-	var state = self.state;
-	var name = self.name;
-	var previouslyRan = self.previouslyRan;
 
 	var jobDoc = Utilities.collection.findOne({
 		_id: {
-			$ne: previouslyRan
+			$ne: self.previouslyRan
 		},
-		name: name,
+		name: self.name,
 		due: {
 			$lt: new Date()
 		},
-		state: state,
+		state: self.state,
 		history: {
 			$not: {
 				$elemMatch: {
@@ -110,7 +105,9 @@ queue.prototype.grabDoc = function () {
 		}
 	});
 
-	this.previouslyRan = jobDoc._id;
+	if (jobDoc) {
+		self.previouslyRan = jobDoc._id;
+	}
 
 	return jobDoc;
 }
