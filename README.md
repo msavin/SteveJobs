@@ -8,17 +8,17 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
 
  - Jobs run on one server at a time
  - Jobs run predictably and consecutively
- - Jobs are logged with their outcomes
+ - Jobs and their history are stored in MongoDB
  - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The new 2.0 has been reported to work as expected.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
+**The upcoming 3.0 will come with repeating jobs and more.** In the meantime, the current version can help you run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
 
-## NEW: In-App Development Tool
+## Developer Friendly UI and API
 
 <img src="https://github.com/msavin/SteveJobs...meteor.schedule.background.tasks.jobs.queue/blob/master/GUI.png?raw=true">
 
-After installing the Steve Jobs package, run the install command below and press Control + J in your app. 
+In addition to a powerful yet simple API, the Steve Jobs package offers an in-app development tool. After installing the main package, run the package command below and press Control + J in your app to open it. 
 
 ```
 meteor add msavin:sjobs-ui-blaze
@@ -32,7 +32,7 @@ First, install the package, and import if necessary:
 meteor add msavin:sjobs
 ```
 ```javascript
-import { Jobs } from 'meteor/msavin:sjobs';
+import { Jobs } from 'meteor/msavin:sjobs'
 ```
 
 Then, write your background jobs like you would write your methods: 
@@ -75,7 +75,7 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 });
 ```
 
-The configuration object supports `date`, `in`, `on`, `priority`, and `state`, all of which are completely optional.
+The configuration object supports `date`, `in`, `on`, `priority`, and `data`, all of which are completely optional.
 
 ## More Information
 
