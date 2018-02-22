@@ -19,18 +19,24 @@ Jobs.register({
 
             if (doc) {
                 self.replicate({
-                    minutes: 5
+                    in: {
+                        minutes: 5
+                    }
                 })
 
                 self.success(doc)
             } else {
                 self.reschedule({
-                    minutes: 5
+                    in: {
+                        minutes: 5
+                    }
                 })
             }
         } else {
             self.reschedule({
-                minutes: 5
+                in: {
+                    minutes: 5
+                }
             })
         }
     }
@@ -53,7 +59,7 @@ For jobs that that run very frequently, you can also use the new `this.remove` f
 
 When you register a job with `Jobs.register`, you can access a wide array of tools to make sure the job runs exactly the way you want it to:
  - `this.document` - access the cached document of the current job
- - `this.set` & `this.get` - state management for the current job
+ - `this.set` & `this.get` - persistent state management for the current job
  - `this.success` - mark the job as successful
  - `this.failure` - mark the job as having failed
  - `this.reschedule` - tell the job to run again later
@@ -70,11 +76,11 @@ For more information, see:
 
 ## New Configuration Options
 
-Jobs.configure now allows you to customize three core functions of the Jobs package: `getServerId`, `getDate` and `log`.
+Jobs.configure now allows you to customize three core functions of the Jobs package: `setServerId`, `getDate` and `log`.
 
-With `getServerId`, you can now specify the mechanism for generating a unique server ID. By default, this uses `Random.id()`, but after @mads suggestion, it made sense to open this function for customization so that it can be integrated with the server ID that you hosting service may assign.
+With `getServerId`, you can now specify the mechanism for generating a unique server ID. By default, this uses `Random.id()`, but after @person suggestion, it made sense to open this function for customization so that it can be integrated with the server ID that you hosting service may assign.
 
-With `getDate`, you can now specify how a new Date object should be initialized. By default, the function will return `new Date()`. With this option, you can, for example, return a Date object that has a future date, to create a time travel effect.
+With `getDate`, you can now specify how a new Date object should be initialized. By default, the function will return `new Date()`. With this option, you can, for example, return a Date object that has a future date, to create a "time travel" effect. Thanks @person for the idea.
 
 With `log`, you can configure how your application should log items. By default, the function will use `console.log`. 
 
