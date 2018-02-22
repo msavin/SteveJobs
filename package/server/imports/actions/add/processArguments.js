@@ -14,7 +14,7 @@ var configIsPresent = function (input) {
 	return lastItemIsConfig;
 }
 
-var processInput = function (args) {
+var processArguments = function (args) {
 	var output = {},
 		args = Array.prototype.slice.call(args);
 
@@ -39,4 +39,4 @@ var processInput = function (args) {
 	return output;
 }
 
-export { processInput }
+export { processArguments }

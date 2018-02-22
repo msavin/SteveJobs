@@ -1,15 +1,15 @@
 import { config } from './config'
 import { logger } from './logger'
-import { registry } from './registry'
 import { helpers } from './helpers'
+import { registry } from './registry'
 import { collection } from './collection'
 
 var Utilities = {
 	config: config,
-	collection: collection,
 	logger: logger,
+	helpers: helpers,
 	registry: registry,
-	helpers: helpers
+	collection: collection,
 }
 
 export { Utilities }

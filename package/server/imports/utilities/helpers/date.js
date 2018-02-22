@@ -1,8 +1,9 @@
 import { number } from './number.js'
 import { logger } from '../logger'
+import { config } from '../config'
 
 var date = function (input1, input2) {
-	var currentDate = new Date();
+	var currentDate = config.getDate()
 	var action;
 
 	// Get the inputs straightened out

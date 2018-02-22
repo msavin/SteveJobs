@@ -2,29 +2,19 @@ import { Utilities } from '../../utilities'
 import { process } from './process.js'
 
 var execute = function (job, callback) {
-	
-	// 1. Get the job Document
-	if (typeof job === "string") {
-		var job = Utilities.collection.findOne({ 
-			_id: job,
-			state: {
-				$nin: ["success", "cancelled"]
-			}
-		});
-	}
+	var jobDoc = Utilities.helpers.getJob(job, {
+		allow: ["pending", "failed"],
+		message: "Job is not valid or not found, or is already resolved:"
+	});
 
-	// 2. ...
-	if (typeof job === "object") {
-		if (typeof Utilities.registry.data[job.name]) {
-			var result = process(job, callback);
+	if (typeof jobDoc === "object") {
+		if (typeof Utilities.registry.data[jobDoc.name]) {
+			var result = process(jobDoc, callback);
 			return result;
 		} else {
-			Utilities.logger("Jobs: Job not found in registry: " + doc.name);
+			Utilities.logger("Jobs: Job not found in registry: " + jobDoc.name);
 			return false;
 		}
-	} else {
-		Utilities.logger(["Job not valid or not found:", job]);
-		return false;
 	}
 }
 
