@@ -158,11 +158,12 @@ Jobs.replicate = function (jobId, config) {
 
 // Clear resolved jobs - or all of them 
 
-Jobs.clear = function (state, name) {
+Jobs.clear = function (state, name, callback) {
 	check(state, Match.OneOf(undefined, String, [String]))
 	check(name, Match.Optional(String))
+	check(callback, Match.Optional(Function))
 
-	return Actions.clear(state, name);
+	return Actions.clear(state, name, callback);
 }
 
 // Remove the job

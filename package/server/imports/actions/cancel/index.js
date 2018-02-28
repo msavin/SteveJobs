@@ -26,7 +26,7 @@ var cancel = function (job, callback) {
 	}
 
 	if (callback) {
-		callback(error, result)
+		callback(error, result);
 	}
 
 	return result;

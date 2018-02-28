@@ -1,6 +1,6 @@
 import { Utilities } from '../../utilities'
 
-var clear = function (state, name) {
+var clear = function (state, name, callback) {
 	action = {
 		state: {
 			$in: state || ["cancelled", "success"]
@@ -26,6 +26,10 @@ var clear = function (state, name) {
 	}
 
 	var result = Utilities.collection.remove(action)
+	
+	if (callback) {
+		callback(undefined, result);
+	}
 	
 	return result;
 }
