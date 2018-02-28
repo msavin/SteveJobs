@@ -1,5 +1,5 @@
-import { Utilities } from '../../utilities'
-import { process } from './process.js'
+import { Utilities } from "../../utilities"
+import { process } from "./process.js"
 
 var execute = function (job, callback) {
 	var jobDoc = Utilities.helpers.getJob(job, {

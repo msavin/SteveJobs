@@ -1,6 +1,6 @@
-import { queue } from './queue/'
-import { dominator } from './dominator/'
-import { manager } from './manager/'
+import { queue } from "./queue/"
+import { dominator } from "./dominator/"
+import { manager } from "./manager/"
 
 Operator = {
 	dominator: dominator,

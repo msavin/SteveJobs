@@ -1,5 +1,5 @@
-import { Mongo } from 'meteor/mongo'
-import { Utilities } from '../../utilities/'
+import { Mongo } from "meteor/mongo"
+import { Utilities } from "../../utilities/"
 
 /* 
 	Potential Optimization

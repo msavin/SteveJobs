@@ -1,4 +1,4 @@
-import { Random } from 'meteor/random'
+import { Random } from "meteor/random"
 
 var config = {
 	started: false,

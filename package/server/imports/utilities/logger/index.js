@@ -1,4 +1,4 @@
-import { config } from '../config'
+import { config } from "../config"
 
 var logger = function (messages) {
 	config.log(messages);

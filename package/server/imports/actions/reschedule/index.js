@@ -1,4 +1,4 @@
-import { Utilities } from '../../utilities'
+import { Utilities } from "../../utilities"
 
 reschedule = function (job, config, callback) {
 	var error,

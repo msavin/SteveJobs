@@ -1,6 +1,6 @@
-import { Meteor } from 'meteor/meteor'
-import { Utilities } from '../utilities/'
-import { Operator } from '../operator/'
+import { Meteor } from "meteor/meteor"
+import { Utilities } from "../utilities/"
+import { Operator } from "../operator/"
 
 // 1. Wait 5 seconds for all the code to initialize
 // 2. Start Jobs if autoStart is enabled

@@ -1,6 +1,6 @@
-import { number } from './number.js'
-import { logger } from '../logger'
-import { config } from '../config'
+import { number } from "./number.js"
+import { logger } from "../logger"
+import { config } from "../config"
 
 var date = function (input1, input2) {
 	var currentDate = config.getDate()
@@ -121,7 +121,7 @@ var date = function (input1, input2) {
 	// Run the magic (if possible ;)
 
 	if (typeof action === "object") {
-		
+
 		Object.keys(action).forEach(function (key1) {
 			if (["in","on"].indexOf(key1) > -1) {
 				Object.keys(action[key1]).forEach(function (key2) {
@@ -142,7 +142,7 @@ var date = function (input1, input2) {
 
 		return currentDate;
 	} else {
-		console.log("invalid argument(s) date generator");
+		logger("Invalid argument(s) for date generator");
 	}
 }
 

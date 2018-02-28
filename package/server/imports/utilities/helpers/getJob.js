@@ -1,5 +1,5 @@
-import { collection } from '../collection'
-import { logger } from '../logger'
+import { collection } from "../collection"
+import { logger } from "../logger"
 
 getJob = function (input, filter, verify) {
 	var jobDoc;
@@ -31,7 +31,7 @@ getJob = function (input, filter, verify) {
 		}
 
 		This could be done in the database, but: 
-		 - its probably faster to query by _id than anything else
+		 - its probably faster to query with just _id
 		 - we might be passing into a cached document into this function
 	*/
 

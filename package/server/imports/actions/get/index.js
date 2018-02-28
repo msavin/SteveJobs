@@ -1,4 +1,4 @@
-import { Utilities } from '../../utilities'
+import { Utilities } from "../../utilities"
 
 var get = function (input, verify, callback) {
 	var jobDoc = Utilities.helpers.getJob(input, {}, verify)

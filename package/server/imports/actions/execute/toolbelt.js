@@ -1,8 +1,8 @@
-import { Utilities } from '../../utilities'
-import { Operator } from '../../operator'
-import { reschedule } from '../reschedule/'
-import { replicate } from '../replicate/'
-import { remove } from '../remove/'
+import { Utilities } from "../../utilities"
+import { Operator } from "../../operator"
+import { reschedule } from "../reschedule/"
+import { replicate } from "../replicate/"
+import { remove } from "../remove/"
 
 var toolbelt = function (jobDoc) {
 	this.document = jobDoc;
@@ -44,7 +44,7 @@ var toolbelt = function (jobDoc) {
 			}
 		}
 
-		return this.document.data.key || null;
+		return this.document.data[key] || null;
 	}
 
 	this.success = function (result) {

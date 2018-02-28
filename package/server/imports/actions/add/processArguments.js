@@ -1,17 +1,17 @@
-var configIsPresent = function (input) {
-	var lastItem = input[input.length - 1],
-		lastItemIsConfig = false,
-		reservedWords = ["in", "on", "priority", "date", "data", "callback"];
+var checkConfig = function (input) {
+	var result = false,
+		lastArgument = input[input.length - 1],
+		keywords = ["in", "on", "priority", "date", "data", "callback"];
 
-	if (typeof lastItem === "object") {
-		reservedWords.forEach(function (word) {
-			if (lastItem[word]) {
-				lastItemIsConfig = true;
+	if (typeof lastArgument === "object") {
+		keywords.forEach(function (keyword) {
+			if (lastArgument[keyword]) {
+				result = true;
 			}
 		});
 	}
 
-	return lastItemIsConfig;
+	return result;
 }
 
 var processArguments = function (args) {
@@ -24,7 +24,7 @@ var processArguments = function (args) {
 	}()
 
 	output.config = function () {
-		if (configIsPresent(args)) {
+		if (checkConfig(args)) {
 			var config = args.pop();
 			return config;
 		} else {

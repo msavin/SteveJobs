@@ -1,6 +1,6 @@
-import { Utilities } from '../../utilities'
-import { toolbelt } from './toolbelt.js'
-import { reschedule } from '../reschedule/'
+import { Utilities } from "../../utilities"
+import { toolbelt } from "./toolbelt.js"
+import { reschedule } from "../reschedule/"
 
 var process = function (doc, callback) {
 	// Goals: 

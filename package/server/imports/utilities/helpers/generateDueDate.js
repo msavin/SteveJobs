@@ -1,6 +1,6 @@
-import { logger } from '../logger'
-import { date } from './date.js'
-import { config } from '../config'
+import { logger } from "../logger"
+import { config } from "../config"
+import { date } from "./date.js"
 
 generateDueDate = function (configObj) {
 	var due = config.getDate();

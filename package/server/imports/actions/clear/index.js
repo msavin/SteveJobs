@@ -1,4 +1,4 @@
-import { Utilities } from '../../utilities'
+import { Utilities } from "../../utilities"
 
 var clear = function (state, name, callback) {
 	action = {

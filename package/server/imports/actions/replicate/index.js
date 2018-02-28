@@ -1,4 +1,4 @@
-import { Utilities } from '../../utilities'
+import { Utilities } from "../../utilities"
 
 var replicate = function (job, config, callback) {
 	var error,

@@ -1,5 +1,5 @@
-import { Utilities } from '../../utilities'
-import { processArguments } from './processArguments.js'
+import { Utilities } from "../../utilities"
+import { processArguments } from "./processArguments.js"
 
 var add = function () {
 	// 0. Prepare variables
@@ -25,10 +25,10 @@ var add = function () {
 
 	// 5. Mission accomplished
 	if (typeof input.config.callback === "function") {
-		return input.config.callback(error, result);
+		input.config.callback(error, result);
 	}
 	
-	return resut;
+	return result;
 }
 
 export { add }

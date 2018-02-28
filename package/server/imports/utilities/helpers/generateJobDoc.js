@@ -1,6 +1,6 @@
-import { config } from '../config'
-import { generateDueDate } from './generateDueDate.js'
-import { number } from './number.js'
+import { config } from "../config"
+import { generateDueDate } from "./generateDueDate.js"
+import { number } from "./number.js"
 
 var generateJobDoc = function (input) {
 	return {

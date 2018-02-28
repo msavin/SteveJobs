@@ -1,7 +1,7 @@
-import { Meteor } from 'meteor/meteor';
-import { Utilities } from '../../utilities/'
-import { execute } from '../../actions/execute';
-import { dominator } from '../dominator';
+import { Meteor } from "meteor/meteor"
+import { Utilities } from "../../utilities/"
+import { execute } from "../../actions/execute"
+import { dominator } from "../dominator"
 
 var queue = function (name) {
 	this.name = name;
@@ -15,7 +15,7 @@ queue.prototype.start = function () {
 	var self = this;
 	
 	if (self.interval) {
-		Utilities.logger('Cannot start queue because it has already been started: ' + self.name);
+		Utilities.logger("Cannot start queue because it has already been started: " + self.name);
 		return;
 	}
 
@@ -27,7 +27,7 @@ queue.prototype.stop = function () {
 	var self = this;
 
 	if (!self.interval) {
-		Utilities.logger('Cannot stop queue because it has already been stopped: ' + self.name);
+		Utilities.logger("Cannot stop queue because it has already been stopped: " + self.name);
 		return;
 	}
 
