@@ -3,7 +3,7 @@ import { process } from "./process.js"
 
 var execute = function (job, callback) {
 	var jobDoc = Utilities.helpers.getJob(job, {
-		allow: ["pending", "failed"],
+		allow: ["pending", "failure"],
 		message: "Job is not valid or not found, or is already resolved:"
 	});
 

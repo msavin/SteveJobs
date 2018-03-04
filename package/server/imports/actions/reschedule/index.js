@@ -4,7 +4,7 @@ reschedule = function (job, config, callback) {
 	var error,
 		result,
 		jobDoc = Utilities.helpers.getJob(job, {
-			allow: ["pending", "failed"],
+			allow: ["pending", "failure"],
 			message: 'Unable to reschedule. Job does not exist or has been resolved: '
 		});
 

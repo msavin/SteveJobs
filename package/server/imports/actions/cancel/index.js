@@ -4,7 +4,7 @@ var cancel = function (job, callback) {
 	var error,
 		result,
 		jobDoc = Utilities.helpers.getJob(job, {
-			allow: ["pending", "failed"],
+			allow: ["pending", "failure"],
 			message: "Unable to cancel job - not found or is resolved: "
 		})
 
