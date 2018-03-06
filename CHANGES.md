@@ -2,7 +2,7 @@
 
 # Steve Jobs: What's New in 3.0
 
-### The Simple Jobs Queue That Just Works
+## The Simple Jobs Queue That Just Works
 
 Meteor evolved application development by going from past-time by default to real-time by default. The Steve Jobs package takes the next leap forward by letting your application run in future-time. 😁
 
