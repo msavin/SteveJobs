@@ -12,13 +12,13 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
  - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The new 3.0 features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the Quick Start below, take a look at the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a>, and/or try the <a href="http://jobsqueue.herokuapp.com">**live demo**</a>.
+**The new 3.0 features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
 
-## Developer Friendly UI and API
+## Developer Friendly GUI and API
 
 <img src="https://github.com/msavin/SteveJobs...meteor.schedule.background.tasks.jobs.queue/blob/master/GUI.png?raw=true">
 
-In addition to a powerful yet simple API, the Steve Jobs package offers an in-app development tool. After installing the main package, run the package command below and press Control + J in your app to open it. 
+In addition to a simple API, the Steve Jobs package offers an in-app development tool. After installing the main package, run the package command below and press Control + J in your app to open it.
 
 ```
 meteor add msavin:sjobs-ui-blaze
@@ -40,15 +40,17 @@ Then, write your background jobs like you would write your methods:
 ```javascript
 Jobs.register({
     "sendReminder": function (to, message) {
-        var call = HTTP.put("http://www.mocky.io/v2/5a58d79c2d00006a29d2e66a/?mocky-delay=2000ms", {
+        var call = HTTP.put("http://www.magic.com/sendEmail", {
             to: to,
             message: message
         })
 
         if (call.statusCode === 200) {
-            this.success(call);
+            this.success(call.result);
         } else {
-            this.failure(call);
+            this.reschedule({
+                minutes: 5
+            });
         }
     }
 });

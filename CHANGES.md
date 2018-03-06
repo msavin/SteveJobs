@@ -86,7 +86,7 @@ With `getDate`, you can now specify how a new Date object should be initialized.
 
 With `log`, you can configure how your application should log items. By default, the function will use `console.log`. 
 
-## Smarter MongoDB Querying
+## Smarter MongoDB Behavior
 
 Of all the pleasures that MongoDB offers, peace of mind is not one of them. 
 
@@ -102,11 +102,11 @@ This has been resolved by making the `serverId` field unique. It looks like Mong
 
 As is - the Steve Jobs package does its job well, and works great with Meteor.
 
-I'm excited about transactions coming MongoDB 4.0. Along with Write Concerns, Retryable Writes, and the new storage engine, this can be used to make the queue _really_ reliable.
-    - In some jobs, you might need to run two database operations, such  `this.replicate` and `this.success`, to successfully resolve the job. It would be nice if the two can be combined to assure that both actions happened successfully.
-    - It could also be helpful in designing a mechanism to keep track of many jobs running across many servers.
+I'm excited about transactions coming MongoDB 4.0. Along with Write Concerns, Retryable Writes, and the new storage engine, this can be used to make the queue _really_ reliable. For example:
+  - In some jobs, you might need to run two database operations, such  `this.replicate` and `this.success`, to successfully resolve the job. It would be nice if the two can be combined to assure that both actions happened successfully.
+  - It could also be helpful in designing a mechanism to keep track of many jobs running across many servers.
 
-MongoDB 4.0 is coming in the summer, so I will evaluate then whether to keep evolving the project or to simply maintain what it does now.
+MongoDB 4.0 is coming this summer, so I will evaluate then whether to keep evolving the project or to simply maintain what it does now.
 
 The idea is, this could grow into a reliable queue that can run many jobs at once and scale horizontally. It would not be the fastest solution, but it may be so reliable, scalable and developer friendly, that speed would seem overrated.
 
