@@ -1,18 +1,17 @@
-import { Utilities } from '../../utilities'
-import { toolbelt } from './toolbelt.js'
-import { reschedule } from '../reschedule/'
-import { Operator } from '../../operator'
+import { Utilities } from "../../utilities"
+import { toolbelt } from "./toolbelt.js"
+import { reschedule } from "../reschedule/"
 
 var process = function (doc, callback) {
 	// Goals: 
 	// 1- Execute the job
 	// 2- Update the document in database
 	// 3- Capture the result (if any)
+
 	var Toolbelt = new toolbelt(doc);
 
 	try {
 		var jobResult = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
-		
 		var resolution = Toolbelt.checkForResolution();
 
 		if (typeof callback === "function") {

@@ -1,4 +1,4 @@
-import { Mongo } from 'meteor/mongo'
+import { Mongo } from "meteor/mongo"
 
 collection = new Mongo.Collection("jobs_data");
 

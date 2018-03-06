@@ -1,8 +1,9 @@
 import { Actions } from './imports/actions'
 import { Utilities } from './imports/utilities'
 import { Operator } from './imports/operator'
+import './imports/startup'
 
-Jobs = {}
+var Jobs = {}
 
 // Configure the package (optional)
 
@@ -11,7 +12,10 @@ Jobs.configure = function (config) {
 		autoStart: Match.Maybe(Boolean),
 		interval: Match.Maybe(Number),
 		startupDelay: Match.Maybe(Number),
-		maxWait: Match.Maybe(Number)
+		maxWait: Match.Maybe(Number),
+		setServerId: Match.Maybe(Function),
+		getDate: Match.Maybe(Function),
+		log: Match.Maybe(Function)
 	})
 
 	Object.keys(config).forEach(function (key) {
@@ -126,30 +130,57 @@ Jobs.execute = function (jobId, callback, force) {
 
 Jobs.reschedule = function (jobId, config) {
 	check(jobId, String)
-	check(config, {
+	if (config) check(config, {
 		date: Match.Maybe(Date),
 		in: Match.Maybe(Object),
 		on: Match.Maybe(Object),
 		priority: Match.Maybe(Number),
+		callback: Match.Maybe(Function)
 	})
 
 	return Actions.reschedule(jobId, config);
 }
 
+// Replicate a job to run it again later
+
+Jobs.replicate = function (jobId, config) {
+	check(jobId, String)
+	if (config) check(config, {
+		date: Match.Maybe(Date),
+		in: Match.Maybe(Object),
+		on: Match.Maybe(Object),
+		data: Match.Maybe(Object),
+		priority: Match.Maybe(Number),
+	})
+
+	return Actions.replicate(jobId, config);
+}
+
 // Clear resolved jobs - or all of them 
 
-Jobs.clear = function (state, name) {
+Jobs.clear = function (state, name, callback) {
 	check(state, Match.OneOf(undefined, String, [String]))
 	check(name, Match.Optional(String))
+	check(callback, Match.Optional(Function))
 
-	return Actions.clear(state, name);
+	return Actions.clear(state, name, callback);
+}
+
+// Remove the job
+
+Jobs.remove = function (jobId, callback) {
+	check(jobId, String)
+	check(callback, Match.Maybe(Function))
+
+	return Actions.remove(jobId, callback);
 }
 
 // Internals for debugging
 
-var JobsInternal = {}
-JobsInternal.Actions = Actions;
-JobsInternal.Utilities = Utilities;
-JobsInternal.Operator = Operator;
+var JobsInternal = {
+	Actions: Actions,
+	Utilities: Utilities,
+	Operator: Operator
+}
 
 export { Jobs, JobsInternal }

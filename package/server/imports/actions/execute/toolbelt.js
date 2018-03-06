@@ -1,57 +1,54 @@
-import { Utilities } from '../../utilities'
-import { Operator } from '../../operator'
-import { reschedule } from '../reschedule/'
+import { Utilities } from "../../utilities"
+import { Operator } from "../../operator"
+import { reschedule } from "../reschedule/"
+import { replicate } from "../replicate/"
+import { remove } from "../remove/"
 
 var toolbelt = function (jobDoc) {
-	this.doc = jobDoc;
+	this.document = jobDoc;
 
 	this.resolved = false; 
 
 	this.set = function (key, value) {	
 		check(key, String)
 
-		if (key.indexOf())
-		var docId = this.doc._id;
-		
+		var docId = this.document._id;
 		var patch = {}
 		patch["data." + key] = value;
-	
-		var doc = Utilities.collection.update(docId, {
+
+		// first, update the document
+		var update = Utilities.collection.update(docId, {
 			$set: patch
 		})
 
-		return doc;
+		// second, patch the cached document if write is successful
+		if (update) {
+			this.document.data[key] = value
+		}
+
+		// finally, return doc update ID
+		return update;
 	}
 
-	this.get = function (key) {
+	this.get = function (key, getLatestFromDatabase) {
 		check(key, String)
-		
-		var docId = this.doc._id;
-		var result = null; 
+		var docId = this.document._id
 
-		// Get the latest doc
-		latestDoc = Utilities.collection.findOne(docId);
-		
-		// Update the cached doc while we're at it
-		this.doc = latestDoc;
-		
-		// Return the result
-		if (latestDoc) {
-			if (latestDoc.data) {
-				result = latestDoc.data;
-
-				if (key) {
-					result = latestDoc.data.key || null;
-				}
-			} else {
-				console.log("WTF")
+		if (getLatestFromDatabase) {
+			// Get the latest doc
+			doc = Utilities.collection.findOne(docId);
+			
+			// Update the cached doc with the fresh copy
+			if (doc) {
+				this.document = doc;	
 			}
 		}
-		return result;
+
+		return this.document.data[key] || null;
 	}
 
 	this.success = function (result) {
-		var docId = this.doc._id;
+		var docId = this.document._id;
 
 		var update = Utilities.collection.update(docId, {
 			$set: {
@@ -61,7 +58,7 @@ var toolbelt = function (jobDoc) {
 				history: {
 					date: new Date(),
 					state: "success",
-					server: Operator.dominator.serverId,
+					serverId: Utilities.config.getServerId(),
 					result: result
 				}
 			}
@@ -73,7 +70,7 @@ var toolbelt = function (jobDoc) {
 	}
 
 	this.failure = function (result) {
-		var docId = this.doc._id;
+		var docId = this.document._id;
 		
 		var update = Utilities.collection.update(docId, {
 			$set: {
@@ -83,7 +80,7 @@ var toolbelt = function (jobDoc) {
 				history: {
 					date: new Date(),
 					state: "failure",
-					server: Operator.dominator.serverId,
+					serverId: Utilities.config.getServerId(),
 					result: result
 				}
 			}
@@ -95,17 +92,43 @@ var toolbelt = function (jobDoc) {
 	}
 
 	this.reschedule = function (config) {
-		var docId = this.doc._id;
+		var docId = this.document._id;
 		var newDate = reschedule(docId, config);
 
-		this.resolved = true;
+		if (!newDate) {
+			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + docId, config]);
+		}
 
-		return newDate;
+		this.resolved = true;
+		return newDate;	
+	}
+
+	this.replicate = function (config) {
+		var doc = this.document;
+		var newCopy = replicate(doc, config)
+
+		if (!newCopy) {
+			Utilities.logger(["Error cloning job: " + doc.name + "/" + docId, config]);
+		}
+
+		return newCopy;
+	}
+
+	this.remove = function () {
+		var docId = this.document._id;
+		var removeDoc = remove(docId)
+
+		if (!removeDoc) {
+			Utilities.logger(["Error removing job: " + doc.name + "/" + docId, config]);
+		}
+
+		this.resolved = true;
+		return removeDoc;
 	}
 
 	this.checkForResolution = function () {
-		var docId = this.doc._id;
-		var queueName = this.doc.name;
+		var docId = this.document._id;
+		var queueName = this.document.name;
 		var resolution = this.resolved;
 
 		if (!resolution) {
@@ -125,7 +148,7 @@ var toolbelt = function (jobDoc) {
 					history: {
 						date: new Date(),
 						state: "unresolved",
-						server: Operator.dominator.serverId
+						serverId: Utilities.config.getServerId()
 					}
 				}
 			})

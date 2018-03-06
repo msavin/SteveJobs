@@ -1,20 +1,21 @@
-import { logger } from '../logger'
-import { date } from './date.js'
+import { logger } from "../logger"
+import { config } from "../config"
+import { date } from "./date.js"
 
-generateDueDate = function (config) {
-	var due = new Date();
+generateDueDate = function (configObj) {
+	var due = config.getDate();
 
-	if (config && config.date) {
-		if (typeof config.date.getDate === "function") {
-			due = config.date;	
+	if (configObj && configObj.date) {
+		if (typeof configObj.date.getDate === "function") {
+			due = configObj.date;	
 		} else {
 			logger("Invalid input for 'date' field. Used current date instead.")
 		}
 	}
 
-	if (typeof config === "object") {
-		if (config.in || config.on) {
-			due = date(due, config);
+	if (typeof configObj === "object") {
+		if (configObj.in || configObj.on) {
+			due = date(due, configObj);
 		}
 	}
 

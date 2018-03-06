@@ -1,3 +1,5 @@
+import { logger } from "../logger"
+
 var number = function (input, note) {
 	if (typeof input === "undefined") {
 		return 0;
@@ -9,19 +11,14 @@ var number = function (input, note) {
 
 	if (typeof input === "string") {
 		input = Number(input);
-
-		if (isNaN(input)) {
-			console.log("Jobs: invalid input for " + note || "number");
-			return 0
-		}
 	}
 
-	if (typeof input === "number") {
-		return input;
-	} else {
-		console.log("Jobs: invalid input for " + note || "number");
-		return 0;
+	if (isNaN(input)) {
+		input = 0;
+		logger(["Invalid input for " + note || "number", "therefore, it was set to 0"]);
 	}
+
+	return input;
 }
 
 export { number }

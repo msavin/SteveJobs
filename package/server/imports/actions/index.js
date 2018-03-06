@@ -3,6 +3,8 @@ import { get } from './get'
 import { clear } from './clear'
 import { cancel } from './cancel'
 import { execute } from './execute'
+import { remove } from './remove'
+import { replicate } from './replicate'
 import { reschedule } from './reschedule'
 
 var Actions = {
@@ -11,6 +13,8 @@ var Actions = {
 	clear: clear,
 	cancel: cancel,
 	execute: execute,
+	remove: remove,
+	replicate: replicate,
 	reschedule: reschedule
 }
 

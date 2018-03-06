@@ -1,24 +1,7 @@
-var logAsString = function (message) {
-	console.log("Jobs: " + message);
-}
-
-var logAsArray = function (messages) {
-	messages.forEach(function (message) {
-		console.log("Jobs: " + message);
-	});
-}
+import { config } from "../config"
 
 var logger = function (messages) {
-	console.log("");
-	console.log("****");
-
-	if (typeof messages === "string") {
-		logAsString(messages);
-	} else if (typeof messages === "object") {
-		logAsArray(messages);
-	}
-
-	console.log("****");
+	config.log(messages);
 }
 
 export { logger }
