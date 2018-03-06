@@ -40,7 +40,7 @@ var dominator = {
 		// then business as usual
 		var doc = self.collection.findOne({}, {
 			sort: {
-				lastPing: 1,
+				lastPing: -1,
 			}
 		});
 
