@@ -13,6 +13,7 @@ Jobs.configure = function (config) {
 		interval: Match.Maybe(Number),
 		startupDelay: Match.Maybe(Number),
 		maxWait: Match.Maybe(Number),
+		disableDevelopmentMode: Match.Maybe(Boolean),
 		setServerId: Match.Maybe(Function),
 		getDate: Match.Maybe(Function),
 		log: Match.Maybe(Function)

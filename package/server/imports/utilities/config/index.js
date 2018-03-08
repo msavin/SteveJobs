@@ -5,7 +5,8 @@ var config = {
 	autoStart: true,
 	interval: 3000,
 	startupDelay: 1 * 1000,
-	maxWait: 5 * 60 * 1000
+	maxWait: 5 * 60 * 1000,
+	disableDevelopmentMode: false
 }
 
 config.getDate = function () {

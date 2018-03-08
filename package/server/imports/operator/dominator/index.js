@@ -33,7 +33,7 @@ var dominator = {
 		// since Meteor runs only one server in development,
 		// we should set dominator as active immediately, otherwise 
 		// it would wait the `lastPing` to surpass `maxWait` 
-		if (Meteor.isDevelopment) {
+		if (Meteor.isDevelopment && !Utilities.config.disableDevelopmentMode) {
 			return self.setAsActive();
 		}
 		
