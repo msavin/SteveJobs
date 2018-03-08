@@ -89,6 +89,7 @@ queue.prototype.grabDoc = function () {
 queue.prototype.run = function () {
 	var self = this;
 	var jobDoc = self.grabDoc();
+	var action = self.trigger.bind(self);
 
 	if (jobDoc) {
 		execute(jobDoc, function () {
@@ -100,7 +101,7 @@ queue.prototype.run = function () {
 
 		if (self.state === "failure") {
 			self.state = "pending";
-			self.trigger();
+			action();
 		}
 	}
 }
