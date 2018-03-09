@@ -50,7 +50,7 @@ var dominator = {
 			var timeGap = new Date () - doc.lastPing;
 			var timeSpacer = Utilities.config.maxWait;
 
-			if (timeGap >= timeSpacer) {
+			if (timeGap <= timeSpacer) {
 				return self.setAsActive()
 			}
 		}
