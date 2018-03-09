@@ -22,6 +22,17 @@ import { Utilities } from "../../utilities/"
 var dominator = {
 	collection: new Mongo.Collection("jobs_dominator_3"),
 	serverId: null,
+	getActive: function () {
+		self = this;
+
+		var doc = self.collection.findOne({}, {
+			sort: {
+				lastPing: -1,
+			}
+		});
+
+		return doc;
+	},
 	isActive: function () {
 		var self = this;
 
@@ -38,21 +49,19 @@ var dominator = {
 		}
 		
 		// then business as usual
-		var doc = self.collection.findOne({}, {
-			sort: {
-				lastPing: -1,
-			}
-		});
+		var doc = self.getActive();
 
+		// if the doc is itself, maintain dominance
 		if (!doc || doc.serverId === self.serverId) {
 			return self.setAsActive();
-		} else {
-			var timeGap = new Date () - doc.lastPing;
-			var timeSpacer = Utilities.config.maxWait;
+		} 
 
-			if (timeGap <= timeSpacer) {
-				return self.setAsActive()
-			}
+		// if someone isn't maintaining dominance, take it
+		var timeGap = new Date () - doc.lastPing;
+		var maxTimeGap = Utilities.config.maxWait;
+
+		if (timeGap <= maxTimeGap) {
+			return self.setAsActive();
 		}
 	},
 	setAsActive: function () {
@@ -69,7 +78,7 @@ var dominator = {
 				$setOnInsert: {
 					created: lastPing
 				}
-			})
+			});
 
 			if (result) {
 				self.lastPing = lastPing;
@@ -83,7 +92,7 @@ var dominator = {
 	},
 	reset: function () {
 		self = this;
-		self.serverId = Utilities.config.getServerId(true)
+		self.serverId = Utilities.config.getServerId(true);
 	}
 }
 
