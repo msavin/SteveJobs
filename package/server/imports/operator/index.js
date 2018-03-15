@@ -9,7 +9,7 @@ Operator = {
 }
 
 Operator.start = function () {
-	Operator.manager.start()
+	Operator.dominator.initialize();
 }
 
 export { Operator }

@@ -6,15 +6,15 @@ var config = {
 	interval: 3000,
 	startupDelay: 1 * 1000,
 	maxWait: 5 * 60 * 1000,
-	disableDevelopmentMode: false
+	disableDevelopmentMode: false,
+	remoteCollection: undefined,
+	serverId: undefined,
 }
 
 config.getDate = function () {
 	var newDate = new Date();
 	return newDate;
 }
-
-config.serverId = null;
 
 config.setServerId = function () {
 	return Random.id();

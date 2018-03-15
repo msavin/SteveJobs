@@ -16,7 +16,8 @@ Jobs.configure = function (config) {
 		disableDevelopmentMode: Match.Maybe(Boolean),
 		setServerId: Match.Maybe(Function),
 		getDate: Match.Maybe(Function),
-		log: Match.Maybe(Function)
+		log: Match.Maybe(Function),
+		remoteCollection: Match.Maybe(String)
 	})
 
 	Object.keys(config).forEach(function (key) {

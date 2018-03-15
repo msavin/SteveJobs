@@ -6,11 +6,13 @@ import { Operator } from "../operator/"
 // 2. Start Jobs if autoStart is enabled
 
 Meteor.startup(function () {
+	Utilities.start();
+	Operator.start();
+
 	Meteor.setTimeout(function () {
 		if (Utilities.config.autoStart) {
 			Meteor.setTimeout(function () {
-				Operator.start();
-				Utilities.config.started = true;
+				Operator.manager.start();
 			}, Utilities.config.startupDelay);
 		}
 	}, 5000)

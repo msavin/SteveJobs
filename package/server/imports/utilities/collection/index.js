@@ -1,10 +1,21 @@
 import { Mongo } from "meteor/mongo"
+import { config } from "../config"
 
-collection = new Mongo.Collection("jobs_data");
+var collectionName = "jobs_data"
 
-collection._ensureIndex({
-	due: 1, 
-	state: 1
-})
+var initializeCollection = function () {
+	var collection; 
 
-export { collection }
+	if (config.remoteCollection) {
+		var dbDriver = new MongoInternals.RemoteCollectionDriver(config.remoteCollection);
+		collection = new Mongo.Collection(collectionName, { _driver: dbDriver });
+	} else {
+		collection = new Mongo.Collection(collectionName);
+	}
+
+	collection._ensureIndex({ due: 1, state: 1 })
+
+	return collection;
+}
+
+export { collection, initializeCollection }
