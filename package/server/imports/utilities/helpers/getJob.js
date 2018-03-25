@@ -1,4 +1,4 @@
-import { collection } from "../collection"
+import { Utilities } from "../"
 import { logger } from "../logger"
 
 getJob = function (input, filter, verify) {
@@ -8,12 +8,12 @@ getJob = function (input, filter, verify) {
 	if (typeof input === "object" && input._id) {
 		jobDoc = input;
 	} else if (typeof input === "string") {
-		jobDoc = collection.findOne(input)
+		jobDoc = Utilities.collection.findOne(input)
 	}
 
 	// verify the job through the database
 	if (typeof jobDoc === "object" && verify) {
-		jobDoc = collection.findOne(jobDoc._id);
+		jobDoc = Utilities.collection.findOne(jobDoc._id);
 	}
 
 	// if its not an object 

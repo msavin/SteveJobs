@@ -23,8 +23,8 @@ reschedule = function (job, config, callback) {
 
 		// Second, set the priority, if any
 		var determineNewPriority = function () {
-			if (config.priority) {
-				var val = Utilities.number(config.priority, "priority") || 0;
+			if (config && config.priority) {
+				var val = Utilities.helpers.number(config.priority, "priority") || 0;
 				dbUpdate.$set.priority = val;
 				dbUpdate.$push.history.newPriority = val;
 			}

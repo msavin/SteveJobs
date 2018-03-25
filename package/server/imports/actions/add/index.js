@@ -9,18 +9,18 @@ var add = function () {
 	var input = processArguments(arguments);
 
 	// 2-1. check if the job is singular
-	if (config.config && input.config.singular) {
+	if (input.config && input.config.singular) {
 		existingDoc = Utilities.collection.findOne({
 			name: input.name,
 			arguments: input.arguments,
 			state: {
-				$in: "pending", "failure"
+				$in: ["pending", "failure"]
 			}
 		})
 	}
 
 	// 2-2. Cancel the job if it exists
-	if (existingDocDoc) {
+	if (existingDoc) {
 		return;
 	}
 	
