@@ -177,6 +177,10 @@ Jobs.remove = function (jobId, callback) {
 	return Actions.remove(jobId, callback);
 }
 
+// Expose the MongoDB collection
+
+Jobs.collection = Utilities.collection
+
 // Internals for debugging
 
 var JobsInternal = {
