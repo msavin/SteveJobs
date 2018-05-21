@@ -18,10 +18,8 @@ var clear = function (state, name, callback) {
 	}
 
 	if (state === "*") {
-		action = {
-			state: {
-				$in: ["cancelled", "success", "pending", "failure"]
-			}
+		action.state = {
+			$in: ["cancelled", "success", "pending", "failure"]
 		}
 	}
 
