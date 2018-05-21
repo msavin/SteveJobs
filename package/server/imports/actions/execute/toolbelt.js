@@ -134,7 +134,7 @@ var toolbelt = function (jobDoc) {
 		if (!resolution) {
 			Utilities.logger([
 				"Job was not successfully terminated: " + queueName + ", " + docId, 
-				"Every job must be resolved with this.successful(), this.failure(), or this.reschedule()",
+				"Every job must be resolved with this.success(), this.failure(), this.reschedule(), or this.remove()",
 				"Queue was stopped; please re-write your function and re-start the server"
 			]);
 
