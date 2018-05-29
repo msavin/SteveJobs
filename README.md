@@ -96,14 +96,6 @@ The configuration object supports `date`, `in`, `on`, `priority`, and `data`, al
 - [Jobs.remove](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsremove)
 - [Jobs.collection](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobscollection)
 
-
-
-
-## More Information
-
-- [**Primary Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use the three R's
-- [**Secondary Features**]()<br>Learn how to handle edge cases
-- [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn about the possibilities and limitations
+------
 
 Steve Jobs is an MIT-licensed project, brought to you by [**Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)
-}
