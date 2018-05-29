@@ -5,18 +5,18 @@ Steve Jobs is an all inclusive package for scheduling background jobs. It automa
  - [Jobs.configure](#jobsconfigure)
  - [Jobs.register](#jobsregister)
  - [Jobs.run](#jobsrun)
- - [Jobs.cancel](#jobscancel)
- - [Jobs.start](#jobsstart)
- - [Jobs.stop](#jobsstop)
- - [Jobs.get](#jobsget)
  - [Jobs.execute](#jobsexecute)
  - [Jobs.reschedule](#jobsreschedule)
  - [Jobs.replicate](#jobsreplicate)
+ - [Jobs.start](#jobsstart)
+ - [Jobs.stop](#jobsstop)
+ - [Jobs.get](#jobsget)
+ - [Jobs.cancel](#jobscancel)
  - [Jobs.clear](#jobsclear)
  - [Jobs.remove](#jobsremove)
  - [Jobs.collection](#jobscollection)
 
-## Jobs.configure
+### Jobs.configure
 
 `Jobs.configure` allows you to configure how the package should work. You can figure one option or all of them. All the options are pre-configured in [`./package/server/imports/utilities/config.js`](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/package/server/imports/utilities/config/index.js). 
 
@@ -32,7 +32,7 @@ Jobs.configure({
 	remoteCollection: String,			// store jobs data in a remote collection
 })```
 
-## Jobs.register
+### Jobs.register
 
 `Jobs.register` allows you to register logic for a job. Once registered, the package will start a queue to look for and execute jobs as appropriate, and you will be able to run jobs with `Jobs.run`.
 
@@ -84,7 +84,7 @@ Each job must be resolved with success, failure, reschedule, and/or remove, othe
 
 For using Promises, see this [GitHub thread](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/issues/31#issuecomment-366665043).
 
-## Jobs.run
+### Jobs.run
 
 `Jobs.run` allows you to schedule a job to run. You call it just like you would call a method, by specifying the job namea and its arguments. At the end, you can pass in a special configuration object. Otherwise, it will be scheduled to run as soon as possible.
 
@@ -120,80 +120,7 @@ The configuration object supports the following inputs:
 	- **callback** - Function
 		- Run a callback function after scheduling the job
 
-## Jobs.cancel
-
-`Jobs.cancel` allows you to cancel a job if it has not run already.
-
-```javascript
-Jobs.cancel(jobId)
-```
-
-
-## Jobs.start
-
-`Jobs.start` allows you start all the queues. This runs automatically unless `autoStart` is reconfigured through `Jobs.configure`. If you call the function with no arguments, it will start all the queues. If you pass in a String, it will start a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
-
-```
-// Start all the queues
-Jobs.start()
-
-// Start just one queue
-Jobs.start("sendReminder")
-
-// Start multiple queues
-Jobs.start(["sendReminder", "sendEmail"])
-```
-
-This function currently only works on the server where it is called.
-
-
-## Jobs.stop
-
-`Jobs.stop` allows you stop all the queues. If you call the function with no arguments, it will stop all the queues. If you pass in a String, it will stop a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
-
-```
-// Start all the queues
-Jobs.start()
-
-// Start just one queue
-Jobs.start("sendReminder")
-
-// Start multiple queues
-Jobs.start(["sendReminder", "sendEmail"])
-```
-
-This function currently only works on the server where it is called. 
-
-## Jobs.get
-
-`Jobs.get` allows you to get a job document by its document id.
-
-```
-Jobs.get(docId)
-```
-
-A job document looks like this:
-
-```javascript
-{
-	_id: 'BqjPbF9NGxY4YdnGn',
-	name: 'sendEmail',
-	created: 2018-05-18T09:48:48.355Z,
-	serverId: '7NrBe4QyDsYjxK9xg',
-	state: 'success',
-	due: 2018-05-18T09:48:48.355Z,
-	priority: 0,
-	arguments: ['jony@apple.com', 'Hello again'],
-	history: [{ 
-		date: 2018-05-18T09:48:57.492Z,
-		state: 'success',
-		serverId: '7NrBe4QyDsYjxK9xg' 
-	}]
-}
-```
-
-
-## Jobs.execute
+### Jobs.execute
 
 `Jobs.execute` allows you to run a job ahead of its due date. It can only work on jobs that have not been resolved. 
 
@@ -201,7 +128,7 @@ A job document looks like this:
 Jobs.execute(docId)
 ```
 
-## Jobs.reschedule
+### Jobs.reschedule
 
 `Jobs.reschedule` allows you to reschedule a job. It can only work on jobs that have not been resolved. 
 
@@ -215,8 +142,7 @@ Jobs.reschedule(jobId, {
 
 The configuration is passed in as the second argument, and it supports the same inputs as `Jobs.run`.
 
-## Jobs.replicate
-
+### Jobs.replicate
 
 `Jobs.replicate` allows you to replicate a job.
 
@@ -228,20 +154,91 @@ Jobs.replicate(jobId, {
 })
 ```
 
+### Jobs.start
+
+`Jobs.start` allows you start all the queues. This runs automatically unless `autoStart` is reconfigured through `Jobs.configure`. If you call the function with no arguments, it will start all the queues. If you pass in a String, it will start a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
+
+```javascript
+// Start all the queues
+Jobs.start()
+
+// Start just one queue
+Jobs.start("sendReminder")
+
+// Start multiple queues
+Jobs.start(["sendReminder", "sendEmail"])
+```
+
+This function currently only works on the server where it is called.
+
+
+### Jobs.stop
+
+`Jobs.stop` allows you stop all the queues. If you call the function with no arguments, it will stop all the queues. If you pass in a String, it will stop a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
+
+```javascript
+// Start all the queues
+Jobs.start()
+
+// Start just one queue
+Jobs.start("sendReminder")
+
+// Start multiple queues
+Jobs.start(["sendReminder", "sendEmail"])
+```
+
+This function currently only works on the server where it is called. 
+
+### Jobs.get
+
+`Jobs.get` allows you to get a job document by its document id.
+
+```javascript
+Jobs.get(docId)
+```
+
+A job document looks like this:
+
+```javascript
+{
+	_id: 'BqjPbF9NGxY4YdnGn',
+	name: 'sendEmail',
+	created: '2018-05-18T09:48:48.355Z',
+	serverId: '7NrBe4QyDsYjxK9xg',
+	state: 'success',
+	due: '2018-05-18T09:48:48.355Z',
+	priority: 0,
+	arguments: ['jony@apple.com', 'Hello again'],
+	history: [{ 
+		date: '2018-05-18T09:48:57.492Z',
+		state: 'success',
+		serverId: '7NrBe4QyDsYjxK9xg' 
+	}]
+}
+```
+
 The configuration is passed in as the second argument, and it supports the same inputs as `Jobs.run`.
 
-## Jobs.clear
+### Jobs.cancel
+
+`Jobs.cancel` allows you to cancel a job if it has not run already.
+
+```javascript
+Jobs.cancel(jobId)
+```
+
+### Jobs.clear
 
 `Jobs.clear` allows you to clear all or some of the jobs in your database.
 
-## Jobs.remove
+### Jobs.remove
 
 `Jobs.remove` allows you to remove a job from the collection.
 
-```
+```javascript
 Jobs.remove(docId)
 ```
 
-## Jobs.collection
+### Jobs.collection
 
 `Jobs.collection` allows you to access the MongoDB collection where the jobs are stored. Ideally, you should not require interaction with the database directly. But hey, we're developers. 

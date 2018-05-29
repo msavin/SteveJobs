@@ -79,10 +79,31 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 
 The configuration object supports `date`, `in`, `on`, `priority`, and `data`, all of which are completely optional.
 
+------
+
+`Jobs.register` and `Jobs.run` are all you need to get started, but that's only the beginning of what the package can do. To explore the rest of the functionality, jump into the documentation:
+- [Jobs.configure](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsconfigure)
+- [Jobs.register](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsregister)
+- [Jobs.run](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsrun)
+- [Jobs.execute](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsexecute)
+- [Jobs.reschedule](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsreschedule)
+- [Jobs.replicate](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsreplicate)
+- [Jobs.start](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsstart)
+- [Jobs.stop](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsstop)
+- [Jobs.get](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsget)
+- [Jobs.cancel](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobscancel)
+- [Jobs.clear](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsclear)
+- [Jobs.remove](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsremove)
+- [Jobs.collection](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobscollection)
+
+
+
+
 ## More Information
 
 - [**Primary Features**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki)<br>Learn how to use the three R's
 - [**Secondary Features**]()<br>Learn how to handle edge cases
 - [**How It Works**](https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki/How-It-Works)<br>Learn about the possibilities and limitations
 
-[**Brought to you by Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)
+Steve Jobs is an MIT-licensed project, brought to you by [**Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)
+}
