@@ -79,7 +79,7 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 
 The configuration object supports `date`, `in`, `on`, `priority`, and `data`, all of which are completely optional.
 
-------
+## Documentation
 
 `Jobs.register` and `Jobs.run` are all you need to get started, but that's only the beginning of what the package can do. To explore the rest of the functionality, jump into the documentation:
 - [Jobs.configure](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsconfigure)
@@ -98,4 +98,4 @@ The configuration object supports `date`, `in`, `on`, `priority`, and `data`, al
 
 ------
 
-Steve Jobs is an MIT-licensed project, brought to you by [**Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh)
+Steve Jobs is an MIT-licensed project, brought to you by [**Meteor Candy**](https://www.meteorcandy.com/?ref=sjgh).
