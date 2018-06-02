@@ -33,7 +33,7 @@ meteor add msavin:sjobs
 ```
 ```javascript
 import { Jobs } from 'meteor/msavin:sjobs'
-```
+``
 
 Then, write your background jobs like you would write your methods: 
 
@@ -49,7 +49,9 @@ Jobs.register({
             this.success(call.result);
         } else {
             this.reschedule({
-                minutes: 5
+                in: {
+                    minutes: 5
+                }
             });
         }
     }
@@ -59,10 +61,10 @@ Jobs.register({
 Finally, schedule a background job like you would call a method: 
 
 ```javascript
-Jobs.run("sendReminder", "tcook@apple.com", "Don't forget about the launch!");
+Jobs.run("sendReminder", "jony@apple.com", "The future is here!");
 ```
 
-One more thing: the function above will schedule the job to run on the moment that the function was called. However, you can delay it by passing in a special <a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki#configuration-options">**configuration object**</a> at the end:
+One more thing: the function above will schedule the job to run on the moment that the function was called, however, you can delay it by passing in a special <a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki#configuration-options">**configuration object**</a> at the end:
 
 ```javascript
 Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
