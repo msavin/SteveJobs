@@ -31,9 +31,10 @@ First, install the package, and import if necessary:
 ```bash
 meteor add msavin:sjobs
 ```
+
 ```javascript
 import { Jobs } from 'meteor/msavin:sjobs'
-``
+```
 
 Then, write your background jobs like you would write your methods: 
 
