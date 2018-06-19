@@ -30,7 +30,8 @@ Jobs.configure({
 	getDate: Function,					// determine how to get the current date, if for whatever reason, new Date() is not suitable
 	log: Function,						// determine how to log the package outputs
 	remoteCollection: String,			// store jobs data in a remote collection
-})```
+})
+```
 
 ### Jobs.register
 
