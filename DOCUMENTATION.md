@@ -103,23 +103,24 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 ```
 
 The configuration object supports the following inputs:
-	- **`in`** - Object
-		- The `in` parameter will schedule the job at a later time, using the current time and your inputs to calculate the due time.
-	- **`on`** - Object
-		- The `on` parameter override the current time with your inputs.
-	- **`in` and `on`** - Object
-		- The supported fields for in and on can be used in singular and/or plural versions:
-			- millisecond, second, minute, hour, day, month, and year
-			- milliseconds, seconds, minutes, hours, days, months, and years
-		- The date object will be updated in the order that is specified. This means that if it is year 2017, and you set `in` one year, but `on` 2019, the year 2019 will be the final result. However, if you set `on` 2019 and `in` one year, then the year 2020 will be the final result.
-	- **`priority`** - Number 
-		- The default priority for each job is 0
-		- If you set it to a positive integer, it will run ahead of other jobs.
-		- If you set it to a negative integer, it will only run after all the zero or positive jobs have completed.
-	- **`date`** - Function
-		- Provide your own date. This stacks with the `in` and `on` operator, and will be applied before they run.
-	- **callback** - Function
-		- Run a callback function after scheduling the job
+
+- **`in`** - Object
+	- The `in` parameter will schedule the job at a later time, using the current time and your inputs to calculate the due time.
+- **`on`** - Object
+	- The `on` parameter override the current time with your inputs.
+- **`in` and `on`** - Object
+	- The supported fields for in and on can be used in singular and/or plural versions:
+		- millisecond, second, minute, hour, day, month, and year
+		- milliseconds, seconds, minutes, hours, days, months, and years
+	- The date object will be updated in the order that is specified. This means that if it is year 2017, and you set `in` one year, but `on` 2019, the year 2019 will be the final result. However, if you set `on` 2019 and `in` one year, then the year 2020 will be the final result.
+- **`priority`** - Number 
+	- The default priority for each job is 0
+	- If you set it to a positive integer, it will run ahead of other jobs.
+	- If you set it to a negative integer, it will only run after all the zero or positive jobs have completed.
+- **`date`** - Function
+	- Provide your own date. This stacks with the `in` and `on` operator, and will be applied before they run.
+- **callback** - Function
+	- Run a callback function after scheduling the job
 
 ### Jobs.execute
 
@@ -137,7 +138,8 @@ Jobs.execute(docId)
 Jobs.reschedule(jobId, {
 	in: {
 		minutes: 5
-	}
+	},
+	priority: 99999999	
 })
 ```
 
@@ -157,7 +159,7 @@ Jobs.replicate(jobId, {
 
 ### Jobs.start
 
-`Jobs.start` allows you start all the queues. This runs automatically unless `autoStart` is reconfigured through `Jobs.configure`. If you call the function with no arguments, it will start all the queues. If you pass in a String, it will start a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
+`Jobs.start` allows you start all the queues. This runs automatically unless `autoStart` is set to `false`. If you call the function with no arguments, it will start all the queues. If you pass in a String, it will start a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
 
 ```javascript
 // Start all the queues
@@ -230,7 +232,16 @@ Jobs.cancel(jobId)
 
 ### Jobs.clear
 
-`Jobs.clear` allows you to clear all or some of the jobs in your database.
+`Jobs.clear` allows you to clear all or some of the jobs in your database. It supports `state` for selecting a job state, which can be `pending`, `success`, or `failure`, or `*"`to select all of them.
+
+You can add the `name` arguments to specify a specific queue. You can also call an optional callback.
+
+```javascript
+var state = "pending";
+var name = "sendEmail";
+var cb = function (r) { console.log(r) } 
+Jobs.clear(state, name, cb)
+```
 
 ### Jobs.remove
 
@@ -242,4 +253,4 @@ Jobs.remove(docId)
 
 ### Jobs.collection
 
-`Jobs.collection` allows you to access the MongoDB collection where the jobs are stored. Ideally, you should not require interaction with the database directly. But hey, we're developers. 
+`Jobs.collection` allows you to access the MongoDB collection where the jobs are stored. Ideally, you should not require interaction with the database directly, but hey, we're developers. If you find a case where this is necessary, let me know.

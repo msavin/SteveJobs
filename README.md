@@ -12,7 +12,7 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
  - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The new 3.0 features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs/wiki">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
+**The <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/CHANGES.md">new 3.0</a> features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
 
 ## Developer Friendly GUI and API
 
