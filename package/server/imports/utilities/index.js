@@ -15,4 +15,5 @@ Utilities.start = function () {
 	Utilities.collection = initializeCollection();
 	Utilities.config.started = true;
 }
+
 export { Utilities }

@@ -179,7 +179,9 @@ Jobs.remove = function (jobId, callback) {
 
 // Expose the MongoDB collection
 
-Jobs.collection = Utilities.collection
+Meteor.startup(function () { 
+	Jobs.collection = Utilities.collection
+})
 
 // Internals for debugging
 
@@ -187,6 +189,6 @@ var JobsInternal = {
 	Actions: Actions,
 	Utilities: Utilities,
 	Operator: Operator
-}
+}; 
 
 export { Jobs, JobsInternal }
