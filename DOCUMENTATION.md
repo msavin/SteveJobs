@@ -180,14 +180,14 @@ This function currently only works on the server where it is called.
 `Jobs.stop` allows you stop all the queues. If you call the function with no arguments, it will stop all the queues. If you pass in a String, it will stop a queue with that name. If you pass in an Array, it will loop over the items in it, and treat them like a string.
 
 ```javascript
-// Start all the queues
-Jobs.start()
+// Stop all the queues
+Jobs.stop()
 
-// Start just one queue
-Jobs.start("sendReminder")
+// Stop just one queue
+Jobs.stop("sendReminder")
 
-// Start multiple queues
-Jobs.start(["sendReminder", "sendEmail"])
+// Stop multiple queues
+Jobs.stop(["sendReminder", "sendEmail"])
 ```
 
 This function currently only works on the server where it is called. 
