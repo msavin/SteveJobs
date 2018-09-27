@@ -73,7 +73,7 @@ Jobs.register({
 ```
 
 Each job is binded with a set of functions to give you maximum control over how the job runs: 
- - `this.doc()` - access job document
+ - `this.document` - access job document
  - `this.set(key, value)` - set a persistent key/value pair
  - `this.get(key)` - get a persistent value from key
  - `this.success(result)` - tell the queue the job is completed, and attach an optional result
