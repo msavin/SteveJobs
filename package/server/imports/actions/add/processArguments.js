@@ -1,7 +1,7 @@
 var checkConfig = function (input) {
 	var result = false,
 		lastArgument = input[input.length - 1],
-		keywords = ["in", "on", "priority", "date", "data", "callback", "singular"];
+		keywords = ["in", "on", "priority", "date", "data", "callback", "singular", "unique"];
 
 	if (typeof lastArgument === "object") {
 		keywords.forEach(function (keyword) {

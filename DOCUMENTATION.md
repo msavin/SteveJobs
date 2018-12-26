@@ -98,7 +98,8 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
         hour: 9,
         minute: 42
     },
-    priority: 9999999999
+    priority: 9999999999,
+    singular: true
 });
 ```
 
@@ -118,8 +119,12 @@ The configuration object supports the following inputs:
 	- If you set it to a positive integer, it will run ahead of other jobs.
 	- If you set it to a negative integer, it will only run after all the zero or positive jobs have completed.
 - **`date`** - Function
-	- Provide your own date. This stacks with the `in` and `on` operator, and will be applied before they run.
-- **callback** - Function
+	- Provide your own date. This stacks with the `in` and `on` operator, and will be applied before they perform their operations.
+* **`unique`** - Boolean
+	- If a job is marked as unique, it will only be scheduled if no other job exists with the same arguments
+* **`singular`** - Boolean
+	- If a job is marked as singular, it will only be scheduled if no other job is pending (or failed, which in effect, is the same as pending) with the same arguments
+- **`callback`** - Function
 	- Run a callback function after scheduling the job
 
 ### Jobs.execute
