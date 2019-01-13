@@ -10,6 +10,8 @@ var Jobs = {}
 Jobs.configure = function (config) {
 	check(config, {
 		autoStart: Match.Maybe(Boolean),
+		autoPurge: Match.Maybe(Boolean),
+		autoRetry: Match.Maybe(Boolean),
 		interval: Match.Maybe(Number),
 		startupDelay: Match.Maybe(Number),
 		maxWait: Match.Maybe(Number),
@@ -17,7 +19,8 @@ Jobs.configure = function (config) {
 		setServerId: Match.Maybe(Function),
 		getDate: Match.Maybe(Function),
 		log: Match.Maybe(Function),
-		remoteCollection: Match.Maybe(String)
+		remoteCollection: Match.Maybe(String),
+		gracePeriod: Match.Maybe(Number),
 	})
 
 	Object.keys(config).forEach(function (key) {

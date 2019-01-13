@@ -1,17 +1,21 @@
 import { Utilities } from "../../utilities"
 
 var clear = function (state, name, callback) {
-	action = {
+	if (typeof state === "string" && state !== "*")  {
+		state = [state]
+	}
+
+	var action = {
 		state: {
 			$in: state || ["cancelled", "success"]
 		}
 	}
 
-	if (typeof name === "string") {
+	if (name && typeof name === "string") {
 		action.name = name
 	}
 
-	if (typeof name === "object") {
+	if (name && typeof name === "object") {
 		action.name = {
 			$in: name
 		}

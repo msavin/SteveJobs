@@ -3,7 +3,7 @@ import { Utilities } from "../../utilities/"
 import { execute } from "../../actions/execute"
 import { dominator } from "../dominator"
 
-var queue = function (name) {
+var queue = function (name, state = "failure") {
 	this.name = name;
 	this.state = "failure";
 	this.interval = null;
@@ -31,7 +31,16 @@ queue.prototype.stop = function () {
 		return;
 	}
 
-	self.state = "failure";
+	var state = function () {
+		if (Utilities.autoRetry) {
+			return "failure"
+		} else {
+			return "pending";
+		}
+	}()
+
+
+	self.state = state;
 	self.previouslyRan = "hi again, I know, this is weird";
 	self.interval = Meteor.clearInterval(self.interval);
 }

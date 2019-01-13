@@ -12,6 +12,7 @@ Meteor.startup(function () {
 	Meteor.setTimeout(function () {
 		if (Utilities.config.autoStart) {
 			Meteor.setTimeout(function () {
+				console.log("=> Started jobs queue")
 				Operator.manager.start();
 			}, Utilities.config.startupDelay);
 		}

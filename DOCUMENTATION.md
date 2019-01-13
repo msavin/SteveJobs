@@ -22,14 +22,17 @@ Steve Jobs is an all inclusive package for scheduling background jobs. It automa
 
 ```javascript
 Jobs.configure({
-	autoStart: Boolean,					// specify if the package should start automatically on Meteor.startup
-	interval: Number,					// specify how often the package should check for due jobs
-	startupDelay: Number,				// specify how long after server startup the package should start running
-	maxWait: Number,					// specify how long the server could be inactive before another server takes on the master role 	disableDevelopmentMode: Boolean,	// development mode assumes that only one server is running, and that it is the active one
-	setServerId: Function,				// determine how to set the serverId - for example, you can have the package use your hosts deployment id
-	getDate: Function,					// determine how to get the current date, if for whatever reason, new Date() is not suitable
-	log: Function,						// determine how to log the package outputs
-	remoteCollection: String,			// store jobs data in a remote collection
+	// Key								// Default      Description 
+	autoStart: Boolean,					// true         - specify if the package should start automatically on Meteor.startup
+	autoRetry: Boolean,					// true         - specify if the package should retry failed jobs whenever a new server takes control
+	autoPurge: Boolean,					// true         - specify if the package should automatically delete internal data (not job related)
+	interval: Number,					// 3000         - specify how often the package should check for due jobs
+	startupDelay: Number,				// 1000         - specify how long after server startup the package should start running
+	maxWait: Number,					// 5min.        - specify how long the server could be inactive before another server takes on the master role 	disableDevelopmentMode: Boolean,	// development mode assumes that only one server is running, and that it is the active one
+	setServerId: Function,				// Random.id () - determine how to set the serverId - for example, you can have the package use your hosts deployment id
+	getDate: Function,					// new Date()   - determine how to get the current date, if for whatever reason, new Date() is not suitable
+	log: Function,						// console.log  - determine how to log the package outputs
+	remoteCollection: String,			// undefined    - store jobs data in a remote collection
 })
 ```
 

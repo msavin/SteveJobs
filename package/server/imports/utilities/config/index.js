@@ -1,14 +1,17 @@
 import { Random } from "meteor/random"
 
 var config = {
-	started: false,
 	autoStart: true,
+	autoPurge: true,
+	autoRetry: true,
+	started: false,
 	interval: 3000,
 	startupDelay: 1 * 1000,
 	maxWait: 5 * 60 * 1000,
 	disableDevelopmentMode: false,
 	remoteCollection: undefined,
 	serverId: undefined,
+	gracePeriod: 10
 }
 
 config.getDate = function () {
@@ -46,5 +49,6 @@ config.log = function (messages) {
 
 	console.log("****");
 }
+
 
 export { config }

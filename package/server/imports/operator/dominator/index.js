@@ -59,6 +59,18 @@ dominator.getActive = function () {
 	return doc;
 }
 
+// This will automatically remove dominator logs
+// to prevent database from getting too big
+dominator.purge = function () {
+	Meteor.setTimeout(function () {
+		return self.collection.remove({
+			serverId: {
+				$ne: self.serverId
+			}
+		})
+	}, 5000);
+}
+
 dominator.setAsActive = function () {
 	var self = this;
 	var lastPing = new Date();
@@ -78,6 +90,10 @@ dominator.setAsActive = function () {
 		if (result) {
 			self.lastPing = lastPing;
 		}
+
+		if (Utilities.config.autoPurge) {
+			dominator.purge();
+		}
 		
 		return result;
 	} catch (e) {
@@ -94,7 +110,18 @@ dominator.isActive = function () {
 	if (Meteor.isDevelopment && !Utilities.config.disableDevelopmentMode) {
 		return self.setAsActive();
 	}
-	
+
+	// if the last ping was less than 10 seconds ago, 
+	// then assume that server is dominant
+	if (self.lastPing && Utilities.config.gracePeriod) {
+		var gracePeriod = new Date(self.lastPing);
+		gracePeriod = gracePeriod.setSeconds(gracePeriod.getSeconds() + Utilities.config.gracePeriod);
+
+		if (new Date() < gracePeriod) {
+			return true;
+		}
+	}
+
 	// then business as usual
 	var doc = self.getActive();
 
@@ -103,7 +130,7 @@ dominator.isActive = function () {
 		return self.setAsActive();
 	} 
 
-	// if someone isn't maintaining dominance, take it
+	// if a server isn't maintaining dominance, take it
 	var timeGap = new Date () - doc.lastPing;
 	var maxTimeGap = Utilities.config.maxWait;
 

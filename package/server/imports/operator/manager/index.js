@@ -1,11 +1,20 @@
 import { queue } from "../queue"
+import { Utilities } from "../../utilities/"
 
 var manager = {}
 
 manager.queues = {}
 
 manager.add = function (name) {
-	manager.queues[name] = new queue(name)
+	var state = function () {
+		if (Utilities.autoRetry) {
+			return "failure"
+		} else {
+			return "pending";
+		}
+	}()
+
+	manager.queues[name] = new queue(name, state)
 }
 
 manager.start = function (name) {
