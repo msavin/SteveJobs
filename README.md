@@ -12,7 +12,7 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
  - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/CHANGES.md">new 3.1</a> features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
+**The new 3.1 features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
 
 ## Developer Friendly GUI and API
 
@@ -86,7 +86,7 @@ The configuration object supports `date`, `in`, `on`, `priority`, `singular`, `u
 
 ## Repeating Jobs
 
-Creating repeating jobs is easy, and you have total control over how they run. First, you need to create a job that will automatically replicate itself.
+Compared to a CRON Job, the Steve Jobs package gives you much more control over how and when the job runs. To get started, you just need to create a job that replicates itself.
 
 ```javascript
 Jobs.register({
@@ -115,7 +115,7 @@ Jobs.register({
 });
 ```
 
-Then, schedule the job to run with the `singular` flag, only if an instance of it does not exist.
+Then, you need to "kickstart" the queue by creating the first job to run. By using the singular flag, you can ensure that Meteor will only create the job if there is no pending or failed instance of it.
 
 ```javascript
 Meteor.startup(function () {

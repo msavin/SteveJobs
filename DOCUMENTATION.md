@@ -27,27 +27,28 @@ Here is an example of what a jobs document looks like:
 {
 	_id: "riEauLYngjSGoETWh",
 	name: "sendEmail",
-	created: 2019-01-13T14:24:42.444Z,
+	created: "2019-01-13T14:24:42.444Z",
 	serverId: "R7KPMHWz7DEsDWBCm",
 	state: "success",
-	due: 2019-01-13T14:24:51.444Z,
+	due: "2019-01-13T14:24:51.444Z",
 	priority: 0,
 	arguments: ["sendReminder", "jony@apple.com", "The future is here!"],
 	history: [{
-  		date: 2019-01-13T14:24:51.444Z,,
+  		date: "2019-01-13T14:24:51.444Z,",
 		state: "success",
 		serverId: "R7KPMHWz7DEsDWBCm" 
 	}, {
-		date: 2019-01-13T14:23:51.444Z,
+		date: "2019-01-13T14:23:51.444Z",
 		type: "reschedule",
 		serverId: "5whJ8rWzDcTv8aZGy",
-		newDue: 2019-01-13T14:24:51.444Z
+		newDue: "2019-01-13T14:24:51.444Z"
 	}] 
 }
 ```
 
 The history of each job is kept in the `history` field, which can also hold the result of the job, if you pass it into the `success` or `failure` action.
 
+Note: dates are not stored as strings, this was just a hack to get around markdown rendering issues
 
 ### Jobs.configure
 
