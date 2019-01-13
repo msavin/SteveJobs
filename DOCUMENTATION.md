@@ -16,6 +16,39 @@ Steve Jobs is an all inclusive package for scheduling background jobs. It automa
  - [Jobs.remove](#jobsremove)
  - [Jobs.collection](#jobscollection)
 
+
+### Overview of a Job Document
+
+Every Job document in stored into MongoDB because MongoDB has great persistence and querying features, and because you would not be required to set up any additional services to get running.
+
+Here is an example of what a jobs document looks like:
+
+```js
+{
+	_id: "riEauLYngjSGoETWh",
+	name: "sendEmail",
+	created: 2019-01-13T14:24:42.444Z,
+	serverId: "R7KPMHWz7DEsDWBCm",
+	state: "success",
+	due: 2019-01-13T14:24:51.444Z,
+	priority: 0,
+	arguments: ["sendReminder", "jony@apple.com", "The future is here!"],
+	history: [{
+  		date: 2019-01-13T14:24:51.444Z,,
+		state: "success",
+		serverId: "R7KPMHWz7DEsDWBCm" 
+	}, {
+		date: 2019-01-13T14:23:51.444Z,
+		type: "reschedule",
+		serverId: "5whJ8rWzDcTv8aZGy",
+		newDue: 2019-01-13T14:24:51.444Z
+	}] 
+}
+```
+
+The history of each job is kept in the `history` field, which can also hold the result of the job, if you pass it into the `success` or `failure` action.
+
+
 ### Jobs.configure
 
 `Jobs.configure` allows you to configure how the package should work. You can figure one option or all of them. All the options are pre-configured in [`./package/server/imports/utilities/config.js`](https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/package/server/imports/utilities/config/index.js). 

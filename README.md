@@ -41,15 +41,17 @@ Then, write your background jobs like you would write your methods:
 ```javascript
 Jobs.register({
     "sendReminder": function (to, message) {
+        var instance = this;
+
         var call = HTTP.put("http://www.magic.com/sendEmail", {
             to: to,
             message: message
         })
 
         if (call.statusCode === 200) {
-            this.success(call.result);
+            instance.success(call.result);
         } else {
-            this.reschedule({
+            instance.reschedule({
                 in: {
                     minutes: 5
                 }
@@ -81,6 +83,47 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 ```
 
 The configuration object supports `date`, `in`, `on`, `priority`, `singular`, `unique`, and `data`, all of which are completely optional. For more information, see the `Jobs.run` <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsrun">documentation</a>.
+
+## Repeating Jobs
+
+Creating repeating jobs is easy, and you have total control over how they run. First, you need to create a job that will automatically replicate itself.
+
+```javascript
+Jobs.register({
+    "syncData": function () {
+        var instance = this;
+
+        var call = HTTP.put("http://www.magic.com/syncData")
+
+        if (call.statusCode === 200) {
+            instance.replicate({
+                in: {
+                    hours: 1
+                }
+            });
+            
+            // alternatively, you can use instance.remove to save storage
+            instance.success(call.result);
+        } else {
+            instance.reschedule({
+                in: {
+                    minutes: 5
+                }
+            });
+        }
+    }
+});
+```
+
+Then, schedule the job to run with the `singular` flag, only if an instance of it does not exist.
+
+```javascript
+Meteor.startup(function () {
+    Jobs.run("syncData", {
+        singular: true
+    })    
+})
+```
 
 ## Documentation
 
