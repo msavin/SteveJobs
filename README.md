@@ -80,7 +80,7 @@ Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
 });
 ```
 
-The configuration object supports `date`, `in`, `on`, `priority`, and `data`, all of which are completely optional.
+The configuration object supports `date`, `in`, `on`, `priority`, `singular`, `unique`, and `data`, all of which are completely optional. For more information, see the `Jobs.run` <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md#jobsrun">documentation</a>.
 
 ## Documentation
 
