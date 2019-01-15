@@ -24,6 +24,8 @@ In addition to a simple API, the Steve Jobs package offers an in-app development
 meteor add msavin:sjobs-ui-blaze
 ```
 
+Note: this package may be a little bit flakey, and might not work if `audit-argument-checks` is present. Unfortunately, I had lost the source code, and will probably rebuild the package once there is a good reason to do so.
+
 ## Quick Start
 
 First, install the package, and import if necessary:
