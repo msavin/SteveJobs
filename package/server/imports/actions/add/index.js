@@ -30,6 +30,7 @@ var add = function () {
 				arguments: input.arguments,
 			})
 
+
 			if (doc) blockAdd = true
 		}
 
@@ -45,9 +46,42 @@ var add = function () {
 	// 3. Generate job document
 	var jobDoc = Utilities.helpers.generateJobDoc(input);
 
-	// 4. Insert the job document into the database
-	var jobId = Utilities.collection.insert(jobDoc);
+	// 4. Insert the job document into the database OR update it
+	var jobId;
 
+	if (input.config && input.config.override) { 
+		var doc = Utilities.collection.findOne({
+			name: input.name,
+			arguments: input.arguments,
+		})
+
+		if (doc) {
+			var initDate = jobDoc.created || new Date;
+
+			jobId = Utilities.collection.update(doc._id, {
+				$set: {
+					due: initDate,
+					priority: jobDoc.priority,
+					updated: jobDoc.created,
+					data: jobDoc.data,
+				},
+				$push: {
+					history: {
+						date: initDate,
+						state: "pending",
+						serverId: Utilities.config.getServerId(),
+						result: "Jobs/JobOveride"
+					}
+				}
+			});
+
+		} else {
+			jobId = Utilities.collection.insert(jobDoc);	
+		}
+	} else {
+		jobId = Utilities.collection.insert(jobDoc);	
+	}
+	
 	// 5. Simulate the document (this might save us a database request in some places)	
 	if (jobId) {
 		result = jobDoc;
