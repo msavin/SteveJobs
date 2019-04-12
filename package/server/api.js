@@ -54,8 +54,24 @@ Jobs.register = function (jobs) {
 Jobs.run = function () {
 	check(arguments[0], String)
 
-	if (Utilities.registry.data[arguments[0]]) {
+	var lastArg = arguments[arguments.length - 1];
+	var remote = typeof lastArg === "object" && lastArg.remote ;
+
+	if (Utilities.registry.data[arguments[0]] || remote) {
 		return Actions.add.apply(null, arguments);
+	} else {
+		Utilities.logger("invalid job name: " + arguments[0] || "not specified");
+		return false;
+	}
+}
+
+// Update / manage a job even though it has not run
+
+Jobs.manage = function () {
+	check(arguments[0], String)
+
+	if (Utilities.registry.data[arguments[0]]) {
+		return Actions.manage.apply(null, arguments);
 	} else {
 		Utilities.logger("invalid job name: " + arguments[0] || "not specified");
 		return false;

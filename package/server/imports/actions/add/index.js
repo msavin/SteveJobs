@@ -1,12 +1,11 @@
 import { Utilities } from "../../utilities"
-import { processArguments } from "./processArguments.js"
 
 var add = function () {
 	// 0. Prepare variables
 	var error, result, blockAdd;
 
 	// 1. Process arguments + prepare the data
-	var input = processArguments(arguments);
+	var input = Utilities.helpers.processJobArguments(arguments);
 
 	// 2 - check if job needs to blocked from being added
 
@@ -27,7 +26,7 @@ var add = function () {
 		if (input.config && input.config.unique) {
 			var doc = Utilities.collection.findOne({
 				name: input.name,
-				arguments: input.arguments,
+				arguments: input.arguments
 			})
 
 

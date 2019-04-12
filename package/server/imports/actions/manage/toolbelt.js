@@ -7,8 +7,6 @@ import { remove } from "../remove/"
 var toolbelt = function (jobDoc) {
 	this.document = jobDoc;
 
-	this.resolved = false; 
-
 	this.set = function (key, value) {	
 		check(key, String)
 
@@ -33,7 +31,6 @@ var toolbelt = function (jobDoc) {
 	this.get = function (key, getLatestFromDatabase) {
 		check(key, String)
 		var docId = this.document._id
-
 
 		if (getLatestFromDatabase) {
 			// Get the latest doc
@@ -145,8 +142,6 @@ var toolbelt = function (jobDoc) {
 			}
 		})
 
-		this.resolved = true;
-
 		return update;
 	}
 
@@ -167,7 +162,21 @@ var toolbelt = function (jobDoc) {
 			}
 		})
 
-		this.resolved = true;
+		return update;
+	}
+
+	this.clearHistory = function () {
+		var docId = this.document._id;
+
+		var update = Utilities.collection.update(docId, {
+			$set: {
+				history: [{
+					date: new Date(),
+					state: "cleared",
+					serverId: Utilities.config.getServerId()
+				}]
+			}
+		})
 
 		return update;
 	}
@@ -180,7 +189,6 @@ var toolbelt = function (jobDoc) {
 			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + docId, config]);
 		}
 
-		this.resolved = true;
 		return newDate;	
 	}
 
@@ -203,55 +211,7 @@ var toolbelt = function (jobDoc) {
 			Utilities.logger(["Error removing job: " + doc.name + "/" + docId, config]);
 		}
 
-		this.resolved = true;
 		return removeDoc;
-	}
-
-	this.clearHistory = function () {
-		var docId = this.document._id;
-
-		var update = Utilities.collection.update(docId, {
-			$set: {
-				history: [{
-					date: new Date(),
-					state: "cleared",
-					serverId: Utilities.config.getServerId()
-				}]
-			}
-		})
-
-		return update;
-	}
-
-	this.checkForResolution = function () {
-		var docId = this.document._id;
-		var queueName = this.document.name;
-		var resolution = this.resolved;
-
-		if (!resolution) {
-			Utilities.logger([
-				"Job was not successfully terminated: " + queueName + ", " + docId, 
-				"Every job must be resolved with this.success(), this.failure(), this.reschedule(), or this.remove()",
-				"Queue was stopped; please re-write your function and re-start the server"
-			]);
-
-			Operator.manager.queues[queueName].stop();
-
-			var update = Utilities.collection.update(docId, {
-				$set: {
-					state: "failure",
-				}, 
-				$push: {
-					history: {
-						date: new Date(),
-						state: "unresolved",
-						serverId: Utilities.config.getServerId()
-					}
-				}
-			})
-
-			return false;
-		}
 	}
 }
 
