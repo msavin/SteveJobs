@@ -45,7 +45,7 @@ var toolbelt = function (jobDoc) {
 			}
 		}
 
-		return this.document.data[key] || null;
+		return this.document.data[key];
 	}
 
 	this.push = function (key, value) {

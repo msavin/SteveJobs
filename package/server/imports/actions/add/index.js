@@ -29,7 +29,6 @@ var add = function () {
 				arguments: input.arguments
 			})
 
-
 			if (doc) blockAdd = true
 		}
 
@@ -52,10 +51,14 @@ var add = function () {
 		var doc = Utilities.collection.findOne({
 			name: input.name,
 			arguments: input.arguments,
+			state: {
+				$in: ["pending", "failure"]
+			}
 		})
 
 		if (doc) {
-			var initDate = jobDoc.created || new Date;
+			console.log(doc)
+			var initDate = jobDoc.due || new Date;
 
 			jobId = Utilities.collection.update(doc._id, {
 				$set: {
