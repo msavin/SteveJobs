@@ -5,6 +5,7 @@ Steve Jobs is an all inclusive package for scheduling background jobs. It automa
  - [Jobs.configure](#jobsconfigure)
  - [Jobs.register](#jobsregister)
  - [Jobs.run](#jobsrun)
+ - [Jobs.find](#jobsfind)
  - [Jobs.execute](#jobsexecute)
  - [Jobs.reschedule](#jobsreschedule)
  - [Jobs.replicate](#jobsreplicate)
@@ -163,6 +164,30 @@ The configuration object supports the following inputs:
 	- If a job is marked as singular, it will only be scheduled if no other job is pending (or failed, which in effect, is the same as pending) with the same arguments
 - **`callback`** - Function
 	- Run a callback function after scheduling the job
+
+### Jobs.find
+
+`Jobs.find` allows you to find a single pending job by its arguments, and run logic against it. You can pass in a callback in the end to check for the document, and you can run the same operations with-in the function scope as you would with `Jobs.register`, as well as `this.run` as a shortcut to `Jobs.run`.
+
+```javascript
+Jobs.find("sendReminder", "jony@apple.com", "The future is here!", function (jobDoc) {
+	if (jobDoc)  {
+		this.reschedule({
+			in: {
+				minutes: 5
+			}
+		});
+
+		return jobDoc;
+	} else {
+		this.run({
+			in: {
+				minutes: 5
+			}
+		})
+	}
+});
+```
 
 ### Jobs.execute
 

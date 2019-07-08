@@ -2,8 +2,12 @@ import { Utilities } from "../../utilities"
 import { toolbelt } from "./toolbelt.js"
 
 var process = function (doc, callback) {
-	var Toolbelt = new toolbelt(doc);
-	
+	var Toolbelt; 
+
+	if (typeof doc === "object") {
+		Toolbelt = new toolbelt(doc);
+	}
+
 	try {
 		var jobResult = callback.apply(Toolbelt, [doc]);
 	}
