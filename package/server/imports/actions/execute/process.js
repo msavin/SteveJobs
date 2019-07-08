@@ -22,7 +22,7 @@ var process = function (doc, callback) {
 	}
 
 	catch (e) {		
-		var failure = Toolbelt.failure();
+		var failure = Toolbelt.failure(e.stack);
 		
 		Utilities.logger("Job failed to run due to code error: " + doc.name)
 		console.log(e);
