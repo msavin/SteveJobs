@@ -67,11 +67,11 @@ Jobs.run = function () {
 
 // Update / manage a job even though it has not run
 
-Jobs.manage = function () {
+Jobs.find = function () {
 	check(arguments[0], String)
 
 	if (Utilities.registry.data[arguments[0]]) {
-		return Actions.manage.apply(null, arguments);
+		return Actions.find.apply(null, arguments);
 	} else {
 		Utilities.logger("invalid job name: " + arguments[0] || "not specified");
 		return false;

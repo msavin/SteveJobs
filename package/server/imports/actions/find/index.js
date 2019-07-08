@@ -1,7 +1,7 @@
 import { Utilities } from "../../utilities"
 import { process } from "./process.js"
 
-var manage = function () {
+var find = function () {
 	// First, process the arguments
 	var input = Utilities.helpers.processJobArguments(arguments);
 
@@ -20,4 +20,4 @@ var manage = function () {
 	}
 }
 
-export { manage }
+export { find }
