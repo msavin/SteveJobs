@@ -223,35 +223,12 @@ var toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.checkForResolution = function () {
+	this.checkForResolution = function (result) {
 		var docId = this.document._id;
 		var queueName = this.document.name;
 		var resolution = this.resolved;
-
-		if (!resolution) {
-			Utilities.logger([
-				"Job was not successfully terminated: " + queueName + ", " + docId, 
-				"Every job must be resolved with this.success(), this.failure(), this.reschedule(), or this.remove()",
-				"Queue was stopped; please re-write your function and re-start the server"
-			]);
-
-			Operator.manager.queues[queueName].stop();
-
-			var update = Utilities.collection.update(docId, {
-				$set: {
-					state: "failure",
-				}, 
-				$push: {
-					history: {
-						date: new Date(),
-						state: "unresolved",
-						serverId: Utilities.config.getServerId()
-					}
-				}
-			})
-
-			return false;
-		}
+		
+		if (!resolution) this.success(result)
 	}
 }
 

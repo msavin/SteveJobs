@@ -80,9 +80,7 @@ Jobs.register({
 	sendEmail: function (to, content) {
 		var send = Magic.sendEmail(to, content);
 		
-		if (send) {
-			this.success()
-		} else {
+		if (!send) {
 			this.reschedule({
 				in: {
 					minutes: 5
@@ -97,7 +95,6 @@ Jobs.register({
 		})
 
 		if (doc) {
-			this.success(doc);
 			this.remove();
 		} else {
 			this.reschedule({
@@ -106,7 +103,7 @@ Jobs.register({
 				}
 			})
 		}
-	}
+
 })
 ```
 
@@ -114,7 +111,6 @@ Each job is binded with a set of functions to give you maximum control over how 
  - `this.document` - access job document
  - `this.set(key, value)` - set a persistent key/value pair
  - `this.get(key)` - get a persistent value from key
- - `this.success(result)` - tell the queue the job is completed, and attach an optional result
  - `this.failure(result)` - tell the queue the job failed, and attach an optional result
  - `this.reschedule(config)` - tell the queue to schedule the job for a future date
  - `this.remove()` - remove the job from the queue

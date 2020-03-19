@@ -2,17 +2,26 @@ import { Utilities } from "../../utilities"
 import { toolbelt } from "./toolbelt.js"
 import { reschedule } from "../reschedule/"
 
-var process = function (doc, callback) {
+var process = async function (doc, callback) {
 	// Goals: 
 	// 1- Execute the job
 	// 2- Update the document in database
 	// 3- Capture the result (if any)
 
 	var Toolbelt = new toolbelt(doc);
+	var jobResult;
+	var jobFunc = Utilities.registry.data[doc.name];
+	var isAsync = jobFunc.constructor.name === "AsyncFunction";
 
 	try {
-		var jobResult = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
-		var resolution = Toolbelt.checkForResolution();
+		if (isAsync) {
+			jobResult = await jobFunc.apply(Toolbelt, doc.arguments);
+		} else {
+			jobResult = jobFunc.apply(Toolbelt, doc.arguments);
+		}
+
+
+		var resolution = Toolbelt.checkForResolution(jobResult);
 
 		if (typeof callback === "function") {
 			return callback(undefined, jobResult);

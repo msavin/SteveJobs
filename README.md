@@ -8,11 +8,11 @@ Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor.
 
  - Jobs run on one server at a time
  - Jobs run predictably and consecutively
- - Jobs and their history are stored in MongoDB
+ - Jobs, their history and returned data are stored in MongoDB
  - Failed jobs are retried on server restart
  - No third party dependencies
 
-**The new 3.1 features repeating jobs and more improvements.** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
+**The new 4.0 features repeating jobs, async support and more!** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
 
 ## Developer Friendly GUI and API
 
@@ -43,21 +43,22 @@ Then, write your background jobs like you would write your methods:
 ```javascript
 Jobs.register({
     "sendReminder": function (to, message) {
-        var instance = this;
+        const instance = this;
 
-        var call = HTTP.put("http://www.magic.com/sendEmail", {
+        const call = HTTP.put("http://www.magic.com/email/send", {
             to: to,
-            message: message
+            message: message,
+            subject: "You've Got Mail!",
         })
 
-        if (call.statusCode === 200) {
-            instance.success(call.result);
-        } else {
+        if (call.statusCode !== 200) {
             instance.reschedule({
                 in: {
                     minutes: 5
                 }
             });
+        } else {
+            return call.data;
         }
     }
 });
@@ -93,9 +94,8 @@ Compared to a CRON Job, the Steve Jobs package gives you much more control over 
 ```javascript
 Jobs.register({
     "syncData": function () {
-        var instance = this;
-
-        var call = HTTP.put("http://www.magic.com/syncData")
+        const instance = this;
+        const call = HTTP.put("http://www.magic.com/syncData")
 
         if (call.statusCode === 200) {
             instance.replicate({
@@ -104,8 +104,8 @@ Jobs.register({
                 }
             });
             
-            // alternatively, you can use instance.remove to save storage
-            instance.success(call.result);
+            // to save storage, you can remove the document
+            instance.remove();
         } else {
             instance.reschedule({
                 in: {
