@@ -6,7 +6,6 @@ import { remove } from "../remove/"
 
 var toolbelt = function (jobDoc) {
 	this.document = jobDoc;
-
 	this.resolved = false; 
 
 	this.set = function (key, value) {	
@@ -152,7 +151,9 @@ var toolbelt = function (jobDoc) {
 
 	this.failure = function (result) {
 		var docId = this.document._id;
-		
+		var queueName = this.document.name;
+
+		// Update the document
 		var update = Utilities.collection.update(docId, {
 			$set: {
 				state: "failure",
@@ -166,6 +167,14 @@ var toolbelt = function (jobDoc) {
 				}
 			}
 		})
+
+		// Stop the queue
+		Utilities.logger([
+			"Job has failed: " + queueName + ", " + docId, 
+			"Queue was stopped; please correct your job function and restart the server"
+		]);
+
+		Operator.manager.queues[queueName].stop();
 
 		this.resolved = true;
 
@@ -225,9 +234,9 @@ var toolbelt = function (jobDoc) {
 
 	this.checkForResolution = function (result) {
 		var docId = this.document._id;
-		var queueName = this.document.name;
 		var resolution = this.resolved;
-		
+
+
 		if (!resolution) this.success(result)
 	}
 }
