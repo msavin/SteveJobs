@@ -49,11 +49,17 @@ queue.prototype.trigger = function () {
 	var self = this;
 
 	if (self.available === true && self.interval) {
-		self.available = false;
+		try {
+			self.available = false;
 
-		if (dominator.isActive()) {
-			self.run()
-		} else {
+			if (dominator.isActive()) {
+				self.run()
+			} else {
+				self.available = true;
+			}
+		} catch(e) {
+			console.error(e);
+		} finally {
 			self.available = true;
 		}
 	}
