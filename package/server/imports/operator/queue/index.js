@@ -59,9 +59,8 @@ queue.prototype.trigger = function () {
 			}
 		} catch(e) {
 			console.error(e);
-		} finally {
 			self.available = true;
-		}
+		} 
 	}
 }
 
