@@ -2,7 +2,7 @@ import { queue } from "./queue/"
 import { dominator } from "./dominator/"
 import { manager } from "./manager/"
 
-Operator = {
+const Operator = {
 	dominator: dominator,
 	queue: queue,
 	manager: manager
