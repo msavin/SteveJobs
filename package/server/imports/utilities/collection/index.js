@@ -4,7 +4,7 @@ import { config } from "../config"
 var collectionName = "jobs_data"
 
 var initializeCollection = function () {
-	var collection; 
+	var collection;
 
 	if (config.remoteCollection) {
 		var dbDriver = new MongoInternals.RemoteCollectionDriver(config.remoteCollection);
@@ -13,7 +13,11 @@ var initializeCollection = function () {
 		collection = new Mongo.Collection(collectionName);
 	}
 
-	collection._ensureIndex({ due: 1, state: 1 })
+	if (collection.createIndex) {
+		collection.createIndex({ due: 1, state: 1 })
+	} else {
+		collection._ensureIndex({ due: 1, state: 1 })
+	}
 
 	return collection;
 }
