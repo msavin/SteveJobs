@@ -1,7 +1,7 @@
 import { Mongo } from "meteor/mongo"
 import { Utilities } from "../../utilities/"
 
-/* 
+/*
 	Potential Optimization
 		if a server is marked as active,
 		dominator should return `true` for `isActive`
@@ -41,14 +41,19 @@ dominator.initialize = function () {
 	}
 
 	// Then, ensure the index is set
-	var index = self.collection._ensureIndex({serverId: 1}, {unique: 1});
+	var index;
+	if (self.collection.createIndex) {
+		index = self.collection.createIndex({serverId: 1}, {unique: 1});
+	} else {
+		index = self.collection._ensureIndex({serverId: 1}, {unique: 1});
+	}
 
 	// Finally, set the serverId
 	self.serverId = Utilities.config.getServerId();
 }
-		
+
 dominator.getActive = function () {
-	self = this;	
+	self = this;
 
 	var doc = self.collection.findOne({}, {
 		sort: {
@@ -75,12 +80,12 @@ dominator.setAsActive = function () {
 	var self = this;
 	var lastPing = new Date();
 
-	try { 
+	try {
 		var result = self.collection.upsert({
 			serverId: self.serverId
 		}, {
 			$set: {
-				lastPing: lastPing,		
+				lastPing: lastPing,
 			},
 			$setOnInsert: {
 				created: lastPing
@@ -94,7 +99,7 @@ dominator.setAsActive = function () {
 		if (Utilities.config.autoPurge) {
 			dominator.purge();
 		}
-		
+
 		return result;
 	} catch (e) {
 		// https://www.youtube.com/watch?v=SHs6O6jC7Y8
@@ -105,13 +110,13 @@ dominator.isActive = function () {
 	var self = this;
 
 	// since Meteor runs only one server in development,
-	// we should set dominator as active immediately, otherwise 
-	// it would wait the `lastPing` to surpass `maxWait` 
+	// we should set dominator as active immediately, otherwise
+	// it would wait the `lastPing` to surpass `maxWait`
 	if (Meteor.isDevelopment && !Utilities.config.disableDevelopmentMode) {
 		return self.setAsActive();
 	}
 
-	// if the last ping was less than 10 seconds ago, 
+	// if the last ping was less than 10 seconds ago,
 	// then assume that server is dominant
 	if (self.lastPing && Utilities.config.gracePeriod) {
 		var gracePeriod = new Date(self.lastPing);
@@ -128,7 +133,7 @@ dominator.isActive = function () {
 	// if the doc is itself, maintain dominance
 	if (!doc || doc.serverId === self.serverId) {
 		return self.setAsActive();
-	} 
+	}
 
 	// if a server isn't maintaining dominance, take it
 	var timeGap = new Date () - doc.lastPing;
