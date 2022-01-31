@@ -1,17 +1,20 @@
 import { Utilities } from "../../utilities"
 
-function reschedule(job, config, callback) {
-	var error,
-		result,
-		jobDoc = Utilities.helpers.getJob(job, {
-			allow: ["pending", "failure"],
-			message: 'Unable to reschedule. Job does not exist or has been resolved: '
-		});
+const reschedule = function (job, config, callback) {
+	let error;
+	let result;
+	
+	const jobDoc = Utilities.helpers.getJob(job, {
+		allow: ["pending", "failure"],
+		message: 'Unable to reschedule. Job does not exist or has been resolved: '
+	});
 
 	if (typeof jobDoc === "object") {
 		// First, prepare the update
-		var dbUpdate = {
-			$set: {},
+		const dbUpdate = {
+			$set: {
+				state: "pending"
+			},
 			$push: {
 				history: {
 					date: new Date(),
@@ -23,13 +26,16 @@ function reschedule(job, config, callback) {
 
 		// Second, set the priority, if any
 		if (config && config.priority) {
-			var val = Utilities.helpers.number(config.priority, "priority") || 0;
+			const val = Utilities.helpers.number(config.priority, "priority") || 0;
 			dbUpdate.$set.priority = val;
 			dbUpdate.$push.history.newPriority = val;
 		}
 
 		// Third, create a new date, if any
-		var val = Utilities.helpers.generateDueDate(config);
+		// ++ base it on the job docs original due date if a date is not passed in
+		if (!config.date) config.date = jobDoc.due
+
+		const val = Utilities.helpers.generateDueDate(config);
 		dbUpdate.$set.due = val;
 		dbUpdate.$push.history.newDue = val;
 

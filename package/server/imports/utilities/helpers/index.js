@@ -5,7 +5,7 @@ import { date } from "./date.js"
 import { getJob } from "./getJob.js"
 import { processJobArguments } from "./processJobArguments.js"
 
-var helpers = {
+const helpers = {
 	generateDueDate: generateDueDate,
 	generateJobDoc: generateJobDoc,
 	getJob: getJob,

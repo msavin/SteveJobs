@@ -4,14 +4,15 @@ import { reschedule } from "../reschedule"
 import { replicate } from "../replicate/"
 import { remove } from "../remove/"
 
-let toolbelt = function (jobDoc) {
-	this.document = jobDoc;
-	this.resolved = false;
+const toolbelt = function (jobDoc) {
+	const instance = this;
+	instance.document = jobDoc;
+	instance.resolved = false;
 
-	this.set = function (key, value) {
+	instance.set = (key, value) => {
 		check(key, String)
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 		let patch = {}
 		patch["data." + key] = value;
 
@@ -22,35 +23,35 @@ let toolbelt = function (jobDoc) {
 
 		// second, patch the cached document if write is successful
 		if (update) {
-			this.document.data[key] = value
+			instance.document.data[key] = value
 		}
 
 		// finally, return doc update ID
 		return update;
 	}
 
-	this.get = function (key, getLatestFromDatabase) {
+	instance.get = (key, getLatestFromDatabase) => {
 		check(key, String)
-		let docId = this.document._id
 
+		let docId = instance.document._id
 
 		if (getLatestFromDatabase) {
 			// Get the latest doc
 			let doc = Utilities.collection.findOne(docId);
 			
 			// Update the cached doc with the fresh copy
-			if (doc) {
-				this.document = doc;
-			}
+			if (doc) instance.document = doc;
 		}
-
-		return this.document.data[key];
+		
+		if (instance.document.data && instance.document.data[key]) {
+			return instance.document.data && instance.document.data[key];	
+		}
 	}
 
-	this.push = function (key, value) {
+	instance.push = (key, value) => {
 		check(key, String)
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$push: {
@@ -61,10 +62,10 @@ let toolbelt = function (jobDoc) {
 
 	}
 
-	this.pull = function (key, value) {
+	instance.pull = (key, value) => {
 		check(key, String)
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$pull: {
@@ -73,10 +74,10 @@ let toolbelt = function (jobDoc) {
 		})
 	}
 
-	this.pullAll = function (key, value) {
+	instance.pullAll = (key, value) => {
 		check(key, String)
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$pullAll: {
@@ -85,12 +86,12 @@ let toolbelt = function (jobDoc) {
 		})
 	}
 
-	this.inc = function (key, value) {
+	instance.inc = (key, value) => {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$inc: {
@@ -99,12 +100,12 @@ let toolbelt = function (jobDoc) {
 		})
 	}
 
-	this.dec = function (key, value) {
+	instance.dec = (key, value) => {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$dec: {
@@ -113,12 +114,12 @@ let toolbelt = function (jobDoc) {
 		})
 	}
 
-	this.addToSet = function (key, value) {
+	instance.addToSet = (key, value) => {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
-		let docId = this.document._id;
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$addToSet: {
@@ -127,8 +128,8 @@ let toolbelt = function (jobDoc) {
 		})
 	}
 
-	this.success = function (result) {
-		let docId = this.document._id;
+	instance.success = (result) => {
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$set: {
@@ -144,14 +145,14 @@ let toolbelt = function (jobDoc) {
 			}
 		})
 
-		this.resolved = true;
+		instance.resolved = true;
 
 		return update;
 	}
 
-	this.failure = function (result) {
-		let docId = this.document._id;
-		let queueName = this.document.name;
+	instance.failure = (result) => {
+		let docId = instance.document._id;
+		let queueName = instance.document.name;
 
 		// Update the document
 		let update = Utilities.collection.update(docId, {
@@ -176,25 +177,25 @@ let toolbelt = function (jobDoc) {
 
 		Operator.manager.queues[queueName].stop();
 
-		this.resolved = true;
+		instance.resolved = true;
 
 		return update;
 	}
 
-	this.reschedule = function (config) {
-		const doc = this.document;
+	instance.reschedule = (config) => {
+		const doc = instance.document;
 		let newDate = reschedule(doc._id, config);
 
 		if (!newDate) {
 			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + doc._id, config]);
 		}
 
-		this.resolved = true;
+		instance.resolved = true;
 		return newDate;
 	}
 
-	this.replicate = function (config) {
-		const doc = this.document;
+	instance.replicate = (config) => {
+		const doc = instance.document;
 		const newCopy = replicate(doc, config)
 
 		if (!newCopy) {
@@ -204,8 +205,8 @@ let toolbelt = function (jobDoc) {
 		return newCopy;
 	}
 
-	this.remove = function () {
-		const doc = this.document;
+	instance.remove = () => {
+		const doc = instance.document;
 		let removeDoc = remove(doc._id)
 
 		if (!removeDoc) {
@@ -216,8 +217,8 @@ let toolbelt = function (jobDoc) {
 		return removeDoc;
 	}
 
-	this.clearHistory = function () {
-		let docId = this.document._id;
+	instance.clearHistory = () => {
+		let docId = instance.document._id;
 
 		let update = Utilities.collection.update(docId, {
 			$set: {
@@ -232,12 +233,11 @@ let toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.checkForResolution = function (result) {
-		let docId = this.document._id;
-		let resolution = this.resolved;
+	instance.checkForResolution = (result) => {
+		let docId = instance.document._id;
+		let resolution = instance.resolved;
 
-
-		if (!resolution) this.success(result)
+		if (!resolution) instance.success(result)
 	}
 }
 

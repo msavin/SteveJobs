@@ -4,12 +4,7 @@ import { helpers } from "./helpers"
 import { registry } from "./registry"
 import { initializeCollection } from "./collection"
 
-var Utilities = {
-	config: config,
-	logger: logger,
-	helpers: helpers,
-	registry: registry
-}
+const Utilities = { config, logger, helpers, registry }
 
 Utilities.start = function () {
 	Utilities.collection = initializeCollection();

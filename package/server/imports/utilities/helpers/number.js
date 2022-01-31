@@ -1,6 +1,6 @@
 import { logger } from "../logger"
 
-var number = function (input, note) {
+const number = function (input, note) {
 	if (typeof input === "undefined") {
 		return 0;
 	}

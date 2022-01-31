@@ -3,7 +3,7 @@ import { config } from "../config"
 import { date } from "./date.js"
 
 generateDueDate = function (configObj) {
-	var due = config.getDate();
+	let due = config.getDate();
 
 	if (configObj && configObj.date) {
 		if (typeof configObj.date.getDate === "function") {

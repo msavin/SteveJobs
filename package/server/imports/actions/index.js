@@ -8,16 +8,6 @@ import { remove } from './remove'
 import { replicate } from './replicate'
 import { reschedule } from './reschedule'
 
-var Actions = {
-	add: add,
-	get: get,
-	find: find,
-	clear: clear,
-	cancel: cancel,
-	execute: execute,
-	remove: remove,
-	replicate: replicate,
-	reschedule: reschedule
-}
+const Actions = { add, get, find, clear, cancel, execute, remove, replicate, reschedule }
 
 export { Actions }

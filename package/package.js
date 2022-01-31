@@ -1,7 +1,7 @@
 Package.describe({
 	name:    "msavin:sjobs",
 	summary: "The simple jobs queue that just works [synced, schedule, tasks, background, later, worker, cron]",
-	version: "4.0.0",
+	version: "4.2.0",
 	documentation: "README.md",
 	git:     "https://github.com/msavin/SteveJobs.git",
 });

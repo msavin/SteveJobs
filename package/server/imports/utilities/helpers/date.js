@@ -2,9 +2,9 @@ import { number } from "./number.js"
 import { logger } from "../logger"
 import { config } from "../config"
 
-var date = function (input1, input2) {
-	var currentDate = config.getDate()
-	var action;
+const date = function (input1, input2) {
+	let currentDate = config.getDate()
+	let action;
 
 	// Get the inputs straightened out
 	if (input2) {
@@ -12,7 +12,7 @@ var date = function (input1, input2) {
 			currentDate = new Date(input1);
 			action = input2;
 		} catch (e) {
-			logger("Invalid date entered.");
+			logger("Invalid date entered.", e);
 			return;
 		}
 	} else {
@@ -20,7 +20,7 @@ var date = function (input1, input2) {
 	}
 
 	// Prepare the options
-	var utilities = {
+	const utilities = {
 		in: {
 			milliseconds: function (int) {
 				int = currentDate.getMilliseconds() + int;

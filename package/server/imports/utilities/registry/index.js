@@ -1,4 +1,4 @@
-var registry = {};
+const registry = {};
 
 registry.data = {};
 

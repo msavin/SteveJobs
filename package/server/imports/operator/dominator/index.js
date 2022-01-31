@@ -3,9 +3,8 @@ import { Utilities } from "../../utilities/"
 
 /* 
 	Potential Optimization
-		if a server is marked as active,
-		dominator should return `true` for `isActive`
-		without running the query for ~1 minute
+		1- if server is not dominant, it should check again when the current server dominance expires rather than poll the db
+		2- when setAsActive is called - its often called once for each queue - should be reduced to just one call
 
 	Non-problematic bug
 		- When the queue starts, if there is more than one queue running,
@@ -18,50 +17,61 @@ import { Utilities } from "../../utilities/"
 		- To prevent annoying console messages, `dominator.setAsActive` has been wrapped in try/catch
 */
 
-var dominator = {
+const dominator = {
 	serverId: null,
 	collection: undefined,
 	initialized: false
 }
 
+let debugMode = false;
+
 dominator.initialize = function () {
-	self = this;
+	if (debugMode) console.log("dominator.initialize", this)
+
+	const self = this;
 
 	// ensure that we're not doing it twice
-	if (self.initialized) {
-		return;
-	}
+	if (self.initialized) return;
 
 	// First, initialize the collection
 	if (Utilities.config.remoteCollection) {
-		var db = new MongoInternals.RemoteCollectionDriver(Utilities.config.remoteCollection);
+		const db = new MongoInternals.RemoteCollectionDriver(Utilities.config.remoteCollection);
 		self.collection = new Mongo.Collection("jobs_dominator_3", { _driver: db });
 	} else {
 		self.collection = new Mongo.Collection("jobs_dominator_3");
 	}
 
-	// Then, ensure the index is set
-	var index = self.collection._ensureIndex({serverId: 1}, {unique: 1});
+	// Then, ensure an index is set
+
+	if (self.collection.createIndex) {
+		self.collection.createIndex({serverId: 1}, {unique: 1});
+	} else {
+		self.collection._ensureIndex({serverId: 1}, {unique: 1});
+	}
 
 	// Finally, set the serverId
 	self.serverId = Utilities.config.getServerId();
 }
 		
 dominator.getActive = function () {
-	self = this;	
+	if (debugMode) console.log("dominator.getActive");
 
-	var doc = self.collection.findOne({}, {
+	const self = this;	
+
+	return self.collection.findOne({}, {
 		sort: {
 			lastPing: -1,
 		}
 	});
-
-	return doc;
 }
 
 // This will automatically remove dominator logs
 // to prevent database from getting too big
 dominator.purge = function () {
+	if (debugMode) console.log("dominator.purge")
+	
+	const self = this;
+
 	Meteor.setTimeout(function () {
 		return self.collection.remove({
 			serverId: {
@@ -72,11 +82,13 @@ dominator.purge = function () {
 }
 
 dominator.setAsActive = function () {
-	var self = this;
-	var lastPing = new Date();
+	if (debugMode) console.log("dominator.setAsActive")
+
+	const self = this;
+	const lastPing = new Date();
 
 	try { 
-		var result = self.collection.upsert({
+		const result = self.collection.upsert({
 			serverId: self.serverId
 		}, {
 			$set: {
@@ -98,11 +110,15 @@ dominator.setAsActive = function () {
 		return result;
 	} catch (e) {
 		// https://www.youtube.com/watch?v=SHs6O6jC7Y8
+		if (debugMode) console.log("dominator.purgeError", e);
+		return false;
 	}
 }
 
 dominator.isActive = function () {
-	var self = this;
+	if (debugMode) console.log("dominator.isActive")
+
+	const self = this;
 
 	// since Meteor runs only one server in development,
 	// we should set dominator as active immediately, otherwise 
@@ -114,34 +130,38 @@ dominator.isActive = function () {
 	// if the last ping was less than 10 seconds ago, 
 	// then assume that server is dominant
 	if (self.lastPing && Utilities.config.gracePeriod) {
-		var gracePeriod = new Date(self.lastPing);
-		gracePeriod = gracePeriod.setSeconds(gracePeriod.getSeconds() + Utilities.config.gracePeriod);
+		const lastPing = new Date(self.lastPing);
+		const gracePeriod = lastPing.setSeconds(lastPing.getSeconds() + Utilities.config.gracePeriod);
 
 		if (new Date() < gracePeriod) {
+			if (debugMode) console.log('dominator.within grace period')
 			return true;
 		}
 	}
 
-	// then business as usual
-	var doc = self.getActive();
+	// otherwise - its business as usual
+	const doc = self.getActive();
 
 	// if the doc is itself, maintain dominance
 	if (!doc || doc.serverId === self.serverId) {
 		return self.setAsActive();
-	} 
+	} else {
+		// if a server isn't maintaining dominance, take it
+		const timeGap = new Date () - doc.lastPing;
+		const maxTimeGap = Utilities.config.maxWait;
 
-	// if a server isn't maintaining dominance, take it
-	var timeGap = new Date () - doc.lastPing;
-	var maxTimeGap = Utilities.config.maxWait;
-
-	if (timeGap >= maxTimeGap) {
-		return self.setAsActive();
+		if (timeGap >= maxTimeGap) {
+			return self.setAsActive();
+		}
 	}
 }
 
+// this function is only called manually
+
 dominator.reset =  function () {
-	self = this;
-	self.serverId = Utilities.config.getServerId(true);
+	if (debugMode) console.log("dominator.reset")
+
+	this.serverId = Utilities.config.getServerId(true);
 }
 
 export { dominator }

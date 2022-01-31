@@ -1,7 +1,7 @@
-var checkForConfig = function (input) {
-	var result = false,
-		lastArgument = input[input.length - 1],
-		keywords = ["in", "on", "priority", "date", "data", "callback", "singular", "unique", "remote"];
+const checkForConfig = function (input) {
+	let result = false;
+	const lastArgument = input[input.length - 1];
+	const keywords = ["in", "on", "priority", "date", "data", "callback", "singular", "unique", "remote"];
 
 	if (typeof lastArgument === "object") {
 		keywords.forEach(function (keyword) {
@@ -14,18 +14,18 @@ var checkForConfig = function (input) {
 	return result;
 }
 
-var processJobArguments = function (args) {
-	var output = {},
-		args = Array.prototype.slice.call(args);
+const processJobArguments = function (argList) {
+	const output = {};
+	const args = Array.prototype.slice.call(argList);
 
 	output.name = function () {
-		var name = args.shift();
+		const name = args.shift();
 		return name;
 	}();
 
 	output.config = function () {
 		if (checkForConfig(args)) {
-			var config = args.pop();
+			const config = args.pop();
 			return config;
 		} else {
 			return {};
@@ -33,7 +33,7 @@ var processJobArguments = function (args) {
 	}();
 
 	output.callback = function () {
-		var lastArgument = args[args.length - 1];
+		const lastArgument = args[args.length - 1];
 
 		if (typeof lastArgument === "function") {
 			return lastArgument;

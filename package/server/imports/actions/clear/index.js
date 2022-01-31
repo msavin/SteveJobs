@@ -1,11 +1,11 @@
 import { Utilities } from "../../utilities"
 
-var clear = function (state, name, callback) {
+const clear = function (state, name, callback) {
 	if (typeof state === "string" && state !== "*")  {
 		state = [state]
 	}
 
-	var action = {
+	let action = {
 		state: {
 			$in: state || ["cancelled", "success"]
 		}
@@ -27,7 +27,7 @@ var clear = function (state, name, callback) {
 		}
 	}
 
-	var result = Utilities.collection.remove(action)
+	const result = Utilities.collection.remove(action)
 	
 	if (callback) {
 		callback(undefined, result);

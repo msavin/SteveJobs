@@ -1,6 +1,6 @@
 import { Random } from "meteor/random"
 
-var config = {
+const config = {
 	autoStart: true,
 	autoPurge: true,
 	autoRetry: true,
@@ -15,8 +15,7 @@ var config = {
 }
 
 config.getDate = function () {
-	var newDate = new Date();
-	return newDate;
+	return new Date();
 }
 
 config.setServerId = function () {
@@ -32,19 +31,15 @@ config.getServerId = function (resetId) {
 }
 
 config.log = function (messages) {	
-	var logAsString = function (item) {
-		console.log("Jobs: " + item);
-	}
+	const logAsString = (item) => console.log("Jobs: " + item);
 
 	console.log("");
 	console.log("****");
 
-	if (typeof messages === "string") {
+	if (Array.isArray(messages)) {
+		messages.forEach(item => logAsString(item))
+	} else {
 		logAsString(messages);
-	} else if (typeof messages === "object") {
-		messages.forEach(function (item) {
-			logAsString(item)
-		});
 	}
 
 	console.log("****");

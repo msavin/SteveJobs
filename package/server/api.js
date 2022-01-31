@@ -3,7 +3,7 @@ import { Utilities } from './imports/utilities'
 import { Operator } from './imports/operator'
 import './imports/startup'
 
-var Jobs = {}
+const Jobs = {}
 
 // Configure the package (optional)
 
@@ -54,8 +54,8 @@ Jobs.register = function (jobs) {
 Jobs.run = function () {
 	check(arguments[0], String)
 
-	var lastArg = arguments[arguments.length - 1];
-	var remote = typeof lastArg === "object" && lastArg.remote ;
+	const lastArg = arguments[arguments.length - 1];
+	const remote = typeof lastArg === "object" && lastArg.remote;
 
 	if (Utilities.registry.data[arguments[0]] || remote) {
 		return Actions.add.apply(null, arguments);
@@ -111,7 +111,7 @@ Jobs.execute = function (jobId, callback, force) {
 	check(force, Match.Optional(Boolean))
 
 	// 1. Get the job
-	var doc = Utilities.collection.findOne({ 
+	const doc = Utilities.collection.findOne({ 
 		_id: jobId,
 		state: {
 			$nin: ["success", "cancelled"]
@@ -204,7 +204,7 @@ Meteor.startup(function () {
 
 // Internals for debugging
 
-var JobsInternal = {
+const JobsInternal = {
 	Actions: Actions,
 	Utilities: Utilities,
 	Operator: Operator

@@ -1,12 +1,12 @@
 import { Utilities } from "../../utilities"
 
-var replicate = function (job, config, callback) {
-	var error,
-		result,
-		jobDoc = Utilities.helpers.getJob(job);
+const replicate = function (job, config, callback) {
+	let error;
+	let result;
+	const jobDoc = Utilities.helpers.getJob(job);
 
 	if (typeof jobDoc === "object") {
-		var replicant = Utilities.helpers.generateJobDoc({
+		const replicant = Utilities.helpers.generateJobDoc({
 			name: jobDoc.name,
 			arguments: jobDoc.arguments,
 			config: config
@@ -14,7 +14,7 @@ var replicate = function (job, config, callback) {
 
 		replicant.parent = jobDoc._id;
 
-		insert = Utilities.collection.insert(replicant);
+		const insert = Utilities.collection.insert(replicant);
 	
 		// simulate the newly inserted document
 		result = function () {

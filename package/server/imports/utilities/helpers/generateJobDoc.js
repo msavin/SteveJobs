@@ -2,17 +2,21 @@ import { config } from "../config"
 import { generateDueDate } from "./generateDueDate.js"
 import { number } from "./number.js"
 
-var generateJobDoc = function (input) {
+const generateJobDoc = function (input) {
 	return {
 		name: input.name,
 		created: config.getDate(),
 		serverId: config.getServerId(),
 		state: "pending",
-		due: function () {
-			return generateDueDate(input.config)
-		}(),
+		due: generateDueDate(input.config),
+		history: [{
+			date: new Date(),
+			due: generateDueDate(input.config),
+			type: "created",
+			serverId: config.getServerId()
+		}],
 		priority: function () {
-			var priority = 0;
+			let priority = 0;
 
 			try {
 				priority = number(input.config.priority, "priority") || 0;	
@@ -23,15 +27,16 @@ var generateJobDoc = function (input) {
 			return priority;
 		}(),
 		data: function () {
-			data = {}
+			let data = {}
 
 			try {
 				data = input.config.data;
 			} catch (e) {
+
 				// https://www.youtube.com/watch?v=XpdpW0z9xnQ
 			}
 			
-			return data;
+			return data || {};
 		}(),
 		arguments: function () {
 			return input.arguments || [];

@@ -1,6 +1,6 @@
 import { config } from "../config"
 
-var logger = function (messages) {
+const logger = function (messages) {
 	config.log(messages);
 }
 

@@ -2,7 +2,7 @@ import { Utilities } from "../"
 import { logger } from "../logger"
 
 getJob = function (input, filter, verify) {
-	var jobDoc;
+	let jobDoc;
 
 	// figure out the input and deal with accordingly
 	if (typeof input === "object" && input._id) {
