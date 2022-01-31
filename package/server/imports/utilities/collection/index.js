@@ -14,7 +14,7 @@ const initializeCollection = function () {
 	}
 
 	
-	if (self.collection.createIndex) {
+	if (collection.createIndex) {
 		collection.createIndex({ due: 1, state: 1 });
 	} else {
 		collection._ensureIndex({ due: 1, state: 1 });
