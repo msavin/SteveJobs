@@ -1,7 +1,7 @@
 import { queue } from "../queue"
 import { Utilities } from "../../utilities/"
 
-let debugMode = true;
+let debugMode = false;
 
 const manager = {}
 
