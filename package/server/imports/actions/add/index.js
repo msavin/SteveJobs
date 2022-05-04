@@ -13,10 +13,7 @@ const add = function () {
 		if (input.config && input.config.singular) {
 			const doc = Utilities.collection.findOne({
 				name: input.name,
-				arguments: input.arguments,
-				state: {
-					$in: ["pending", "failure"]
-				}
+				arguments: input.arguments
 			})
 
 			if (doc) blockAdd = true
@@ -26,7 +23,10 @@ const add = function () {
 		if (input.config && input.config.unique) {
 			const doc = Utilities.collection.findOne({
 				name: input.name,
-				arguments: input.arguments
+				arguments: input.arguments,
+				state: {
+					$in: ["pending", "failure"]
+				}
 			})
 
 			if (doc) blockAdd = true

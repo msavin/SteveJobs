@@ -8,7 +8,7 @@ let debugMode = false;
 const queue = function (name, state = "failure") {
 	this.name = name;
 	this.state = "failure";
-	this.interval = null;
+	this.interval = false;
 	this.available = true;
 	this.previouslyRan = "this needs to be defined for the Mongo query :P";
 }

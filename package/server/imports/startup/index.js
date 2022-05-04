@@ -8,13 +8,11 @@ import { Operator } from "../operator/"
 Meteor.startup(function () {
 	Utilities.start();
 	Operator.start();
-
-	Meteor.setTimeout(function () {
-		if (Utilities.config.autoStart) {
-			Meteor.setTimeout(function () {
-				console.log("=> Started jobs queue")
-				Operator.manager.start();
-			}, Utilities.config.startupDelay);
-		}
-	}, 3000)
+	
+	if (Utilities.config.autoStart) {
+		Operator.manager.start();
+		console.log("=> Started jobs queue")
+	} else {
+		console.log("=> Steve Jobs: auto start is disabled")
+	}
 });
