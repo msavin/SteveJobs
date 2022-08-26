@@ -10,7 +10,8 @@ const config = {
 	disableDevelopmentMode: false,
 	remoteCollection: undefined,
 	serverId: undefined,
-	gracePeriod: 10
+	gracePeriod: 10,
+	collectionName: "jobs_data"
 }
 
 config.getDate = function () {

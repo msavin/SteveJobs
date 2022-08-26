@@ -21,6 +21,7 @@ Jobs.configure = function (config) {
 		log: Match.Maybe(Function),
 		remoteCollection: Match.Maybe(String),
 		gracePeriod: Match.Maybe(Number),
+		collectionName: Match.Maybe(String)
 	})
 
 	Object.keys(config).forEach(function (key) {

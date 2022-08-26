@@ -1,16 +1,12 @@
 import { Mongo } from "meteor/mongo"
 import { config } from "../config"
 
-const collectionName = "jobs_data"
-
 const initializeCollection = function () {
-	let collection; 
-
 	if (config.remoteCollection) {
 		const dbDriver = new MongoInternals.RemoteCollectionDriver(config.remoteCollection);
-		collection = new Mongo.Collection(collectionName, { _driver: dbDriver });
+		collection = new Mongo.Collection(config.collectionName, { _driver: dbDriver });
 	} else {
-		collection = new Mongo.Collection(collectionName);
+		collection = new Mongo.Collection(config.collectionName);
 	}
 
 	
