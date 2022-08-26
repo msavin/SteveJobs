@@ -68,6 +68,7 @@ Jobs.configure({
 	getDate: Function,					// new Date()   - determine how to get the current date, if for whatever reason, new Date() is not suitable
 	log: Function,						// console.log  - determine how to log the package outputs
 	remoteCollection: String,			// undefined    - store jobs data in a remote collection
+	collectionName: String,				// jobs_data    - name of collection for where to store jobs
 })
 ```
 
