@@ -1,6 +1,8 @@
 import { Mongo } from "meteor/mongo"
 import { config } from "../config"
 
+let collection; 
+
 const initializeCollection = function () {
 	if (config.remoteCollection) {
 		const dbDriver = new MongoInternals.RemoteCollectionDriver(config.remoteCollection);
@@ -9,7 +11,6 @@ const initializeCollection = function () {
 		collection = new Mongo.Collection(config.collectionName);
 	}
 
-	
 	if (collection.createIndex) {
 		collection.createIndex({ due: 1, state: 1 });
 	} else {
