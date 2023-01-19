@@ -88,8 +88,8 @@ queue.prototype.grabDoc = function () {
 		}
 	}, {
 		sort: {
-			due: 1,
-			priority: 1
+			priority: -1,
+			due: 1
 		}
 	});
 
