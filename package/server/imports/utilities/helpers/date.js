@@ -126,7 +126,7 @@ const date = function (input1, input2) {
 			if (["in","on"].indexOf(key1) > -1) {
 				Object.keys(action[key1]).forEach(function (key2) {
 					try {
-						newNumber = number(action[key1][key2]);
+						const newNumber = number(action[key1][key2]);
 						
 						if (typeof newNumber === "number") {
 							utilities[key1][key2](newNumber);
