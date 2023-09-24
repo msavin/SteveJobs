@@ -1,9 +1,9 @@
 import { Utilities } from "../../utilities"
 
-const reschedule = function (job, config, callback) {
+const reschedule = async function (job, config, callback) {
 	let error;
 	let result;
-	
+
 	const jobDoc = Utilities.helpers.getJob(job, {
 		allow: ["pending", "failure"],
 		message: 'Unable to reschedule. Job does not exist or has been resolved: '
@@ -40,7 +40,7 @@ const reschedule = function (job, config, callback) {
 		dbUpdate.$push.history.newDue = val;
 
 		// Finally, run the update
-		result = Utilities.collection.update(jobDoc._id, dbUpdate)
+		result = await Utilities.collection.updateAsync(jobDoc._id, dbUpdate)
 	} else {
 		error = true
 	}

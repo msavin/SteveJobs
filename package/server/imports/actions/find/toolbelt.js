@@ -1,13 +1,14 @@
+import { check } from "meteor/check"
 import { Utilities } from "../../utilities"
 import { Operator } from "../../operator"
 import { reschedule } from "../reschedule/"
 import { replicate } from "../replicate/"
 import { remove } from "../remove/"
 
-var toolbelt = function (jobDoc) {
+const toolbelt = function (jobDoc) {
 	this.document = jobDoc;
 
-	this.set = function (key, value) {	
+	this.set = async function (key, value) {
 		check(key, String)
 
 		var docId = this.document._id;
@@ -15,7 +16,7 @@ var toolbelt = function (jobDoc) {
 		patch["data." + key] = value;
 
 		// first, update the document
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$set: patch
 		})
 
@@ -28,29 +29,29 @@ var toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.get = function (key, getLatestFromDatabase) {
+	this.get = async function (key, getLatestFromDatabase) {
 		check(key, String)
-		var docId = this.document._id
+		const docId = this.document._id
 
 		if (getLatestFromDatabase) {
 			// Get the latest doc
-			doc = Utilities.collection.findOne(docId);
-			
+			const doc = await Utilities.collection.findOneAsync(docId);
+
 			// Update the cached doc with the fresh copy
 			if (doc) {
-				this.document = doc;	
+				this.document = doc;
 			}
 		}
 
 		return this.document.data[key];
 	}
 
-	this.push = function (key, value) {
+	this.push = async function (key, value) {
 		check(key, String)
 
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$push: {
 				["data." + key]: value
 			}
@@ -59,79 +60,79 @@ var toolbelt = function (jobDoc) {
 
 	}
 
-	this.pull = function (key, value) {
+	this.pull = async function (key, value) {
 		check(key, String)
 
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$pull: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	this.pullAll = function (key, value) {
+	this.pullAll = async function (key, value) {
 		check(key, String)
 
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$pullAll: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	this.inc = function (key, value) {
+	this.inc = async function (key, value) {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$inc: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	this.dec = function (key, value) {
+	this.dec = async function (key, value) {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$dec: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	this.addToSet = function (key, value) {
+	this.addToSet = async function (key, value) {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$addToSet: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	this.success = function (result) {
+	this.success = async function (result) {
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "success",
-			}, 
+			},
 			$push: {
 				history: {
 					date: new Date(),
@@ -145,13 +146,13 @@ var toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.failure = function (result) {
+	this.failure = async function (result) {
 		var docId = this.document._id;
-		
-		var update = Utilities.collection.update(docId, {
+
+		var update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "failure",
-			}, 
+			},
 			$push: {
 				history: {
 					date: new Date(),
@@ -165,10 +166,10 @@ var toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.clearHistory = function () {
+	this.clearHistory = async function () {
 		var docId = this.document._id;
 
-		var update = Utilities.collection.update(docId, {
+		var update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				history: [{
 					date: new Date(),
@@ -181,20 +182,20 @@ var toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.reschedule = function (config) {
+	this.reschedule = async function (config) {
 		var docId = this.document._id;
-		var newDate = reschedule(docId, config);
+		var newDate = await reschedule(docId, config);
 
 		if (!newDate) {
 			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + docId, config]);
 		}
 
-		return newDate;	
+		return newDate;
 	}
 
-	this.replicate = function (config) {
+	this.replicate = async function (config) {
 		var doc = this.document;
-		var newCopy = replicate(doc, config)
+		var newCopy = await replicate(doc, config)
 
 		if (!newCopy) {
 			Utilities.logger(["Error cloning job: " + doc.name + "/" + docId, config]);
@@ -203,9 +204,9 @@ var toolbelt = function (jobDoc) {
 		return newCopy;
 	}
 
-	this.remove = function () {
+	this.remove = async function () {
 		var docId = this.document._id;
-		var removeDoc = remove(docId)
+		var removeDoc = await remove(docId)
 
 		if (!removeDoc) {
 			Utilities.logger(["Error removing job: " + doc.name + "/" + docId, config]);

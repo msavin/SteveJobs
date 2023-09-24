@@ -1,6 +1,6 @@
 import { Utilities } from "../../utilities"
 
-const cancel = function (job, callback) {
+const cancel = async function (job, callback) {
 	let error;
 	let result;
 
@@ -10,7 +10,7 @@ const cancel = function (job, callback) {
 	})
 
 	if (typeof jobDoc === "object") {
-		result = Utilities.collection.update(jobDoc._id, {
+		result = await Utilities.collection.updateAsync(jobDoc._id, {
 			$set: {
 				state: "cancelled"
 			},

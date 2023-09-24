@@ -1,12 +1,12 @@
 import { Utilities } from "../../utilities"
 
-const remove = function (job, callback) {
+const remove = async function (job, callback) {
 	let error;
 	let result;
 	const jobDoc = Utilities.helpers.getJob(job);
 
 	if (typeof jobDoc === "object") {
-		result = Utilities.collection.remove(jobDoc._id)
+		result = await Utilities.collection.removeAsync(jobDoc._id)
 	} else {
 		error = true
 	}

@@ -1,6 +1,6 @@
 import { Utilities } from "../../utilities"
 
-const add = function () {
+const add = async function () {
 	// 0. Prepare variables
 	let error, result, blockAdd;
 
@@ -11,7 +11,7 @@ const add = function () {
 
 		// 2-1. check if the job is singular
 		if (input.config && input.config.singular) {
-			const doc = Utilities.collection.findOne({
+			const doc = await Utilities.collection.findOneAsync({
 				name: input.name,
 				arguments: input.arguments
 			})
@@ -21,7 +21,7 @@ const add = function () {
 
 		// 2-2. check if job is unique
 		if (input.config && input.config.unique) {
-			const doc = Utilities.collection.findOne({
+			const doc = await Utilities.collection.findOneAsync({
 				name: input.name,
 				arguments: input.arguments,
 				state: {
@@ -42,15 +42,15 @@ const add = function () {
 
 			return result;
 		}
-	
+
 	// 3. Generate job document
 	const jobDoc = Utilities.helpers.generateJobDoc(input);
 
 	// 4. Insert the job document into the database OR update it
 	let jobId;
 
-	if (input.config && input.config.override) { 
-		const doc = Utilities.collection.findOne({
+	if (input.config && input.config.override) {
+		const doc = await Utilities.collection.findOneAsync({
 			name: input.name,
 			arguments: input.arguments,
 			state: {
@@ -61,7 +61,7 @@ const add = function () {
 		if (doc) {
 			const initDate = jobDoc.due || new Date;
 
-			jobId = Utilities.collection.update(doc._id, {
+			jobId = await Utilities.collection.updateAsync(doc._id, {
 				$set: {
 					due: initDate,
 					priority: jobDoc.priority,
@@ -79,13 +79,13 @@ const add = function () {
 			});
 
 		} else {
-			jobId = Utilities.collection.insert(jobDoc);	
+			jobId = await Utilities.collection.insertAsync(jobDoc);
 		}
 	} else {
-		jobId = Utilities.collection.insert(jobDoc);	
+		jobId = await Utilities.collection.insertAsync(jobDoc);
 	}
-	
-	// 5. Simulate the document (this might save us a database request in some places)	
+
+	// 5. Simulate the document (this might save us a database request in some places)
 	if (jobId) {
 		result = jobDoc;
 		result._id = jobId;
@@ -98,7 +98,7 @@ const add = function () {
 	if (input.config && typeof input.config.callback === "function") {
 		input.config.callback(error, result);
 	}
-	
+
 	return result;
 }
 

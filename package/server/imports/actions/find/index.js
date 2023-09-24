@@ -1,12 +1,12 @@
 import { Utilities } from "../../utilities"
 import { process } from "./process.js"
 
-const find = function () {
+const find = async function () {
 	// First, process the arguments
 	const input = Utilities.helpers.processJobArguments(arguments);
 
 	// Second, find an active job
-	const jobDoc = Utilities.collection.findOne({
+	const jobDoc = await Utilities.collection.findOneAsync({
 		name: input.name,
 		arguments: input.arguments,
 		state: {

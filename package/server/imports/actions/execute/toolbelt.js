@@ -9,7 +9,7 @@ const toolbelt = function (jobDoc) {
 	instance.document = jobDoc;
 	instance.resolved = false;
 
-	instance.set = (key, value) => {
+	instance.set = async (key, value) => {
 		check(key, String)
 
 		let docId = instance.document._id;
@@ -17,7 +17,7 @@ const toolbelt = function (jobDoc) {
 		patch["data." + key] = value;
 
 		// first, update the document
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$set: patch
 		})
 
@@ -30,30 +30,30 @@ const toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	instance.get = (key, getLatestFromDatabase) => {
+	instance.get = async (key, getLatestFromDatabase) => {
 		check(key, String)
 
 		let docId = instance.document._id
 
 		if (getLatestFromDatabase) {
 			// Get the latest doc
-			let doc = Utilities.collection.findOne(docId);
-			
+			let doc = await Utilities.collection.findOneAsync(docId);
+
 			// Update the cached doc with the fresh copy
 			if (doc) instance.document = doc;
 		}
-		
+
 		if (instance.document.data && instance.document.data[key]) {
-			return instance.document.data && instance.document.data[key];	
+			return instance.document.data && instance.document.data[key];
 		}
 	}
 
-	instance.push = (key, value) => {
+	instance.push = async (key, value) => {
 		check(key, String)
 
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$push: {
 				["data." + key]: value
 			}
@@ -62,76 +62,76 @@ const toolbelt = function (jobDoc) {
 
 	}
 
-	instance.pull = (key, value) => {
+	instance.pull = async (key, value) => {
 		check(key, String)
 
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$pull: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	instance.pullAll = (key, value) => {
+	instance.pullAll = async (key, value) => {
 		check(key, String)
 
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$pullAll: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	instance.inc = (key, value) => {
+	instance.inc = async (key, value) => {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$inc: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	instance.dec = (key, value) => {
+	instance.dec = async (key, value) => {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$dec: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	instance.addToSet = (key, value) => {
+	instance.addToSet = async (key, value) => {
 		check(key, String)
 		check(value, Number)
 		value = value || 1
 
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$addToSet: {
 				["data." + key]: value
 			}
 		})
 	}
 
-	instance.success = (result) => {
+	instance.success = async (result) => {
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "success",
 			},
@@ -150,12 +150,12 @@ const toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	instance.failure = (result) => {
+	instance.failure = async (result) => {
 		let docId = instance.document._id;
 		let queueName = instance.document.name;
 
 		// Update the document
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "failure",
 			},
@@ -182,9 +182,9 @@ const toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	instance.reschedule = (config) => {
+	instance.reschedule = async (config) => {
 		const doc = instance.document;
-		let newDate = reschedule(doc._id, config);
+		let newDate = await reschedule(doc._id, config);
 
 		if (!newDate) {
 			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + doc._id, config]);
@@ -194,9 +194,9 @@ const toolbelt = function (jobDoc) {
 		return newDate;
 	}
 
-	instance.replicate = (config) => {
+	instance.replicate = async (config) => {
 		const doc = instance.document;
-		const newCopy = replicate(doc, config)
+		const newCopy = await replicate(doc, config)
 
 		if (!newCopy) {
 			Utilities.logger(["Error cloning job: " + doc.name + "/" + doc._id, config]);
@@ -205,9 +205,9 @@ const toolbelt = function (jobDoc) {
 		return newCopy;
 	}
 
-	instance.remove = () => {
+	instance.remove = async () => {
 		const doc = instance.document;
-		let removeDoc = remove(doc._id)
+		let removeDoc = await remove(doc._id)
 
 		if (!removeDoc) {
 			Utilities.logger(["Error removing job: " + doc.name + "/" + doc._id]);
@@ -217,10 +217,10 @@ const toolbelt = function (jobDoc) {
 		return removeDoc;
 	}
 
-	instance.clearHistory = () => {
+	instance.clearHistory = async () => {
 		let docId = instance.document._id;
 
-		let update = Utilities.collection.update(docId, {
+		let update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				history: [{
 					date: new Date(),

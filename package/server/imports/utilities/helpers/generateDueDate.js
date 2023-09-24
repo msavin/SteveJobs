@@ -7,7 +7,7 @@ const generateDueDate = function (configObj) {
 
 	if (configObj && configObj.date) {
 		if (typeof configObj.date.getDate === "function") {
-			due = configObj.date;	
+			due = configObj.date;
 		} else {
 			logger("Invalid input for 'date' field. Used current date instead.")
 		}

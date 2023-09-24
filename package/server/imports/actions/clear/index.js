@@ -1,6 +1,6 @@
 import { Utilities } from "../../utilities"
 
-const clear = function (state, name, callback) {
+const clear = async function (state, name, callback) {
 	if (typeof state === "string" && state !== "*")  {
 		state = [state]
 	}
@@ -27,12 +27,12 @@ const clear = function (state, name, callback) {
 		}
 	}
 
-	const result = Utilities.collection.remove(action)
-	
+	const result = await Utilities.collection.removeAsync(action)
+
 	if (callback) {
 		callback(undefined, result);
 	}
-	
+
 	return result;
 }
 

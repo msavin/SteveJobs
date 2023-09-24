@@ -1,6 +1,6 @@
 import { Utilities } from "../../utilities"
 
-const replicate = function (job, config, callback) {
+const replicate = async function (job, config, callback) {
 	let error;
 	let result;
 	const jobDoc = Utilities.helpers.getJob(job);
@@ -14,8 +14,8 @@ const replicate = function (job, config, callback) {
 
 		replicant.parent = jobDoc._id;
 
-		const insert = Utilities.collection.insert(replicant);
-	
+		const insert = await Utilities.collection.insertAsync(replicant);
+
 		// simulate the newly inserted document
 		result = function () {
 			if (insert) {
@@ -27,7 +27,7 @@ const replicate = function (job, config, callback) {
 	} else {
 		error = true;
 	}
-	
+
 	// run the callback and return
 	if (callback) {
 		callback(error, result)
