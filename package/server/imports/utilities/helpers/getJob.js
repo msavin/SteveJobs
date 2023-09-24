@@ -1,7 +1,7 @@
 import { Utilities } from "../"
 import { logger } from "../logger"
 
-getJob = function (input, filter, verify) {
+const getJob = function (input, filter, verify) {
 	let jobDoc;
 
 	// figure out the input and deal with accordingly
