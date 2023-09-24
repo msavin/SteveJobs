@@ -2,7 +2,7 @@ import { logger } from "../logger"
 import { config } from "../config"
 import { date } from "./date.js"
 
-generateDueDate = function (configObj) {
+const generateDueDate = function (configObj) {
 	let due = config.getDate();
 
 	if (configObj && configObj.date) {
