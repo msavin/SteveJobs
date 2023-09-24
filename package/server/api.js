@@ -1,3 +1,4 @@
+import { check, Match } from 'meteor/check'
 import { Actions } from './imports/actions'
 import { Utilities } from './imports/utilities'
 import { Operator } from './imports/operator'
@@ -46,7 +47,7 @@ Jobs.register = function (jobs) {
 			}
 		} else {
 			Utilities.logger("Register failed - this key should be a function: " + job);
-		}	
+		}
 	})
 }
 
@@ -112,7 +113,7 @@ Jobs.execute = function (jobId, callback, force) {
 	check(force, Match.Optional(Boolean))
 
 	// 1. Get the job
-	const doc = Utilities.collection.findOne({ 
+	const doc = Utilities.collection.findOne({
 		_id: jobId,
 		state: {
 			$nin: ["success", "cancelled"]
@@ -178,7 +179,7 @@ Jobs.replicate = function (jobId, config) {
 	return Actions.replicate(jobId, config);
 }
 
-// Clear resolved jobs - or all of them 
+// Clear resolved jobs - or all of them
 
 Jobs.clear = function (state, name, callback) {
 	check(state, Match.OneOf(undefined, String, [String]))
@@ -199,7 +200,7 @@ Jobs.remove = function (jobId, callback) {
 
 // Expose the MongoDB collection
 
-Meteor.startup(function () { 
+Meteor.startup(function () {
 	Jobs.collection = Utilities.collection
 })
 
@@ -209,6 +210,6 @@ const JobsInternal = {
 	Actions: Actions,
 	Utilities: Utilities,
 	Operator: Operator
-}; 
+};
 
 export { Jobs, JobsInternal }
