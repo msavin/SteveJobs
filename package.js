@@ -12,3 +12,15 @@ Package.onUse(function(api) {
 	api.mainModule("server/api.js", "server");
 	api.export(["Jobs", "JobsInternal"]);
 });
+
+Package.onTest(function (api) {
+	api.use('tinytest');
+	api.use(['ecmascript', 'msavin:sjobs'], ['server']);
+	api.use(["mongo", "random", "check"], "server");
+
+	api.addFiles([
+		// "tests/basic.js",
+		// "tests/internals.js",
+		"tests/replication.js"
+	])
+});  

@@ -28,7 +28,7 @@ const clear = async function (state, name, callback) {
 	}
 
 	const result = await Utilities.collection.removeAsync(action)
-
+	
 	if (callback) {
 		callback(undefined, result);
 	}

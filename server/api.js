@@ -53,7 +53,7 @@ Jobs.register = function (jobs) {
 
 // Adds a new job to MongoDB
 
-Jobs.run = function () {
+Jobs.run = async function () {
 	check(arguments[0], String)
 
 	const lastArg = arguments[arguments.length - 1];
@@ -89,31 +89,31 @@ Jobs.cancel = function (jobId) {
 
 // Start or stop the queue - intended for debugging and/or single server deployments
 
-Jobs.start = function (name) {
+Jobs.start = async function (name) {
 	check(name, Match.OneOf(undefined, String, [String]))
-	Operator.manager.start(name);
+	return await Operator.manager.start(name);
 }
 
-Jobs.stop = function (name) {
+Jobs.stop = async function (name) {
 	check(name, Match.OneOf(undefined, String, [String]))
-	Operator.manager.stop(name);
+	return await Operator.manager.stop(name);
 }
 
 // Get info on a job
 
-Jobs.get = function (jobId) {
+Jobs.get = async function (jobId) {
 	check(jobId, String);
-	return Actions.get(jobId);
+	return await Actions.get(jobId);
 }
 
 // Run a job ahead of time
 
-Jobs.execute = function (jobId, callback, force) {
+Jobs.execute = async function (jobId, callback, force) {
 	check(jobId, String)
 	check(force, Match.Optional(Boolean))
 
 	// 1. Get the job
-	const doc = Utilities.collection.findOne({
+	const doc = await Utilities.collection.findOneAsync({ 
 		_id: jobId,
 		state: {
 			$nin: ["success", "cancelled"]
@@ -151,7 +151,7 @@ Jobs.execute = function (jobId, callback, force) {
 
 // Reschedule a job
 
-Jobs.reschedule = function (jobId, config) {
+Jobs.reschedule = async function (jobId, config) {
 	check(jobId, String)
 	if (config) check(config, {
 		date: Match.Maybe(Date),
@@ -161,12 +161,12 @@ Jobs.reschedule = function (jobId, config) {
 		callback: Match.Maybe(Function)
 	})
 
-	return Actions.reschedule(jobId, config);
+	return await Actions.reschedule(jobId, config);
 }
 
 // Replicate a job to run it again later
 
-Jobs.replicate = function (jobId, config) {
+Jobs.replicate = async function (jobId, config) {
 	check(jobId, String)
 	if (config) check(config, {
 		date: Match.Maybe(Date),
@@ -176,26 +176,26 @@ Jobs.replicate = function (jobId, config) {
 		priority: Match.Maybe(Number),
 	})
 
-	return Actions.replicate(jobId, config);
+	return await Actions.replicate(jobId, config);
 }
 
 // Clear resolved jobs - or all of them
 
-Jobs.clear = function (state, name, callback) {
+Jobs.clear = async function (state, name, callback) {
 	check(state, Match.OneOf(undefined, String, [String]))
 	check(name, Match.Optional(String))
 	check(callback, Match.Optional(Function))
 
-	return Actions.clear(state, name, callback);
+	return await Actions.clear(state, name, callback);
 }
 
 // Remove the job
 
-Jobs.remove = function (jobId, callback) {
+Jobs.remove = async function (jobId, callback) {
 	check(jobId, String)
 	check(callback, Match.Maybe(Function))
 
-	return Actions.remove(jobId, callback);
+	return await Actions.remove(jobId, callback);
 }
 
 // Expose the MongoDB collection

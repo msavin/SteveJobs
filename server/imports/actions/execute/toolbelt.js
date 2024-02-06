@@ -38,7 +38,7 @@ const toolbelt = function (jobDoc) {
 		if (getLatestFromDatabase) {
 			// Get the latest doc
 			let doc = await Utilities.collection.findOneAsync(docId);
-
+			
 			// Update the cached doc with the fresh copy
 			if (doc) instance.document = doc;
 		}
@@ -174,8 +174,8 @@ const toolbelt = function (jobDoc) {
 			"Job has failed: " + queueName + ", " + docId,
 			"Queue was stopped; please correct your job function and restart the server"
 		]);
-
-		Operator.manager.queues[queueName].stop();
+		debugger;
+		await Operator.manager.queues[queueName].stop();
 
 		instance.resolved = true;
 

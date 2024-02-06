@@ -8,7 +8,7 @@ import { remove } from "../remove/"
 const toolbelt = function (jobDoc) {
 	this.document = jobDoc;
 
-	this.set = async function (key, value) {
+	this.set = async function (key, value) {	
 		check(key, String)
 
 		var docId = this.document._id;
@@ -35,8 +35,8 @@ const toolbelt = function (jobDoc) {
 
 		if (getLatestFromDatabase) {
 			// Get the latest doc
-			const doc = await Utilities.collection.findOneAsync(docId);
-
+			doc = await Utilities.collection.findOneAsync(docId);
+			
 			// Update the cached doc with the fresh copy
 			if (doc) {
 				this.document = doc;
@@ -148,7 +148,7 @@ const toolbelt = function (jobDoc) {
 
 	this.failure = async function (result) {
 		var docId = this.document._id;
-
+		
 		var update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "failure",

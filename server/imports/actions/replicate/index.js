@@ -15,7 +15,7 @@ const replicate = async function (job, config, callback) {
 		replicant.parent = jobDoc._id;
 
 		const insert = await Utilities.collection.insertAsync(replicant);
-
+	
 		// simulate the newly inserted document
 		result = function () {
 			if (insert) {

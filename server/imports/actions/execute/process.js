@@ -1,7 +1,6 @@
 import { Promise } from "meteor/promise"
 import { Utilities } from "../../utilities"
 import { toolbelt } from "./toolbelt.js"
-import { reschedule } from "../reschedule/"
 
 const process = async function (doc, callback) {
 	// Goals: 
@@ -12,6 +11,7 @@ const process = async function (doc, callback) {
 	const Toolbelt = new toolbelt(doc);
 
 	try {
+		debugger;
 		const res = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
 		const jobResult = Promise.await(Promise.resolve(res));
 		const resolution = Toolbelt.checkForResolution(jobResult);
@@ -22,7 +22,7 @@ const process = async function (doc, callback) {
 			return jobResult;
 		}
 	} catch (error) {		
-		const failure = Toolbelt.failure(error.stack);
+		const failure = await Toolbelt.failure(error.stack);
 		
 		Utilities.logger(`Job failed to run due to code error: ${doc.name}`)
 		console.log(error);

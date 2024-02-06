@@ -45,7 +45,7 @@ dominator.initialize = function () {
 	// Then, ensure an index is set
 
 	if (self.collection.createIndex) {
-		self.collection.createIndex({serverId: 1}, {unique: 1});
+		self.collection.createIndexAsync({serverId: 1}, {unique: 1});
 	} else {
 		self.collection._ensureIndex({serverId: 1}, {unique: 1});
 	}
@@ -53,7 +53,7 @@ dominator.initialize = function () {
 	// Finally, set the serverId
 	self.serverId = Utilities.config.getServerId();
 }
-
+		
 dominator.getActive = async function () {
 	if (debugMode) console.log("dominator.getActive");
 
@@ -88,7 +88,7 @@ dominator.setAsActive = async function () {
 	const self = this;
 	const lastPing = new Date();
 
-	try {
+	try { 
 		const result = await self.collection.upsertAsync({
 			serverId: self.serverId
 		}, {

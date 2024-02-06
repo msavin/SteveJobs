@@ -1,3 +1,5 @@
+import { Jobs } from 'meteor/msavin:sjobs';
+
 /* 
 	Tests the following:
 	 - Jobs.register
@@ -6,12 +8,12 @@
 	 - Jobs.execute
 */
 
-JobsTests2 = function () {
+Tinytest.addAsync("Replication", async function (test) {
 
 	// O - Clear the collection
 
 	console.log("--- 0 ---")
-	var clear = Jobs.clear("*")
+	var clear = await Jobs.clear("*")
 	console.log(clear)
 	
 	// 1 - Register the Job
@@ -40,7 +42,7 @@ JobsTests2 = function () {
 
 	// 2 - Schedule a job
 
-	var jobId = Jobs.run("timeThing", {
+	var jobId = await Jobs.run("timeThing", {
 		in: {
 			years: 1
 		}
@@ -50,8 +52,8 @@ JobsTests2 = function () {
 
 	// 3 - Execute the job early
 
-	Jobs.execute(jobId, function () {
+	await Jobs.execute(jobId, function () {
 		console.log("Callback from Jobs.execute. Arguments are:");
 		console.log(arguments);
 	})
-}
+})

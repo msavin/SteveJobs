@@ -49,7 +49,7 @@ const add = async function () {
 	// 4. Insert the job document into the database OR update it
 	let jobId;
 
-	if (input.config && input.config.override) {
+	if (input.config && input.config.override) { 
 		const doc = await Utilities.collection.findOneAsync({
 			name: input.name,
 			arguments: input.arguments,
@@ -79,10 +79,10 @@ const add = async function () {
 			});
 
 		} else {
-			jobId = await Utilities.collection.insertAsync(jobDoc);
+			jobId = await Utilities.collection.insertAsync(jobDoc);	
 		}
 	} else {
-		jobId = await Utilities.collection.insertAsync(jobDoc);
+		jobId = await Utilities.collection.insertAsync(jobDoc);	
 	}
 
 	// 5. Simulate the document (this might save us a database request in some places)
