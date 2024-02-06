@@ -1,3 +1,5 @@
+import { Jobs } from 'meteor/msavin:sjobs';
+
 /* 
 	Tests the following:
 	 - Jobs.register
@@ -8,18 +10,17 @@
 	 	
 */
 
-JobsTests3 = function () {
-
+Tinytest.addAsync("Internals", async function (test) {
 	// O - Clear the collection
 
 	console.log("--- 0 ---")
-	var clear = Jobs.clear("*")
+	var clear = await Jobs.clear("*")
 	console.log(clear)
 	
 	// 1 - Register the Job
 
 	Jobs.register({
-		"statefulJob": function () {
+		"statefulJob": async function () {
 			self = this;
 
 			var count = self.get("count");
@@ -37,7 +38,7 @@ JobsTests3 = function () {
 					}
 				})
 			} else {
-				self.remove()
+				await self.remove()
 			}
 
 			console.log(self.document)
@@ -51,4 +52,5 @@ JobsTests3 = function () {
 			count: 1
 		}
 	})
-}
+
+});
