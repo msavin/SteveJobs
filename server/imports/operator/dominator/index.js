@@ -26,7 +26,7 @@ const dominator = {
 
 let debugMode = false;
 
-dominator.initialize = function () {
+dominator.initialize = async function () {
 	if (debugMode) console.log("dominator.initialize", this)
 
 	const self = this;
@@ -43,12 +43,8 @@ dominator.initialize = function () {
 	}
 
 	// Then, ensure an index is set
-
-	if (self.collection.createIndex) {
-		self.collection.createIndexAsync({serverId: 1}, {unique: 1});
-	} else {
-		self.collection._ensureIndex({serverId: 1}, {unique: 1});
-	}
+	await self.collection.createIndexAsync({serverId: 1}, {unique: 1});
+	
 
 	// Finally, set the serverId
 	self.serverId = Utilities.config.getServerId();
