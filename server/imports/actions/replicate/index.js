@@ -3,7 +3,7 @@ import { Utilities } from "../../utilities"
 const replicate = async function (job, config, callback) {
 	let error;
 	let result;
-	const jobDoc = Utilities.helpers.getJob(job);
+	const jobDoc = await Utilities.helpers.getJob(job);
 
 	if (typeof jobDoc === "object") {
 		const replicant = Utilities.helpers.generateJobDoc({
