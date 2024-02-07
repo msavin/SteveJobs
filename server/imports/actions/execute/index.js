@@ -2,7 +2,7 @@ import { Utilities } from "../../utilities"
 import { process } from "./process.js"
 
 const execute = async function (job, callback) {
-	const jobDoc = Utilities.helpers.getJob(job, {
+	const jobDoc = await Utilities.helpers.getJob(job, {
 		allow: ["pending", "failure"],
 		message: "Job is not valid or not found, or is already resolved:"
 	});

@@ -4,7 +4,7 @@ const reschedule = async function (job, config, callback) {
 	let error;
 	let result;
 	
-	const jobDoc = Utilities.helpers.getJob(job, {
+	const jobDoc = await Utilities.helpers.getJob(job, {
 		allow: ["pending", "failure"],
 		message: 'Unable to reschedule. Job does not exist or has been resolved: '
 	});

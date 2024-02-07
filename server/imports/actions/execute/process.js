@@ -11,7 +11,6 @@ const process = async function (doc, callback) {
 	const Toolbelt = new toolbelt(doc);
 
 	try {
-		debugger;
 		const res = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
 		const jobResult = Promise.await(Promise.resolve(res));
 		const resolution = Toolbelt.checkForResolution(jobResult);

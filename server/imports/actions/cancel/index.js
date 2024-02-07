@@ -4,7 +4,7 @@ const cancel = async function (job, callback) {
 	let error;
 	let result;
 
-	const jobDoc = Utilities.helpers.getJob(job, {
+	const jobDoc = await Utilities.helpers.getJob(job, {
 		allow: ["pending", "failure"],
 		message: "Unable to cancel job - not found or is resolved: "
 	})

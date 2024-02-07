@@ -174,7 +174,7 @@ const toolbelt = function (jobDoc) {
 			"Job has failed: " + queueName + ", " + docId,
 			"Queue was stopped; please correct your job function and restart the server"
 		]);
-		debugger;
+		
 		await Operator.manager.queues[queueName].stop();
 
 		instance.resolved = true;
