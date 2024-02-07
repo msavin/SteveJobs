@@ -14,8 +14,8 @@ Tinytest.addAsync("Basic", async function (test) {
 
 	console.log("--- 0 ---")
 	var clear = await Jobs.clear("*")
-	console.log(clear)
-	
+	test.equal(clear, 1);
+
 	// 1 - Register the Job
 
 	Jobs.register({
@@ -49,16 +49,13 @@ Tinytest.addAsync("Basic", async function (test) {
 	console.log("Job doc after creation:")
 	console.log(jobDoc);
 
-	if (jobDoc.due.getYear() === targetYear) {
-		console.log("Date looks fine")
-	} else {
-		console.log("Error around due date check")
-	}
+	test.equal(jobDoc.due.getYear(), targetYear);
 
 	// 4 - Cancel the job 
 
 	var cancel = await Jobs.cancel(jobId);
-
+	test.equal(cancel, 1)
+	
 	// 5 - Check the job was canceled
 
 	var jobDoc = await Jobs.get(jobId);
@@ -67,11 +64,7 @@ Tinytest.addAsync("Basic", async function (test) {
 	console.log("Job doc after cancel:")
 	console.log(jobDoc)
 
-	if (jobDoc.state === "cancelled") {
-		console.log("Job was cancelled")	
-	} else {
-		console.log("Job cancel failed")
-	}
+	test.equal(jobDoc.state, "cancelled");
 
 	// 6 - Log whatever is in the collection
 
