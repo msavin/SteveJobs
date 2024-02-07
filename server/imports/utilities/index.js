@@ -6,8 +6,8 @@ import { initializeCollection } from "./collection"
 
 const Utilities = { config, logger, helpers, registry }
 
-Utilities.start = function () {
-	Utilities.collection = initializeCollection();
+Utilities.start = async function () {
+	Utilities.collection = await initializeCollection();
 	Utilities.config.started = true;
 }
 

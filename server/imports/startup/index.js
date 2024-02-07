@@ -5,8 +5,8 @@ import { Operator } from "../operator/"
 // 1. Wait 3 seconds for all the code to initialize
 // 2. Start Jobs if autoStart is enabled
 
-Meteor.startup(function () {
-	Utilities.start();
+Meteor.startup(async function() {
+	await Utilities.start();
 	Operator.start();
 	
 	if (Utilities.config.autoStart) {
