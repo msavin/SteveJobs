@@ -18,8 +18,8 @@ Tinytest.addAsync("Replication", async function (test) {
 	
 	// 1 - Register the Job
 
-	Jobs.register({
-		"timeThing": function () {
+	await Jobs.register({
+		"timeThing": async function () {
 			doc = this.document;
 
 			console.log("The current time is");
@@ -30,13 +30,13 @@ Tinytest.addAsync("Replication", async function (test) {
 
 			console.log("");
 
-			this.replicate({
+			await this.replicate({
 				in: {
 					seconds: 5
 				}
 			})
 
-			this.success();
+			await this.success();
 		}
 	})
 

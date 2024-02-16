@@ -14,7 +14,7 @@ manager.add = function (name) {
 	manager.queues[name] = new queue(name, state)
 }
 
-manager.start = async function (name) {
+manager.start = function (name) {
 	if (debugMode) console.log(`Jobs: manager.start(${name})`)
 	
 	const action = (queue) => manager.queues[queue].start()

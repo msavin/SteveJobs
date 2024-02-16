@@ -142,7 +142,7 @@ Jobs.execute = async function (jobId, callback, force) {
 	// 3. Ensure the job is real
 
 	if (Operator.manager.isAvailable(doc.name) || force) {
-		return Actions.execute(doc, callback, force)
+		return await Actions.execute(doc, callback, force)
 	} else {
 		Utilities.logger("Unable to execute job -  queue is busy: " + doc.name + "/" + jobId);
 		return false;

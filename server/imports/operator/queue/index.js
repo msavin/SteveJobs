@@ -68,7 +68,7 @@ queue.prototype.grabDoc = async function () {
 	if (debugMode) console.log(`queue.prototype.grabDoc(${this.name})`)
 
 	const self = this;
-
+	
 	const jobDoc = await Utilities.collection.findOneAsync({
 		_id: {
 			$ne: self.previouslyRan
@@ -102,11 +102,11 @@ queue.prototype.grabDoc = async function () {
 	return jobDoc;
 }
 
-queue.prototype.run = function () {
+queue.prototype.run = async function () {
 	if (debugMode) console.log(`queue.prototype.run(${this.name})`)
 
 	const self = this;
-	const jobDoc = self.grabDoc();
+	const jobDoc = await self.grabDoc();
 
 	if (jobDoc) {
 		execute(jobDoc, function () {
