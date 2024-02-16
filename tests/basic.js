@@ -71,4 +71,5 @@ Tinytest.addAsync("Basic", async function (test) {
 	console.log("--- 6 ---")
 	var allJobDocs = await JobsInternal.Utilities.collection.find().fetchAsync();
 	console.log(allJobDocs);
+	test.equal(allJobDocs.length, 1)
 });

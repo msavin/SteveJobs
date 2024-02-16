@@ -6,12 +6,12 @@ import { getJob } from "./getJob.js"
 import { processJobArguments } from "./processJobArguments.js"
 
 const helpers = {
-	generateDueDate: generateDueDate,
-	generateJobDoc: generateJobDoc,
-	getJob: getJob,
-	number: number,
-	date: date,
-	processJobArguments: processJobArguments
+	generateDueDate,
+	generateJobDoc,
+	getJob,
+	number,
+	date,
+	processJobArguments
 }
 
 export { helpers }
