@@ -15,7 +15,7 @@ Package.onUse(function(api) {
 
 Package.onTest(function (api) {
 	api.use('tinytest');
-	api.use(['ecmascript', 'msavin:sjobs'], ['server']);
+	api.use(['ecmascript', 'harry97:sjobs'], ['server']);
 	api.use(["mongo", "random", "check"], "server");
 
 	api.addFiles([
