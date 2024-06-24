@@ -12,7 +12,7 @@ const process = async function (doc, callback) {
 
 	try {
 		const res = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
-		const jobResult = Promise.await(Promise.resolve(res));
+		const jobResult = await (Promise.resolve(res));
 		const resolution = Toolbelt.checkForResolution(jobResult);
 
 		if (typeof callback === "function") {
