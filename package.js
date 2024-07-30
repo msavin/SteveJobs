@@ -1,13 +1,13 @@
 Package.describe({
-	name:    "msavin:sjobs",
+	name:    "harry97:sjobs",
 	summary: "The simple jobs queue that just works [synced, schedule, tasks, background, later, worker, cron]",
-	version: "5.0.0",
+	version: "4.3.3",
 	documentation: "README.md",
 	git:     "https://github.com/msavin/SteveJobs.git",
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom(['2.8.1', '3.0']);
+  api.versionsFrom(['2.8.1', '3.0.1']);
 	api.use(["mongo", "random", "ecmascript", "check"], "server");
 	api.mainModule("server/api.js", "server");
 	api.export(["Jobs", "JobsInternal"]);

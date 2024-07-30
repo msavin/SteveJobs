@@ -30,7 +30,7 @@ const getJob = async function (input, filter, verify) {
 			message: String
 		}
 
-		This could be done in the database, but:
+		This could be done in the database, but: 
 		 - its probably faster to query with just _id
 		 - we might be passing into a cached document into this function
 	*/
