@@ -1,6 +1,5 @@
-import { Promise } from "meteor/promise"
-import { Utilities } from "../../utilities"
-import { toolbelt } from "./toolbelt.js"
+import { Utilities } from '../../utilities'
+import { toolbelt } from './toolbelt.js'
 
 const process = async function (doc, callback) {
 	// Goals: 
@@ -11,9 +10,10 @@ const process = async function (doc, callback) {
 	const Toolbelt = new toolbelt(doc);
 
 	try {
-		const res = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments);
-		const jobResult = await (Promise.resolve(res));
-		const resolution = Toolbelt.checkForResolution(jobResult);
+    // const res = Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments)
+    // const jobResult = Promise.await(Promise.resolve(res))
+    // const jobResult = await res()
+		const jobResult = await Utilities.registry.data[doc.name].apply(Toolbelt, doc.arguments)
 
 		if (typeof callback === "function") {
 			return callback(undefined, jobResult);

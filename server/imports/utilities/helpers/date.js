@@ -8,7 +8,7 @@ const date = function (input1, input2) {
 
 	// Get the inputs straightened out
 	if (input2) {
-		try { 
+		try {
 			currentDate = new Date(input1);
 			action = input2;
 		} catch (e) {
@@ -126,12 +126,12 @@ const date = function (input1, input2) {
 			if (["in","on"].indexOf(key1) > -1) {
 				Object.keys(action[key1]).forEach(function (key2) {
 					try {
-						newNumber = number(action[key1][key2]);
-						
+						const newNumber = number(action[key1][key2]);
+
 						if (typeof newNumber === "number") {
 							utilities[key1][key2](newNumber);
 						} else {
-							logger("invalid type was inputted: " + key1 + "." + key2);	
+							logger("invalid type was inputted: " + key1 + "." + key2);
 						}
 					} catch (e) {
 						logger("invalid argument was ignored: " + key1 + "." + key2);

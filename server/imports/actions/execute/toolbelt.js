@@ -42,9 +42,9 @@ const toolbelt = function (jobDoc) {
 			// Update the cached doc with the fresh copy
 			if (doc) instance.document = doc;
 		}
-		
+
 		if (instance.document.data && instance.document.data[key]) {
-			return instance.document.data && instance.document.data[key];	
+			return instance.document.data && instance.document.data[key];
 		}
 	}
 
@@ -182,9 +182,9 @@ const toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	instance.reschedule = (config) => {
+	instance.reschedule = async (config) => {
 		const doc = instance.document;
-		let newDate = reschedule(doc._id, config);
+		let newDate = await reschedule(doc._id, config);
 
 		if (!newDate) {
 			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + doc._id, config]);
@@ -194,9 +194,9 @@ const toolbelt = function (jobDoc) {
 		return newDate;
 	}
 
-	instance.replicate = (config) => {
+	instance.replicate = async (config) => {
 		const doc = instance.document;
-		const newCopy = replicate(doc, config)
+		const newCopy = await replicate(doc, config)
 
 		if (!newCopy) {
 			Utilities.logger(["Error cloning job: " + doc.name + "/" + doc._id, config]);
@@ -205,9 +205,9 @@ const toolbelt = function (jobDoc) {
 		return newCopy;
 	}
 
-	instance.remove = () => {
+	instance.remove = async () => {
 		const doc = instance.document;
-		let removeDoc = remove(doc._id)
+		let removeDoc = await remove(doc._id)
 
 		if (!removeDoc) {
 			Utilities.logger(["Error removing job: " + doc.name + "/" + doc._id]);

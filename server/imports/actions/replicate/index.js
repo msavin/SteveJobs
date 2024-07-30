@@ -27,7 +27,7 @@ const replicate = async function (job, config, callback) {
 	} else {
 		error = true;
 	}
-	
+
 	// run the callback and return
 	if (callback) {
 		callback(error, result)

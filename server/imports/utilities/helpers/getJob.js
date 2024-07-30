@@ -1,7 +1,7 @@
 import { Utilities } from "../"
 import { logger } from "../logger"
 
-getJob = async function (input, filter, verify) {
+const getJob = async function (input, filter, verify) {
 	let jobDoc;
 
 	// figure out the input and deal with accordingly
@@ -16,15 +16,15 @@ getJob = async function (input, filter, verify) {
 		jobDoc = await Utilities.collection.findOneAsync(jobDoc._id);
 	}
 
-	// if its not an object 
+	// if its not an object
 	if (typeof jobDoc !== "object") {
 		logger(["Job may not exist / unable to retrieve: ", input]);
 		return;
 	}
-	
+
 	// run through the filter
 
-	/*	
+	/*
 		sampleFilter = {
 			allow: [""],
 			message: String

@@ -32,7 +32,7 @@ const clear = async function (state, name, callback) {
 	if (callback) {
 		callback(undefined, result);
 	}
-	
+
 	return result;
 }
 

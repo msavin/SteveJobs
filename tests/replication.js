@@ -1,4 +1,4 @@
-import { Jobs } from 'meteor/harry97:sjobs';
+import { Jobs } from 'meteor/msavin:sjobs';
 
 /* 
 	Tests the following:

@@ -1,7 +1,8 @@
+import { Meteor } from "meteor/meteor"
 import { Mongo } from "meteor/mongo"
 import { Utilities } from "../../utilities/"
 
-/* 
+/*
 	Potential Optimization
 		1- if server is not dominant, it should check again when the current server dominance expires rather than poll the db
 		2- when setAsActive is called - its often called once for each queue - should be reduced to just one call
@@ -52,7 +53,7 @@ dominator.initialize = async function () {
 dominator.getActive = async function () {
 	if (debugMode) console.log("dominator.getActive");
 
-	const self = this;	
+	const self = this;
 
 	return await self.collection.findOneAsync({}, {
 		sort: {
@@ -65,7 +66,7 @@ dominator.getActive = async function () {
 // to prevent database from getting too big
 dominator.purge = function () {
 	if (debugMode) console.log("dominator.purge")
-	
+
 	const self = this;
 
 	Meteor.setTimeout(async function () {
@@ -88,7 +89,7 @@ dominator.setAsActive = async function () {
 			serverId: self.serverId
 		}, {
 			$set: {
-				lastPing: lastPing,		
+				lastPing: lastPing,
 			},
 			$setOnInsert: {
 				created: lastPing
@@ -102,7 +103,7 @@ dominator.setAsActive = async function () {
 		if (Utilities.config.autoPurge) {
 			dominator.purge();
 		}
-		
+
 		return result;
 	} catch (e) {
 		// https://www.youtube.com/watch?v=SHs6O6jC7Y8
@@ -117,13 +118,13 @@ dominator.isActive = function () {
 	const self = this;
 
 	// since Meteor runs only one server in development,
-	// we should set dominator as active immediately, otherwise 
-	// it would wait the `lastPing` to surpass `maxWait` 
+	// we should set dominator as active immediately, otherwise
+	// it would wait the `lastPing` to surpass `maxWait`
 	if (Meteor.isDevelopment && !Utilities.config.disableDevelopmentMode) {
 		return self.setAsActive();
 	}
 
-	// if the last ping was less than 10 seconds ago, 
+	// if the last ping was less than 10 seconds ago,
 	// then assume that server is dominant
 	if (self.lastPing && Utilities.config.gracePeriod) {
 		const lastPing = new Date(self.lastPing);

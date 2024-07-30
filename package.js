@@ -7,7 +7,7 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-    api.versionsFrom(['1.3', '3.0-beta.0']);
+  api.versionsFrom(['2.8.1', '3.0.1']);
 	api.use(["mongo", "random", "ecmascript", "check"], "server");
 	api.mainModule("server/api.js", "server");
 	api.export(["Jobs", "JobsInternal"]);
@@ -15,7 +15,7 @@ Package.onUse(function(api) {
 
 Package.onTest(function (api) {
 	api.use('tinytest');
-	api.use(['ecmascript', 'harry97:sjobs'], ['server']);
+	api.use(['ecmascript', 'msavin:sjobs'], ['server']);
 	api.use(["mongo", "random", "check"], "server");
 
 	api.addFiles([
@@ -23,4 +23,4 @@ Package.onTest(function (api) {
 		"tests/internals.js",
 		"tests/replication.js"
 	])
-});  
+});

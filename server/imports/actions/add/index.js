@@ -42,7 +42,7 @@ const add = async function () {
 
 			return result;
 		}
-	
+
 	// 3. Generate job document
 	const jobDoc = Utilities.helpers.generateJobDoc(input);
 
@@ -84,8 +84,8 @@ const add = async function () {
 	} else {
 		jobId = await Utilities.collection.insertAsync(jobDoc);	
 	}
-	
-	// 5. Simulate the document (this might save us a database request in some places)	
+
+	// 5. Simulate the document (this might save us a database request in some places)
 	if (jobId) {
 		result = jobDoc;
 		result._id = jobId;
@@ -98,7 +98,7 @@ const add = async function () {
 	if (input.config && typeof input.config.callback === "function") {
 		input.config.callback(error, result);
 	}
-	
+
 	return result;
 }
 

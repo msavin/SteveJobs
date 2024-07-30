@@ -16,7 +16,7 @@ const find = async function () {
 
 	// Third, run the described callback
 	if (typeof input.callback === "function") {
-		process(jobDoc, input.callback);
+    await process(jobDoc, input.callback);
 	}
 }
 

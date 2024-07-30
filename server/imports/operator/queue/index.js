@@ -17,7 +17,7 @@ queue.prototype.start = function () {
 	if (debugMode) console.log(`queue.prototype.start(${this.name})`)
 
 	const self = this;
-	
+
 	if (self.interval) {
 		Utilities.logger(`Cannot start queue because it has already been started: ${self.name}`);
 		return;
@@ -60,7 +60,7 @@ queue.prototype.trigger = function () {
 		} catch(e) {
 			console.error(e);
 			self.available = true;
-		} 
+		}
 	}
 }
 

@@ -8,7 +8,7 @@ const execute = async function (job, callback) {
 	});
 
 	if (typeof jobDoc === "object") {
-		if (typeof Utilities.registry.data[jobDoc.name]) {			
+		if (typeof Utilities.registry.data[jobDoc.name]) {
 			const result = await process(jobDoc, callback);
 			return result;
 		} else {

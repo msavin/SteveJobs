@@ -1,10 +1,11 @@
+import { check } from "meteor/check"
 import { Utilities } from "../../utilities"
 import { Operator } from "../../operator"
 import { reschedule } from "../reschedule/"
 import { replicate } from "../replicate/"
 import { remove } from "../remove/"
 
-var toolbelt = function (jobDoc) {
+const toolbelt = function (jobDoc) {
 	this.document = jobDoc;
 
 	this.set = async function (key, value) {	
@@ -30,7 +31,7 @@ var toolbelt = function (jobDoc) {
 
 	this.get = async function (key, getLatestFromDatabase) {
 		check(key, String)
-		var docId = this.document._id
+		const docId = this.document._id
 
 		if (getLatestFromDatabase) {
 			// Get the latest doc
@@ -38,7 +39,7 @@ var toolbelt = function (jobDoc) {
 			
 			// Update the cached doc with the fresh copy
 			if (doc) {
-				this.document = doc;	
+				this.document = doc;
 			}
 		}
 
@@ -131,7 +132,7 @@ var toolbelt = function (jobDoc) {
 		var update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "success",
-			}, 
+			},
 			$push: {
 				history: {
 					date: new Date(),
@@ -151,7 +152,7 @@ var toolbelt = function (jobDoc) {
 		var update = await Utilities.collection.updateAsync(docId, {
 			$set: {
 				state: "failure",
-			}, 
+			},
 			$push: {
 				history: {
 					date: new Date(),
@@ -181,20 +182,20 @@ var toolbelt = function (jobDoc) {
 		return update;
 	}
 
-	this.reschedule = function (config) {
+	this.reschedule = async function (config) {
 		var docId = this.document._id;
-		var newDate = reschedule(docId, config);
+		var newDate = await reschedule(docId, config);
 
 		if (!newDate) {
 			Utilities.logger(["Error rescheduling job: " + doc.name + "/" + docId, config]);
 		}
 
-		return newDate;	
+		return newDate;
 	}
 
-	this.replicate = function (config) {
+	this.replicate = async function (config) {
 		var doc = this.document;
-		var newCopy = replicate(doc, config)
+		var newCopy = await replicate(doc, config)
 
 		if (!newCopy) {
 			Utilities.logger(["Error cloning job: " + doc.name + "/" + docId, config]);
@@ -203,9 +204,9 @@ var toolbelt = function (jobDoc) {
 		return newCopy;
 	}
 
-	this.remove = function () {
+	this.remove = async function () {
 		var docId = this.document._id;
-		var removeDoc = remove(docId)
+		var removeDoc = await remove(docId)
 
 		if (!removeDoc) {
 			Utilities.logger(["Error removing job: " + doc.name + "/" + docId, config]);
