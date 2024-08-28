@@ -6,6 +6,48 @@ import './imports/startup'
 
 const Jobs = {}
 
+// Validated Jobs.run configuration schema
+
+const JobRunConfigSchema = {
+	in: Match.Maybe({
+		millisecond: Match.Maybe(Number),
+		milliseconds: Match.Maybe(Number),
+		second: Match.Maybe(Number),
+		seconds: Match.Maybe(Number),
+		minute: Match.Maybe(Number),
+		minutes: Match.Maybe(Number),
+		hour: Match.Maybe(Number),
+		hours: Match.Maybe(Number),
+		day: Match.Maybe(Number),
+		days: Match.Maybe(Number),
+		month: Match.Maybe(Number),
+		months: Match.Maybe(Number),
+		year: Match.Maybe(Number),
+		years: Match.Maybe(Number),
+	}),
+	on: Match.Maybe({
+		millisecond: Match.Maybe(Number),
+		milliseconds: Match.Maybe(Number),
+		second: Match.Maybe(Number),
+		seconds: Match.Maybe(Number),
+		minute: Match.Maybe(Number),
+		minutes: Match.Maybe(Number),
+		hour: Match.Maybe(Number),
+		hours: Match.Maybe(Number),
+		day: Match.Maybe(Number),
+		days: Match.Maybe(Number),
+		month: Match.Maybe(Number),
+		months: Match.Maybe(Number),
+		year: Match.Maybe(Number),
+		years: Match.Maybe(Number),
+	}),
+	date: Match.Maybe(Date),
+	priority: Match.Maybe(Number),
+	unique: Match.Maybe(Boolean),
+	singular: Match.Maybe(Boolean),
+	callback: Match.Maybe(Function),
+};
+
 // Configure the package (optional)
 
 Jobs.configure = function (config) {
@@ -56,6 +98,10 @@ Jobs.run = async function () {
 	check(arguments[0], String)
 
 	const lastArg = arguments[arguments.length - 1];
+	const config = (typeof lastArg === "object" && !Array.isArray(lastArg) && !lastArg.remote) ? lastArg : {};
+
+	check(config, Match.Optional(JobRunConfigSchema));
+
 	const remote = typeof lastArg === "object" && lastArg.remote;
 
 	if (Utilities.registry.data[arguments[0]] || remote) {
@@ -112,7 +158,7 @@ Jobs.execute = async function (jobId, callback, force) {
 	check(force, Match.Optional(Boolean))
 
 	// 1. Get the job
-	const doc = await Utilities.collection.findOneAsync({ 
+	const doc = await Utilities.collection.findOneAsync({
 		_id: jobId,
 		state: {
 			$nin: ["success", "cancelled"]
