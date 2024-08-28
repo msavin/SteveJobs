@@ -46,6 +46,7 @@ const JobRunConfigSchema = {
 	unique: Match.Maybe(Boolean),
 	singular: Match.Maybe(Boolean),
 	callback: Match.Maybe(Function),
+	data: Match.Maybe(Object),
 };
 
 // Configure the package (optional)
