@@ -43,7 +43,7 @@ queue.prototype.stop = function () {
 	self.interval = Meteor.clearInterval(self.interval);
 }
 
-queue.prototype.trigger = function () {
+queue.prototype.trigger = async function () {
 	if (debugMode) console.log(`queue.prototype.trigger(${this.name})`)
 
 	const self = this;
@@ -52,7 +52,7 @@ queue.prototype.trigger = function () {
 		try {
 			self.available = false;
 
-			if (dominator.isActive()) {
+			if (await dominator.isActive()) {
 				self.run()
 			} else {
 				self.available = true;
@@ -111,14 +111,14 @@ queue.prototype.run = async function () {
 	if (jobDoc) {
 		execute(jobDoc, function () {
 			self.available = true;
-			self.trigger()
+			self.trigger().finally()
 		});
 	} else {
 		self.available = true;
 
 		if (self.state === "failure") {
 			self.state = "pending";
-			self.trigger();
+			self.trigger().finally();
 		}
 	}
 }
