@@ -112,7 +112,7 @@ dominator.setAsActive = async function () {
 	}
 }
 
-dominator.isActive = function () {
+dominator.isActive = async function () {
 	if (debugMode) console.log("dominator.isActive")
 
 	const self = this;
@@ -121,7 +121,7 @@ dominator.isActive = function () {
 	// we should set dominator as active immediately, otherwise
 	// it would wait the `lastPing` to surpass `maxWait`
 	if (Meteor.isDevelopment && !Utilities.config.disableDevelopmentMode) {
-		return self.setAsActive();
+		return await self.setAsActive();
 	}
 
 	// if the last ping was less than 10 seconds ago,
@@ -137,18 +137,18 @@ dominator.isActive = function () {
 	}
 
 	// otherwise - its business as usual
-	const doc = self.getActive();
+	const doc = await self.getActive();
 
 	// if the doc is itself, maintain dominance
 	if (!doc || doc.serverId === self.serverId) {
-		return self.setAsActive();
+		return await self.setAsActive();
 	} else {
 		// if a server isn't maintaining dominance, take it
 		const timeGap = new Date () - doc.lastPing;
 		const maxTimeGap = Utilities.config.maxWait;
 
 		if (timeGap >= maxTimeGap) {
-			return self.setAsActive();
+			return await self.setAsActive();
 		}
 	}
 }
