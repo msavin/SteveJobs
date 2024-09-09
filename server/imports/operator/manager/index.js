@@ -15,33 +15,27 @@ manager.add = function (name) {
 }
 
 manager.start = async function (name) {
-	if (debugMode) console.log(`Jobs: manager.start(${name})`)
-	
-	const action = (queue) => manager.queues[queue].start()
+	if (debugMode) console.log(`Jobs: manager.start(${name})`);
+	const action = (queue) => manager.queues[queue].start();
 
 	if (typeof name === "string") {
 		await action(name);
-	} else if (Array.isArray(name)) { 
-		// for await (const item of name) {
-		// 	action(item)
-		// }
-		name.forEach(item => action(item))
+	} else if (Array.isArray(name)) {
+		await Promise.all(name.map(item => action(item)));
 	} else {
-		Object.keys(manager.queues).forEach(item => action(item))
+		await Promise.all(Object.keys(manager.queues).map(item => action(item)));
 	}
 }
-
 manager.stop = async function (name) {
-	if (debugMode) console.log(`Jobs: manager.stop(${name})`)
-	
-	const action = (queue) => manager.queues[queue].stop()
+	if (debugMode) console.log(`Jobs: manager.stop(${name})`);
+	const action = (queue) => manager.queues[queue].stop();
 
 	if (typeof name === "string") {
 		await action(name);
-	} else if (typeof name === "object") { 
-		name.forEach(item => action(item))
+	} else if (Array.isArray(name)) {
+		await Promise.all(name.map(item => action(item)));
 	} else {
-		Object.keys(manager.queues).forEach(item => action(item))
+		await Promise.all(Object.keys(manager.queues).map(item => action(item)));
 	}
 }
 
