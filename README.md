@@ -42,7 +42,7 @@ import { Jobs } from 'meteor/msavin:sjobs'
 Then, write your background jobs like you would write your methods: 
 
 ```javascript
-Jobs.register({
+await Jobs.register({
     "sendReminder": async function (to, message) {
         const instance = this;
 
@@ -108,7 +108,7 @@ The configuration object supports `date`, `in`, `on`, `priority`, `singular`, `u
 Compared to a CRON Job, the Steve Jobs package gives you much more control over how and when the job runs. To get started, you just need to create a job that replicates itself.
 
 ```javascript
-Jobs.register({
+await Jobs.register({
     "syncData": async function () {
         const instance = this;
         const call = await HTTP.putAsync("http://www.magic.com/syncData");

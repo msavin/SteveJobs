@@ -77,7 +77,7 @@ Jobs.configure({
 `Jobs.register` (async) function that allows you to register logic for a job. Once registered, the package will start a queue to look for and execute jobs as appropriate, and you will be able to run jobs with `Jobs.run`.
 
 ```javascript
-Jobs.register({
+await Jobs.register({
 	sendEmail: async function (to, content) {
 		const send = await Magic.sendEmail(to, content);
 
