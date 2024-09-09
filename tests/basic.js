@@ -1,4 +1,5 @@
 import { Jobs } from 'meteor/msavin:sjobs';
+import {dominator as Utilites} from "../server/imports/operator/dominator";
 
 /* 
 	Tests the following:
