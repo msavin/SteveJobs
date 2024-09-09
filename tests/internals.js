@@ -19,7 +19,7 @@ Tinytest.addAsync("Internals", async function (test) {
 	// 1 - Register the Job
 
 	console.log("--- 1 ---")
-	Jobs.register({
+	await Jobs.register({
 		"statefulJob": async function () {
 			self = this;
 

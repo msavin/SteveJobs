@@ -14,13 +14,13 @@ manager.add = function (name) {
 	manager.queues[name] = new queue(name, state)
 }
 
-manager.start = function (name) {
+manager.start = async function (name) {
 	if (debugMode) console.log(`Jobs: manager.start(${name})`)
 	
 	const action = (queue) => manager.queues[queue].start()
 
 	if (typeof name === "string") {
-		action(name);
+		await action(name);
 	} else if (Array.isArray(name)) { 
 		// for await (const item of name) {
 		// 	action(item)
