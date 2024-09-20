@@ -32,10 +32,10 @@ Jobs.configure = function (config) {
 
 // Register jobs in a similar style to Meteor methods
 
-Jobs.register = function (jobs) {
+Jobs.register = async function (jobs) {
 	check(jobs, Object);
 
-	Object.keys(jobs).forEach(function (job) {
+	for (const job of Object.keys(jobs)) {
 		if (typeof jobs[job] === "function") {
 			// Register the job and start the queue
 			Operator.manager.add(job);
@@ -43,14 +43,13 @@ Jobs.register = function (jobs) {
 
 			// If Jobs has already started, start the queue automatically
 			if (Utilities.config.started) {
-				Operator.manager.queues[job].start();
+				await Operator.manager.queues[job].start();
 			}
 		} else {
 			Utilities.logger("Register failed - this key should be a function: " + job);
 		}
-	})
+	}
 }
-
 // Adds a new job to MongoDB
 
 Jobs.run = async function () {
@@ -60,7 +59,7 @@ Jobs.run = async function () {
 	const remote = typeof lastArg === "object" && lastArg.remote;
 
 	if (Utilities.registry.data[arguments[0]] || remote) {
-		return Actions.add.apply(null, arguments);
+		return await Actions.add.apply(null, arguments);
 	} else {
 		Utilities.logger("invalid job name: " + arguments[0] || "not specified");
 		return false;
@@ -69,11 +68,11 @@ Jobs.run = async function () {
 
 // Update / manage a job even though it has not run
 
-Jobs.find = function () {
+Jobs.find = async function () {
 	check(arguments[0], String)
 
 	if (Utilities.registry.data[arguments[0]]) {
-		return Actions.find.apply(null, arguments);
+		return await Actions.find.apply(null, arguments);
 	} else {
 		Utilities.logger("invalid job name: " + arguments[0] || "not specified");
 		return false;
@@ -82,9 +81,9 @@ Jobs.find = function () {
 
 // Cancel a job without removing it from MongoDB
 
-Jobs.cancel = function (jobId) {
+Jobs.cancel = async function (jobId) {
 	check(jobId, String);
-	return Actions.cancel(jobId);
+	return await Actions.cancel(jobId);
 }
 
 // Start or stop the queue - intended for debugging and/or single server deployments

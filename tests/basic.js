@@ -1,4 +1,5 @@
 import { Jobs } from 'meteor/msavin:sjobs';
+import {dominator as Utilites} from "../server/imports/operator/dominator";
 
 /* 
 	Tests the following:
@@ -13,12 +14,14 @@ Tinytest.addAsync("Basic", async function (test) {
 	// O - Clear the collection
 
 	console.log("--- 0 ---")
+	const count = await Utilites.collection.countDocuments({});
 	var clear = await Jobs.clear("*")
-	test.equal(clear, 1);
+	console.log("Cleared " + clear + " jobs out of " + count);
+	test.equal(clear, count);
 
 	// 1 - Register the Job
 
-	Jobs.register({
+	await Jobs.register({
 		"sayHi": function (name) {
 			console.log("Hi " + name);
 			this.success();
