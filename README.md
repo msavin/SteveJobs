@@ -6,14 +6,16 @@
 
 Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fiber-independent async timing functions, this package is quick, reliable, and effortless to use.
 
-	•	Jobs run on one server at a time
-	•	Jobs run predictably and consecutively
-	•	Jobs, their history, and returned data are stored in MongoDB
-	•	Failed jobs are retried on server restart
-	•	No third-party dependencies
-	•	Fully async/await compatible for Meteor 3.0
+- Jobs run on one server at a time
+- Jobs run predictably and consecutively
+- Jobs, their history, and returned data are stored in MongoDB
+- Failed jobs are retried on server restart
+- No third-party dependencies
+- Fully async/await compatible for Meteor 3.0
 
 **The new 5.0 introduces async/await support to work seamlessly with Meteor 3.0+.!** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
+
+Special thanks to (haryadel)[https://github.com/harryadel] and (StorytellerCZ)[https://github.com/StorytellerCZ] for the migration to Meteor 3.0
 
 ## Developer Friendly GUI and API
 
