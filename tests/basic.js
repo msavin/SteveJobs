@@ -1,3 +1,6 @@
+import { Jobs } from 'meteor/msavin:sjobs';
+import {dominator as Utilites} from "../server/imports/operator/dominator";
+
 /* 
 	Tests the following:
 	 - Jobs.register 
@@ -7,17 +10,18 @@
 	 - Jova.
 */
 
-JobsTests1 = function () {
-
+Tinytest.addAsync("Basic", async function (test) {
 	// O - Clear the collection
 
 	console.log("--- 0 ---")
-	var clear = Jobs.clear("*")
-	console.log(clear)
-	
+	const count = await Utilites.collection.countDocuments({});
+	var clear = await Jobs.clear("*")
+	console.log("Cleared " + clear + " jobs out of " + count);
+	test.equal(clear, count);
+
 	// 1 - Register the Job
 
-	Jobs.register({
+	await Jobs.register({
 		"sayHi": function (name) {
 			console.log("Hi " + name);
 			this.success();
@@ -25,8 +29,8 @@ JobsTests1 = function () {
 	})
 
 	// 2 - Schedule a job
-
-	var jobId = Jobs.run("sayHi", "Steve", {
+	console.log("--- 2 ---")
+	var jobId = await Jobs.run("sayHi", "Steve", {
 		in: {
 			years: 1
 		},
@@ -36,12 +40,11 @@ JobsTests1 = function () {
 			console.log(arguments);
 		}
 	})
-
 	jobId = jobId._id
 
 	// 3 - Check the due date
 
-	var jobDoc = Jobs.get(jobId);
+	var jobDoc = await Jobs.get(jobId);
 	var date = new Date();
 	var targetYear = date.getYear() + 1 
 
@@ -49,33 +52,27 @@ JobsTests1 = function () {
 	console.log("Job doc after creation:")
 	console.log(jobDoc);
 
-	if (jobDoc.due.getYear() === targetYear) {
-		console.log("Date looks fine")
-	} else {
-		console.log("Error around due date check")
-	}
+	test.equal(jobDoc.due.getYear(), targetYear);
 
 	// 4 - Cancel the job 
 
-	var cancel = Jobs.cancel(jobId);
-
+	var cancel = await Jobs.cancel(jobId);
+	test.equal(cancel, 1)
+	
 	// 5 - Check the job was canceled
 
-	var jobDoc = Jobs.get(jobId);
+	var jobDoc = await Jobs.get(jobId);
 
 	console.log("--- 5 ---")
 	console.log("Job doc after cancel:")
 	console.log(jobDoc)
 
-	if (jobDoc.state === "cancelled") {
-		console.log("Job was cancelled")	
-	} else {
-		console.log("Job cancel failed")
-	}
+	test.equal(jobDoc.state, "cancelled");
 
 	// 6 - Log whatever is in the collection
 
 	console.log("--- 6 ---")
-	var allJobDocs = JobsInternal.Utilities.collection.find().fetch();
+	var allJobDocs = await JobsInternal.Utilities.collection.find().fetchAsync();
 	console.log(allJobDocs);
-}
+	test.equal(allJobDocs.length, 1)
+});

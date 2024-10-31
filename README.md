@@ -4,15 +4,16 @@
 
 ### The Simple Jobs Queue That Just Works
 
-Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fibers-based timing functions, this package is quick, reliable and effortless to use. 
+Run scheduled tasks with Steve Jobs, the simple jobs queue made just for Meteor. With tight MongoDB integration and fiber-independent async timing functions, this package is quick, reliable, and effortless to use.
 
- - Jobs run on one server at a time
- - Jobs run predictably and consecutively
- - Jobs, their history and returned data are stored in MongoDB
- - Failed jobs are retried on server restart
- - No third party dependencies
+	•	Jobs run on one server at a time
+	•	Jobs run predictably and consecutively
+	•	Jobs, their history, and returned data are stored in MongoDB
+	•	Failed jobs are retried on server restart
+	•	No third-party dependencies
+	•	Fully async/await compatible for Meteor 3.0
 
-**The new 4.0 features repeating jobs, async support and more!** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
+**The new 5.0 introduces async/await support to work seamlessly with Meteor 3.0+.!** It can run hundreds of jobs in seconds with minimal CPU impact, making it a reasonable choice for many applications. To get started, check out the <a href="https://github.com/msavin/SteveJobs..meteor.jobs.scheduler.queue.background.tasks/blob/master/DOCUMENTATION.md">**documentation**</a> and the <a href="#quick-start">**quick start**</a> below.
 
 ## Developer Friendly GUI and API
 
@@ -41,24 +42,39 @@ import { Jobs } from 'meteor/msavin:sjobs'
 Then, write your background jobs like you would write your methods: 
 
 ```javascript
-Jobs.register({
-    "sendReminder": function (to, message) {
+await Jobs.register({
+    "sendReminder": async function (to, message) {
         const instance = this;
 
-        const call = HTTP.put("http://www.magic.com/email/send", {
-            to: to,
-            message: message,
-            subject: "You've Got Mail!",
-        })
+        try {
+            const call = await HTTP.callAsync('PUT', "http://www.magic.com/email/send", {
+                data: {
+                    to: to,
+                    message: message,
+                    subject: "You've Got Mail!"
+                }
+            });
 
-        if (call.statusCode !== 200) {
-            instance.reschedule({
+            // Check if response is not 200
+            if (call.statusCode !== 200) {
+                await instance.reschedule({
+                    in: {
+                        minutes: 5
+                    }
+                });
+            } else {
+                // Return response data if successful
+                return call.data;
+            }
+
+        } catch (e) {
+            // Handle error (e.g., network issue)
+            await instance.reschedule({
                 in: {
                     minutes: 5
                 }
             });
-        } else {
-            return call.data;
+            console.error("Failed to send email. Rescheduling job:", e);
         }
     }
 });
@@ -67,16 +83,16 @@ Jobs.register({
 Finally, schedule a background job like you would call a method: 
 
 ```javascript
-Jobs.run("sendReminder", "jony@apple.com", "The future is here!");
+await Jobs.run("sendReminder", "jony@apple.com", "The future is here!");
 ```
 
 One more thing: the function above will schedule the job to run on the moment that the function was called, however, you can delay it by passing in a special <a href="https://github.com/msavin/SteveJobs-meteor-jobs-queue/wiki#configuration-options">**configuration object**</a> at the end:
 
 ```javascript
-Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
+await Jobs.run("sendReminder", "jony@apple.com", "The future is here!", {
     in: {
         days: 3,
-    }, 
+    },
     on: {
         hour: 9,
         minute: 42
@@ -92,22 +108,22 @@ The configuration object supports `date`, `in`, `on`, `priority`, `singular`, `u
 Compared to a CRON Job, the Steve Jobs package gives you much more control over how and when the job runs. To get started, you just need to create a job that replicates itself.
 
 ```javascript
-Jobs.register({
-    "syncData": function () {
+await Jobs.register({
+    "syncData": async function () {
         const instance = this;
-        const call = HTTP.put("http://www.magic.com/syncData")
+        const call = await HTTP.putAsync("http://www.magic.com/syncData");
 
         if (call.statusCode === 200) {
-            instance.replicate({
+            await instance.replicate({
                 in: {
                     hours: 1
                 }
             });
-            
+
             // to save storage, you can remove the document
-            instance.remove();
+            await instance.remove();
         } else {
-            instance.reschedule({
+            await instance.reschedule({
                 in: {
                     minutes: 5
                 }
@@ -120,8 +136,8 @@ Jobs.register({
 Then, you need to "kickstart" the queue by creating the first job to run. By using the singular flag, you can ensure that Meteor will only create the job if there is no pending or failed instance of it.
 
 ```javascript
-Meteor.startup(function () {
-    Jobs.run("syncData", {
+Meteor.startup(async function () {
+    await Jobs.run("syncData", {
         singular: true
     })    
 })

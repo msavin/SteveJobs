@@ -1,3 +1,5 @@
+import { Jobs } from 'meteor/msavin:sjobs';
+
 /* 
 	Tests the following:
 	 - Jobs.register
@@ -8,36 +10,37 @@
 	 	
 */
 
-JobsTests3 = function () {
-
+Tinytest.addAsync("Internals", async function (test) {
 	// O - Clear the collection
 
 	console.log("--- 0 ---")
-	var clear = Jobs.clear("*")
-	console.log(clear)
+	var clear = await Jobs.clear("*")
 	
 	// 1 - Register the Job
 
-	Jobs.register({
-		"statefulJob": function () {
+	console.log("--- 1 ---")
+	await Jobs.register({
+		"statefulJob": async function () {
 			self = this;
 
-			var count = self.get("count");
-			console.log(self)
+			let count = await self.get("count");
 			console.log("I am: " + count)
-			if (count < 5) {
 
+			if (count < 5) {
 				count = count + 1;
 				console.log("current is:" + count)
-				self.set("count", count)
-
-				self.reschedule({
+				await self.set("count", count)
+				
+				test.equal(self.document.data.count, count)
+				
+				await self.reschedule({
 					in: {
 						seconds: 5
 					}
 				})
 			} else {
-				self.remove()
+				test.equal(self.document.data.count, 5);
+				await self.remove()
 			}
 
 			console.log(self.document)
@@ -45,10 +48,13 @@ JobsTests3 = function () {
 	})
 
 	// 2 - Schedule a job
-
-	var jobId = Jobs.run("statefulJob", {
+	console.log("--- 2 ---")
+	var jobId = await Jobs.run("statefulJob", {
 		data: {
 			count: 1
 		}
 	})
-}
+	console.log("Job doc after run:")
+	console.log(jobId)
+
+});
