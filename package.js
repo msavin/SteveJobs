@@ -20,7 +20,8 @@ Package.onTest(function (api) {
 
 	api.addFiles([
 		"tests/basic.js",
+		"tests/configSchemaValidation.js",
 		"tests/internals.js",
 		"tests/replication.js"
-	])
+	]);
 });
